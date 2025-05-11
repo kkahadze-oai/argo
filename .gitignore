@@ -84,3 +84,7 @@ Thumbs.db
 # Jupyter Notebook
 .ipynb_checkpoints
 */.ipynb_checkpoints/* 
+
+# texts
+!kajaia.txt
+!harris.txt
