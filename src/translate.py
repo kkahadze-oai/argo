@@ -2,8 +2,15 @@
 import sys
 import argparse
 import re
-from extract_definition import extract_definition
-from transliterate import latinized_to_mkhedruli
+import os
+
+# Check if we're running the script directly or importing it
+if __name__ == "__main__":
+    # When running directly from src, add parent directory to path
+    sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+from src.extract_definition import extract_definition
+from src.transliterate import latinized_to_mkhedruli
 
 def normalize_for_comparison(text):
     """
@@ -124,7 +131,7 @@ def find_close_lemma_matches(file_path, search_term, max_distance=1):
 def lemmatize_mingrelian(word):
     """
     Lemmatize a Mingrelian word to its base form.
-    This is a dummy function that will be replaced by the user.
+    Handles various inflection patterns in Mingrelian including hyphenated forms.
     
     Args:
         word (str): Word to lemmatize
@@ -132,19 +139,30 @@ def lemmatize_mingrelian(word):
     Returns:
         str: Lemmatized form of the word
     """
-    # print("PRINTING LEMMATIZED FORM: ", word[:-2])
-    if word[-1] == 's':
+    # If it's an affix (starts with a dash), keep it as is
+    if word.startswith('-'):
+        return word
+    
+    # Check if the word already has a word-internal hyphen
+    if '-' in word:
+        # If it's already in a form like "zhir-i", keep it as is
+        return word
+    
+    # Standard lemmatization rules
+    if word.endswith('s'):
         return word[:-1]
-    elif word[-3:-1] == 'ep':
+    elif word.endswith('ep'):
         return word[:-3] + 'i'
-    elif word[-2:] == 'sh':
+    elif word.endswith('sh'):
         return word[:-1]
-    elif word[-3:] == 'sha':
-        return word[:-2] 
+    elif word.endswith('sha'):
+        return word[:-2]
+    # For words ending in consonants, generate both forms
     elif word[-1] not in ['a', 'i', 'e', 'o', 'u', 'h', 's']:
+        # This will be matched by the modified find_lemma_entry
         return word + 'i'
-    # Dummy implementation - return the word unchanged
-    # User will replace this with their own implementation
+    
+    # Return the word unchanged for other cases
     return word
 
 def find_lemma_entry(file_path, search_term):
@@ -174,13 +192,32 @@ def find_lemma_entry(file_path, search_term):
                     # Check if this is the lemma we're looking for
                     current_lemma = line.replace('Lemma:', '').strip()
                     
+                    # Skip comparison if current_lemma starts with a hyphen and search_term doesn't
+                    if current_lemma.startswith('-') and not search_term.startswith('-'):
+                        recording = False
+                        current_entry = []
+                        continue
+                    
                     # Do exact matches with hyphen preserved
                     is_exact_match = search_term.lower() == current_lemma.lower()
                     
                     # Check if the lemma starts with our search term followed by a number
                     is_base_lemma_match = re.match(rf'^{re.escape(search_term.lower())}[0-9]+$', current_lemma.lower())
                     
-                    if is_exact_match or is_base_lemma_match:
+                    # Check for hyphenated forms (e.g., "zhiri" matches "zhir-i")
+                    is_hyphenated_match = False
+                    # If search_term ends with 'i'
+                    if search_term.lower().endswith('i') and len(search_term) > 2:
+                        base = search_term.lower()[:-1]  # Remove the 'i'
+                        hyphenated = f"{base}-i"
+                        is_hyphenated_match = hyphenated == current_lemma.lower()
+                    
+                    # Only check dehyphenated match if current_lemma doesn't start with hyphen
+                    is_dehyphenated_match = False
+                    if not current_lemma.startswith('-'):
+                        is_dehyphenated_match = current_lemma.lower().replace('-', '') == search_term.lower()
+                    
+                    if is_exact_match or is_base_lemma_match or is_hyphenated_match or is_dehyphenated_match:
                         recording = True
                         current_entry = [line.strip()]
                     else:
@@ -191,12 +228,12 @@ def find_lemma_entry(file_path, search_term):
                 elif recording:
                     current_entry.append(line.strip())
             
-            # Check the last entry in the file
+            # Add the last entry if we were recording
             if recording and current_entry:
                 entries.append('\n'.join(current_entry))
-                
+            
             return entries
-                
+            
     except FileNotFoundError:
         print(f"Error: File '{file_path}' not found.", file=sys.stderr)
         sys.exit(1)
@@ -257,13 +294,14 @@ def find_entries_containing_word(file_path, georgian_word):
     
     return []
 
-def translate_lemma(file_path, lemma):
+def translate_lemma(file_path, lemma, debug_output=False):
     """
     Translate a Mingrelian lemma to Georgian.
     
     Args:
         file_path (str): Path to the dictionary file
         lemma (str): Lemma to translate
+        debug_output (bool): Whether to print debug messages
     
     Returns:
         list: List of tuples with (lemma, georgian_definition, mingrelian_word, definition_line, entry_text, georgian_script_word)
@@ -276,10 +314,11 @@ def translate_lemma(file_path, lemma):
         lemmatized_form = lemmatize_mingrelian(lemma)
         # Only search again if the lemmatized form is different from the original
         if lemmatized_form != lemma:
-            print("PRINTING LEMMATIZED FORM: ", lemmatized_form)
+            if debug_output:
+                print("PRINTING LEMMATIZED FORM: ", lemmatized_form)
             entry_texts = find_lemma_entry(file_path, lemmatized_form)
             # If entries found with the lemmatized form, log this
-            if entry_texts:
+            if entry_texts and debug_output:
                 print(f"Found entries using lemmatized form: {lemmatized_form}")
     
     if not entry_texts:
@@ -356,6 +395,10 @@ def search_containing_word(file_path, lemma):
         lemma_line = lines[0] if lines else ""
         if lemma_line.startswith("Lemma:"):
             lemma_line = lemma_line.replace("Lemma:", "").strip()
+            
+            # Skip affix entries if we're not searching for an affix
+            if lemma_line.startswith('-') and not lemma.startswith('-'):
+                continue
         
         # Find a context line that contains our Georgian word
         context_line = ""
@@ -393,7 +436,7 @@ def main():
                 georgian_lemma = latinized_to_mkhedruli(lemma)
                 print(f"Latinized: {lemma} → Georgian script: {georgian_lemma}")
                 
-                results = translate_lemma(args.file, lemma)
+                results = translate_lemma(args.file, lemma, debug_output=True)
                 
                 if len(results) == 1 and results[0][1] is None:
                     print(f"No direct translation found for '{lemma}' ({georgian_lemma})")
@@ -448,7 +491,7 @@ def main():
         georgian_lemma = latinized_to_mkhedruli(args.lemma)
         print(f"Latinized: {args.lemma} → Georgian script: {georgian_lemma}")
         
-        results = translate_lemma(args.file, args.lemma)
+        results = translate_lemma(args.file, args.lemma, debug_output=True)
         
         if len(results) == 1 and results[0][1] is None:
             print(f"No direct translation found for '{args.lemma}' ({georgian_lemma})")

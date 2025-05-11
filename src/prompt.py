@@ -1,8 +1,17 @@
 #!/usr/bin/env python3
-from translate import translate_lemma, search_containing_word, lemmatize_mingrelian, find_close_lemma_matches
-from transliterate import latinized_to_mkhedruli, mkhedruli_to_latinized
-from extract_definition import extract_definition
-from prompts import (
+import sys
+import os
+
+# Check if we're running the script directly or importing it
+if __name__ == "__main__":
+    # When running directly from src, add parent directory to path
+    sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+# Now both import styles will work
+from src.translate import translate_lemma, search_containing_word, lemmatize_mingrelian, find_close_lemma_matches
+from src.transliterate import latinized_to_mkhedruli, mkhedruli_to_latinized
+from src.extract_definition import extract_definition
+from src.prompts import (
     get_initial_translation_prompt,
     get_follow_up_phrase,
     get_grammar_text,
@@ -16,7 +25,7 @@ import re
 from dotenv import load_dotenv
 import openai
 
-MODEL = 'o4-mini'
+MODEL = 'gpt-4.5-preview-2025-02-27'
 # GPT 4.1 for context
 LONG_CONTEXT_MODEL = 'o4-mini'
 # Load environment variables from .env file
@@ -54,6 +63,26 @@ def is_mkhedruli(text):
     """
     # Georgian Mkhedruli Unicode range is approximately U+10D0 to U+10FF
     return bool(re.search('[\u10D0-\u10FF]', text))
+
+def extract_translations(response_text):
+    """
+    Extract Georgian and English translations from the model's response.
+    
+    Args:
+        response_text (str): The model's response text
+        
+    Returns:
+        tuple: (georgian_translation, english_translation)
+    """
+    # Extract Georgian translation using regex
+    georgian_match = re.search(r'Georgian:\s*(.*?)(?:\n|$)', response_text)
+    georgian_translation = georgian_match.group(1).strip() if georgian_match else ""
+    
+    # Extract English translation using regex
+    english_match = re.search(r'English:\s*(.*?)(?:\n|$)', response_text)
+    english_translation = english_match.group(1).strip() if english_match else ""
+    
+    return georgian_translation, english_translation
 
 def main(terminal_logging=True, dict_file=None):
     # Default dictionary file path if not provided
@@ -274,7 +303,7 @@ def main(terminal_logging=True, dict_file=None):
     for entry in all_entries:
         dict_entries.append(entry)
         dict_entries.append("\n" + "-"*40 + "\n")
-    
+
     # Print all collected dict_entries if terminal logging is enabled
     if terminal_logging:
         print("\n".join(dict_entries))
@@ -330,7 +359,7 @@ def main(terminal_logging=True, dict_file=None):
     
     # Get follow-up phrase using the new function
     follow_up_phrase = get_follow_up_phrase(latinized, mkhedruli)
-    
+
     # import harris.txt 
     with open('/Users/konstantinekahadze/Desktop/argo/harris.txt', 'r') as file:
         grammar = file.read()
@@ -338,8 +367,6 @@ def main(terminal_logging=True, dict_file=None):
     # Get grammar text using the new function
     grammar_text = get_grammar_text(grammar)
 
-    # Get after phrase using the new function
-    after_phrase = get_after_phrase(latinized, mkhedruli)
 
     # Get follow-up prompt using the new function (log to file but respect terminal_logging)
     follow_up_prompt = get_follow_up_prompt(
@@ -387,8 +414,20 @@ def main(terminal_logging=True, dict_file=None):
     if terminal_logging:
         print(f"Follow-up response logged to followup_response_log.txt")
     
+    # Extract Georgian and English translations
+    georgian_translation, english_translation = extract_translations(follow_up_response_text)
+
+    # Store translations in a dictionary for easy access (useful for web apps)
+    translations = {
+        'mingrelian_latinized': latinized,
+        'mingrelian_mkhedruli': mkhedruli,
+        'georgian': georgian_translation,
+        'english': english_translation,
+        'full_response': follow_up_response_text
+    }
+    
     # Print the follow-up response with color formatting (always)
-    print(f"\n{colorize('Follow-up Response:', 'CYAN')}")
+    print(f"\n{colorize('Follow-up Response:', 'RED')}")
     
     # Process the follow-up response line by line to apply formatting (always)
     for line in follow_up_response_text.split('\n'):
@@ -408,6 +447,9 @@ def main(terminal_logging=True, dict_file=None):
         else:
             # Regular text
             print(colorize(line, 'CYAN'))
+    
+    # Return the translations dictionary for use in a web app
+    return translations
 
 if __name__ == "__main__":
     # Parse command line arguments
@@ -427,4 +469,14 @@ if __name__ == "__main__":
         i += 1
     
     # Run main function with parsed arguments
-    main(terminal_logging=not quiet_mode, dict_file=dict_file) 
+    translations = main(terminal_logging=not quiet_mode, dict_file=dict_file)
+    
+    # Example of how to access translations in another script or web app
+    if translations:
+        # Print the extracted translations to demonstrate usage
+        if not quiet_mode:
+            print("\nExtracted translations for web app usage:")
+            print(f"Mingrelian (latinized): {translations['mingrelian_latinized']}")
+            print(f"Mingrelian (mkhedruli): {translations['mingrelian_mkhedruli']}")
+            print(f"Georgian: {translations['georgian']}")
+            print(f"English: {translations['english']}") 

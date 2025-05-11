@@ -41,7 +41,16 @@ def log_to_file(content: str, filename: str, logging_mode: bool = True) -> None:
         logging_mode (bool): Whether to log the content to file (always True for file logging)
     """
     if logging_mode:
-        with open(filename, 'w', encoding='utf-8') as log_file:
+        # Get the src directory path
+        import os
+        from pathlib import Path
+        
+        # Use the src directory for log files
+        src_dir = Path(__file__).parent
+        log_file_path = src_dir / filename
+        
+        # Write content to the log file
+        with open(log_file_path, 'w', encoding='utf-8') as log_file:
             log_file.write(content)
 
 # Initial translation prompt
@@ -57,6 +66,7 @@ def get_initial_translation_prompt(dict_entries: List[str], logging_mode: bool =
         str: The complete initial translation prompt
     """
     command = f"\n\nCan you translate these entries from a Mingrelian-Georgian dictionary into English. Don't translate the Mingrelian into English, just the Georgian which you should be able to understand.\nHere is an example of what I expect you to do: {FIRST_SHOT_EXAMPLE}\n\nNow that you've seen an example, translate the following entries into English: \n"
+    print("Dict 1: ", dict_entries[0])
     prompt = command + "\n" + "\n".join(dict_entries) + "\n"
     
     # Log the initial prompt if in logging mode
@@ -78,8 +88,8 @@ def get_follow_up_phrase(latinized: str, mkhedruli: str) -> str:
     """
     return f"""
                         Now you will translate the following phrase into Georgian and then English
-                        Phrase in Mingrelian (latinized): {latinized}
-                        Phrase in Mingrelian (mkhedruli): {mkhedruli}
+                        Phrase in Mingrelian (latinized script): {latinized}
+                        Same phrase in Mingrelian (mkhedruli script): {mkhedruli}
                         """
 
 def get_grammar_text(grammar: str) -> str:
@@ -106,14 +116,21 @@ def get_after_phrase(latinized: str, mkhedruli: str) -> str:
         str: The formatted after phrase prompt
     """
     return f"""
-                        Now you will translate the phrase into Georgian and then English
-                        Phrase in Mingrelian (latinized): {latinized}
-                        Phrase in Mingrelian (mkhedruli): {mkhedruli}
-                        After analyzing the phrase and thinking through the translation step by step, please output your answer in exactly this format:
+Now you will translate the phrase into Georgian and then English
+Phrase in Mingrelian (latinized script): {latinized}
+Phrase in Mingrelian (mkhedruli script): {mkhedruli}
 
-                        Translation:
-                        Georgian: [Georgian translation]  
-                        English: [English translation]
+VERY IMPORTANT: After analyzing the phrase and thinking through the translation step by step, 
+please output your answer IN EXACTLY THIS FORMAT:
+
+Translation:
+Georgian: [Georgian translation]  
+English: [English translation]
+
+You MUST include both lines with exactly those labels ("Georgian:" and "English:") 
+as they will be automatically parsed by the system.
+
+You can add additional notes, etymology, or explanations AFTER those two lines.
                         """
 
 def get_follow_up_prompt(
@@ -136,7 +153,22 @@ def get_follow_up_prompt(
     Returns:
         str: The complete follow-up prompt
     """
-    prompt = follow_up_phrase + grammar_text + "\n\nDictionary entries translated into English:\n" + initial_response_text + follow_up_phrase
+    # Extract the latinized and mkhedruli script from the follow_up_phrase
+    latinized = ""
+    mkhedruli = ""
+    
+    lines = follow_up_phrase.strip().split('\n')
+    for line in lines:
+        if "latinized script" in line:
+            latinized = line.split(":")[-1].strip()
+        elif "mkhedruli script" in line:
+            mkhedruli = line.split(":")[-1].strip()
+    
+    # Get the after phrase with format instructions
+    after_phrase = get_after_phrase(latinized, mkhedruli)
+    
+    # Combine all components
+    prompt = follow_up_phrase + grammar_text + "\n\nDictionary entries translated into English:\n" + initial_response_text + after_phrase
     
     # Log the follow-up prompt if in logging mode
     log_to_file(prompt, 'followup_prompt_log.txt', logging_mode)
