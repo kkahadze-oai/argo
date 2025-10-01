@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from typing import List, Optional
+from pathlib import Path
 
 # Example prompt showing how to translate dictionary entries
 FIRST_SHOT_EXAMPLE = """
@@ -42,7 +43,6 @@ def log_to_file(content: str, filename: str, logging_mode: bool = True) -> None:
     if logging_mode:
         # Get the src directory path
         import os
-        from pathlib import Path
         
         # Use the src directory for log files
         src_dir = Path(__file__).parent
@@ -102,8 +102,9 @@ def get_grammar_text(grammar: str) -> str:
         str: The formatted grammar section
     """
     
-    # import popiel.txt
-    with open('data/popiel.txt', 'r') as file:
+    # import popiel.txt using absolute path
+    popiel_path = Path(__file__).parent.parent / 'data' / 'popiel.txt'
+    with open(popiel_path, 'r') as file:
         popiel_grammar = file.read()
 
     return f"\nYou will also be given two grammars written in English to help you translate the phrase. Beware of any differences in transcription that may occur between the grammer which is written in English by a linguist and uses IPA, and the dictionarty entries which use latinized Mingrelian at times and Mkhedruli (Georgian script) at other times.\n\n GRAMMAR START\n{grammar}\nGRAMMAR END\n\n GRAMMAR START\n{popiel_grammar}\nGRAMMAR END\n"

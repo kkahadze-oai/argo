@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import sys
 import os
+from pathlib import Path
 
 # Check if we're running the script directly or importing it
 if __name__ == "__main__":
@@ -91,7 +92,7 @@ def extract_translations(response_text):
 def main(terminal_logging=True, dict_file=None):
     # Default dictionary file path if not provided
     if dict_file is None:
-        dict_file = 'data/kajaia.txt'
+        dict_file = str(Path(__file__).parent.parent / 'data' / 'kajaia.txt')
     
     # Create a variable to collect all output
     dict_entries = []
@@ -371,8 +372,9 @@ def main(terminal_logging=True, dict_file=None):
     # Get follow-up phrase using the new function
     follow_up_phrase = get_follow_up_phrase(latinized, mkhedruli)
 
-    # import harris.txt 
-    with open('data/harris.txt', 'r') as file:
+    # import harris.txt using absolute path
+    harris_path = Path(__file__).parent.parent / 'data' / 'harris.txt'
+    with open(harris_path, 'r') as file:
         grammar = file.read()
 
     # Get grammar text using the new function
