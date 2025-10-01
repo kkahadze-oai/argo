@@ -9,8 +9,7 @@ FIRST_SHOT_EXAMPLE = """
     Mkhedruli Mingrelian word: ვემხი
 
     ========================================
-    COMPLETE TRANSLATION ENTRIES:
-    ========================================
+    DICTIONARY ENTRIES:
 
     Lemma: vemx-i
     Number: 8022
@@ -102,7 +101,15 @@ def get_grammar_text(grammar: str) -> str:
     Returns:
         str: The formatted grammar section
     """
-    return f"\nYou will also be given a Grammar written in English to help you translate the phrase. Beware of any differences in transcription that may occur between the grammer which is written in English by a linguist and uses IPA, and the dictionarty entries which use latinized Mingrelian at times and Mkhedruli (Georgian script) at other times.\n\n GRAMMAR START\n{grammar}\nGRAMMAR END\n"
+    
+    # import popiel.txt
+    with open('data/popiel.txt', 'r') as file:
+        popiel_grammar = file.read()
+
+    return f"\nYou will also be given two grammars written in English to help you translate the phrase. Beware of any differences in transcription that may occur between the grammer which is written in English by a linguist and uses IPA, and the dictionarty entries which use latinized Mingrelian at times and Mkhedruli (Georgian script) at other times.\n\n GRAMMAR START\n{grammar}\nGRAMMAR END\n\n GRAMMAR START\n{popiel_grammar}\nGRAMMAR END\n"
+
+
+
 
 def get_after_phrase(latinized: str, mkhedruli: str) -> str:
     """

@@ -19,17 +19,21 @@ from src.prompts import (
     get_follow_up_prompt,
     log_to_file
 )
+from src.llm_client import LLMClient, get_default_llm_client
 import sys
 import os
 import re
 from dotenv import load_dotenv
-import openai
 
-MODEL = 'gpt-4.5-preview-2025-02-27'
-# GPT 4.1 for context
-LONG_CONTEXT_MODEL = 'o4-mini'
 # Load environment variables from .env file
 load_dotenv()
+
+# Model configuration - can be overridden by environment variables
+# Set LLM_PROVIDER in .env to "openai" or "anthropic"
+# Set LLM_MODEL in .env to specify which model to use
+DEFAULT_PROVIDER = os.getenv("LLM_PROVIDER", "openai")
+DEFAULT_MODEL = os.getenv("LLM_MODEL", "gpt-4o")  # or "claude-3-5-sonnet-20241022" for Claude
+LONG_CONTEXT_MODEL = os.getenv("LLM_LONG_CONTEXT_MODEL", DEFAULT_MODEL)
 
 # ANSI color codes for terminal output
 COLORS = {
@@ -87,7 +91,7 @@ def extract_translations(response_text):
 def main(terminal_logging=True, dict_file=None):
     # Default dictionary file path if not provided
     if dict_file is None:
-        dict_file = '/Users/konstantinekahadze/Desktop/argo/kajaia.txt'
+        dict_file = 'data/kajaia.txt'
     
     # Create a variable to collect all output
     dict_entries = []
@@ -132,7 +136,28 @@ def main(terminal_logging=True, dict_file=None):
             dict_entries.append(f"Mkhedruli Mingrelian word: {latinized_to_mkhedruli(word)}")
         
         if len(results) == 1 and results[0][1] is None:
-            # No direct translation found, try with lemmatized form
+            # No direct translation found, try hyphenated form with "-i" first (higher priority)
+            hyphenated_tried = False
+            if (not word.startswith('-') and not '-' in word and 
+                word[-1] not in ['a', 'i', 'e', 'o', 'u', 'h', 's']):
+                hyphenated_word = word + '-i'
+                dict_entries.append(f"Trying hyphenated form: '{hyphenated_word}'")
+                hyphenated_results = translate_lemma(dict_file, hyphenated_word)
+                hyphenated_tried = True
+                
+                # If we found results with the hyphenated form
+                if not (len(hyphenated_results) == 1 and hyphenated_results[0][1] is None):
+                    dict_entries.append(f"Found translation for hyphenated form '{hyphenated_word}'")
+                    for curr_lemma, definition, mingrelian, definition_line, entry_text, georgian_word in hyphenated_results:
+                        if entry_text:
+                            # Store the complete entry text
+                            all_entries.append(f"Match for hyphenated form '{hyphenated_word}' of '{word}':\n{entry_text}")
+                        else:
+                            # If no entry found
+                            all_entries.append(f"No translation found for hyphenated form '{hyphenated_word}' of '{word}'")
+                    continue  # Skip to next word since we found a match with the hyphenated form
+            
+            # If still no results, try with lemmatized form
             lemmatized_word = lemmatize_mingrelian(word)
             if lemmatized_word != word:
                 dict_entries.append(f"Trying lemmatized form: '{lemmatized_word}'")
@@ -297,8 +322,7 @@ def main(terminal_logging=True, dict_file=None):
     
     # Add the complete entries section to the dict_entries
     dict_entries.append("\n" + "="*40)
-    dict_entries.append("COMPLETE TRANSLATION ENTRIES:")
-    dict_entries.append("="*40 + "\n")
+    dict_entries.append("DICTIONARY ENTRIES:")
     
     for entry in all_entries:
         dict_entries.append(entry)
@@ -315,39 +339,26 @@ def main(terminal_logging=True, dict_file=None):
     if terminal_logging:
         print(f"Initial prompt logged to initial_prompt_log.txt")
     
-    # Set OpenAI API key from environment variable
-    api_key = os.getenv("OPENAI_API_KEY")
-    if not api_key:
-        print("ERROR: No OpenAI API key found. Make sure it's set in your .env file as OPENAI_API_KEY=your_key_here")
+    # Initialize LLM client
+    try:
+        llm_client = get_default_llm_client(provider=DEFAULT_PROVIDER, model=DEFAULT_MODEL)
+    except Exception as e:
+        print(f"ERROR: Failed to initialize LLM client: {e}")
+        print("\nTIP: Make sure you have set the appropriate API key in your .env file:")
+        print("  - For OpenAI: OPENAI_API_KEY=your_key_here")
+        print("  - For Claude: ANTHROPIC_API_KEY=your_key_here")
+        print("\nYou can also set LLM_PROVIDER=openai or LLM_PROVIDER=anthropic in .env")
         return
-    
-    openai.api_key = api_key
     
     # Store LM response in a variable instead of printing it
     initial_response_text = ""
     
     try:
-        # Try the newer OpenAI API format (1.0.0+)
-        try:
-            response = openai.chat.completions.create(
-                model=MODEL,
-                messages=[{"role": "user", "content": initial_prompt}]
-            )
-            initial_response_text = response.choices[0].message.content
-        except AttributeError:
-            # Fall back to older OpenAI API format (0.x)
-            # Use 'text-davinci-003' which works with the Completion API
-            if terminal_logging:
-                print("Using older OpenAI API with text-davinci-003 model...")
-            response = openai.Completion.create(
-                model="text-davinci-003",  # Use model that works with Completion API
-                prompt=initial_prompt,
-                max_tokens=2000
-            )
-            initial_response_text = response.choices[0].text.strip()
+        # Call the LLM with the initial prompt
+        initial_response_text = llm_client.complete(initial_prompt)
     except Exception as e:
-        print(f"Error calling OpenAI API: {e}")
-        print("\nTIP: Consider updating your OpenAI package with: pip install --upgrade openai")
+        print(f"Error calling LLM API: {e}")
+        print(f"\nTIP: Check your {DEFAULT_PROVIDER.upper()} API key and internet connection")
         return
     
     # Log the initial response to a file
@@ -361,7 +372,7 @@ def main(terminal_logging=True, dict_file=None):
     follow_up_phrase = get_follow_up_phrase(latinized, mkhedruli)
 
     # import harris.txt 
-    with open('/Users/konstantinekahadze/Desktop/argo/harris.txt', 'r') as file:
+    with open('data/harris.txt', 'r') as file:
         grammar = file.read()
 
     # Get grammar text using the new function
@@ -381,31 +392,20 @@ def main(terminal_logging=True, dict_file=None):
     # but we'll respect the terminal_logging setting
     if not terminal_logging:
         print(f"Working on translation...")
+    
+    # Initialize LLM client for follow-up (may use different model for long context)
+    try:
+        follow_up_client = get_default_llm_client(provider=DEFAULT_PROVIDER, model=LONG_CONTEXT_MODEL)
+    except Exception as e:
+        print(f"ERROR: Failed to initialize LLM client for follow-up: {e}")
+        return
         
     # Send the follow-up prompt to the LM
     follow_up_response_text = ""
     try:
-        # Try the newer OpenAI API format (1.0.0+)
-        try:
-            follow_up_response = openai.chat.completions.create(
-                model=LONG_CONTEXT_MODEL,
-                messages=[
-                    {"role": "user", "content": follow_up_prompt},
-                ]
-            )
-            follow_up_response_text = follow_up_response.choices[0].message.content
-        except AttributeError:
-            # Fall back to older OpenAI API format (0.x)
-            if terminal_logging:
-                print("Using older OpenAI API with text-davinci-003 model...")
-            follow_up_response = openai.Completion.create(
-                model="text-davinci-003",
-                prompt=follow_up_prompt,
-                max_tokens=2000
-            )
-            follow_up_response_text = follow_up_response.choices[0].text.strip()
+        follow_up_response_text = follow_up_client.complete(follow_up_prompt)
     except Exception as e:
-        print(f"Error calling OpenAI API for follow-up: {e}")
+        print(f"Error calling LLM API for follow-up: {e}")
         return
     
     # Log the follow-up response to a file (always)

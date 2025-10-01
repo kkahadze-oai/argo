@@ -17,14 +17,19 @@ from src.prompts import (
     get_follow_up_prompt,
     log_to_file
 )
-import openai
+from src.llm_client import LLMClient
 import re
+
+# Import dictionary processing functions
+from src.translate import translate_lemma, search_containing_word, lemmatize_mingrelian, find_close_lemma_matches
 
 # Request model
 class PromptIn(BaseModel):
     prompt: str
     api_key: str
     target_language: str = "english"  # Default to English if not specified
+    provider: str = "openai"  # "openai" or "anthropic"
+    model: str = None  # Optional: specify model name (uses provider default if None)
 
 # Response model
 class ResponseOut(BaseModel):
@@ -50,10 +55,21 @@ def is_mkhedruli(text):
     """Check if text contains Georgian Mkhedruli script characters."""
     return bool(re.search('[\u10D0-\u10FF]', text))
 
-def process_prompt(prompt_text, api_key):
-    """Process the prompt text using the OpenAI API."""
-    # Configure API key
-    openai.api_key = api_key
+def process_prompt(prompt_text, api_key, provider="openai", model=None):
+    """
+    Process the prompt text using the specified LLM provider.
+    
+    Args:
+        prompt_text: Text to translate
+        api_key: API key for the LLM provider
+        provider: "openai" or "anthropic"
+        model: Optional model name (uses provider default if None)
+    """
+    # Initialize LLM client
+    try:
+        llm_client = LLMClient(provider=provider, model=model, api_key=api_key)
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Failed to initialize LLM client: {str(e)}")
     
     # Determine if input is mkhedruli or latinized
     if is_mkhedruli(prompt_text):
@@ -71,10 +87,6 @@ def process_prompt(prompt_text, api_key):
     except FileNotFoundError:
         # If harris.txt doesn't exist, use an empty string
         grammar = ""
-    
-    # Import dictionary processing functions
-    from src.translate import translate_lemma, search_containing_word, lemmatize_mingrelian, find_close_lemma_matches
-    from src.extract_definition import extract_definition
     
     # Default dictionary file path
     dict_file = Path(__file__).parent.parent / 'kajaia.txt'
@@ -178,12 +190,8 @@ def process_prompt(prompt_text, api_key):
     initial_prompt = get_initial_translation_prompt(dict_entries, logging_mode=True)
     
     try:
-        # Initial API call
-        response = openai.chat.completions.create(
-            model="o4-mini",
-            messages=[{"role": "user", "content": initial_prompt}]
-        )
-        initial_response_text = response.choices[0].message.content
+        # Initial API call using LLM client
+        initial_response_text = llm_client.complete(initial_prompt)
         
         # Log the initial response to a file
         log_to_file(initial_response_text, 'initial_response_log.txt', True)
@@ -201,12 +209,8 @@ def process_prompt(prompt_text, api_key):
             logging_mode=True
         )
         
-        # Make follow-up API call
-        follow_up_response = openai.chat.completions.create(
-            model="o4-mini",
-            messages=[{"role": "user", "content": follow_up_prompt}]
-        )
-        follow_up_response_text = follow_up_response.choices[0].message.content
+        # Make follow-up API call using LLM client
+        follow_up_response_text = llm_client.complete(follow_up_prompt)
         
         # Log the follow-up response to a file
         log_to_file(follow_up_response_text, 'followup_response_log.txt', True)
@@ -233,16 +237,21 @@ async def chat(data: PromptIn):
     
     Parameters:
     - prompt: Text in Mingrelian (either latinized or mkhedruli script)
-    - api_key: OpenAI API key
+    - api_key: API key for the LLM provider
     - target_language: Language for translation (english or georgian)
+    - provider: LLM provider to use ("openai" or "anthropic")
+    - model: Optional model name (uses provider default if None)
     """
     if not data.prompt:
         raise HTTPException(status_code=400, detail="Prompt text is required")
     
     if not data.api_key:
-        raise HTTPException(status_code=400, detail="OpenAI API key is required")
+        raise HTTPException(status_code=400, detail="API key is required")
+    
+    if data.provider not in ["openai", "anthropic"]:
+        raise HTTPException(status_code=400, detail="Provider must be 'openai' or 'anthropic'")
     
     # Process the prompt
-    translations = process_prompt(data.prompt, data.api_key)
+    translations = process_prompt(data.prompt, data.api_key, data.provider, data.model)
     
     return ResponseOut(**translations) 

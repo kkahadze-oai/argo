@@ -1,0 +1,1529 @@
+Abstract
+This chapter addresses Megrelian, a Kartvelian (South Caucasian) language spoken by
+Megrelians, a subethnic group compactly residing in one of the western provinces of Georgia,
+Samegrelo. A language of informal communication, Megrelian has been subject to linguistic
+research both in Georgia and beyond for more than 200 years now.
+Backed by the existing literature on the language, most of which has been published in
+Georgian, this sketch provides an account of essential features of Megrelian phonology,
+grammar, and lexicon, including such typologically renowned properties of Megrelian as the
+elaborate system of preverbs and innovative and extremely specific case-marking alignment
+that not only features ergative stimuli of affective verbs, but can also license this case to
+adverbs as well. Furthermore, new insights are proposed for such domains of linguistic
+structure as the language’s case system, grades of comparison, expression of spatial deixis by
+pronominal expressions, verbal aspect, and evidentiality; some of these statements are based
+on the data from the author’s long-term fieldwork and are now being introduced to linguistic
+discourse.
+Keywords
+Megrelian, Kartvelian, South Caucasian, ergative, case-marking alignment, preverbs, spatial
+deixis, evidentiality
+Chapter 12
+Megrelian
+Alexander Rostovtsev-Popiel
+12.1. The Language and Its Speakers
+Megrelian (autoglossonym margaluri nina, Georgian glossonym megruli ena; ISO 639-3
+name ‘xmf’, Glottolog name ‘ming1252’), also known as Colchian (Colchidian) or Iverian, is
+an unwritten language spoken by Megrelians, a subethnic group of Georgians compactly
+residing in Western Georgia, in the historical area of Samegrelo (Megrelian Samargalo). The
+Megrelian-speaking community also used to inhabit Abkhazia before the war in 1992–1993,
+with most of that poplulation now living as displaced persons in Tbilisi and other cities of
+Georgia; however, some of them have remained in the Gali and T’q’varčeli districts in the
+southeast of breakaway Abkhazia.1
+Megrelian is mutually unintelligible with the dominant language of the area, Georgian,
+not to mention the family outlier, Svan. Some mutual intelligibility connects Megrelian and
+northern varieties of Laz spoken in Sarpi (Georgia) and, to a lesser extent, Hopa, a bordering
+territory in Turkey. Native speakers of other dialects of Laz do not understand Megrelian.
+Together with its closest sister language, Laz, Megrelian constitutes the Zan subgroup of
+the Kartvelian family.2
+Megrelian has two major dialects: Samurzaq’ano-Zugdidian in the northwest and
+Senak’ian in the southeast of the Megrelian-speaking area. These primarily differ in phonetics
+and lexicon; morphological differences are less pronounced. The Samurzaq’ano-Zugdidian
+1 Unless otherwise stated, linguistic data and judgments pertaining to culture and ethnography
+provided here are based on my fieldwork. This chapter uses a four-line glossing convention, which
+facilitates the explanation of differences between actual phonological representation and
+morphological structure—these are significant in Megrelian.
+2 The term “Zan” originates from the Svan ethnonym for Megrelians, SG zan, PL zanär, and was coined
+in scholarly literature by Adolf Dirr and Arnold Chikobava.
+dialect has outlier varieties spoken in Abkhazia (as well as, for the most part, currently in
+Tbilisi), whereas Senak’ian includes a highly specific subdialect spoken in Mart’vili.
+Megrelian is locally spoken in the historical region of Samegrelo, enclosed between the
+Black Sea and the Rioni, Cxenisc’q’ali, and Enguri rivers; the language thus borders Svan in
+the north and Georgian in the east (the historical regions of Imereti and, to a lesser extent,
+Lečxumi) and in the south (Guria).
+According to the 2014 census,3 the population of Samegrelo is over 300 thousand people.
+With the only exception of the harbor town of Poti, which constitutes a rather colorful
+mosaic both ethnically and linguistically, the rest of the population of Samegrelo is rather
+homogeneous both in terms of self-identity and language, the overwhelming majority either
+speaking Megrelian as their mother tongue (next to Georgian) or at least having a good
+command of it.
+There are no exact figures with respect to the Gali and T’q’varčeli minorities in
+Abkhazia, but they probably number within the range of ten thousand people; the locals tend
+to refer to themselves as Georgians and mainly speak Megrelian.
+Megrelians represent the northern branch of the Zan linguistic area, which is split in two
+by the Georgian-speaking regions (viz., Guria and Ač’ara), with their Laz kin remaining in the
+south. Glotto-chronological research evidence suggests that Zan must have developed from
+western Kartvelian dialects that had spread within what is now Western Georgia in the second
+millennium BC (Klimov 1998a: xii), see Chapter 11. The Megrelian language community
+identifies with Georgian culture and history, but this identification also has local overtones.
+Megrelians are Orthodox Christians and belong to the Georgian Orthodox Church,
+Georgia’s dominant religious institution. The language of liturgy is exclusively Georgian.
+3 http://census.ge/ge/results/census1/migration, accessed October 29, 2019.
+As was mentioned above, Megrelian is an unwritten language used in everyday life and
+for non-official communication in Samegrelo. Other spheres of use include trade at local
+markets; smaller shops welcome the language, too, as is also the case with all other
+institutions in Samegrelo where informal communication is preferred. In all other instances,
+Georgian is used. Megrelian is not taught at school, although universities in Tbilisi and
+Kutaisi offer practical courses in the language.
+Nearly all Megrelians are native speakers of Georgian; however, for the most part, their
+Georgian has a distinctive Megrelian accent and specific grammatical features. In the districts
+of Gali and T’q’varčeli, Georgian partially yields its lingua franca status to Russian.
+Megrelian-Abkhazian bilingualism has also been attested.
+In the 1930s, attempts were made to grant Megrelian the status of a written language
+(which subsequently led to the production of periodical newspapers, see section 12.2.2).
+These efforts came to naught, and the newspapers ceased publication on orders from Moscow.
+Currently, there are no mass media functioning in Megrelian within the Republic of Georgia,
+but in Gali, Abkhazian authorities have been publishing a Megrelian bimonthly newspaper
+called “Gal” and are currently launching a Megrelian TV channel, “Gal-TV.
+”4 These
+developments are viewed negatively in Georgia, including by the population of Samegrelo,
+for they are perceived as another step toward conflict escalation and the rise of the anti-
+Georgian sentiment in the region.
+Advocates of the Megrelian language and culture, many of them foreigners, have argued
+that Megrelian has the potential to develop into a literary language. They base upon a body of
+literature translated into Megrelian (for the most part from Georgian, including several
+versions of Šota Rustaveli’s nation-wide celebrated “Knight in the Panther’s Skin”) and on
+4 https://www.ekhokavkaza.com/a/28491954.html, accessed September 28, 2018.
+some work by contemporary writers and poets. Most Megrelians treat books in their language
+more as a decoration for their homes than as something they would ever think of actually
+reading. Although Klimov (1998b, p. 52) claims that Megrelian serves as a means of informal
+correspondence,5 Megrelians often experience difficulties reading and writing in their
+language.6
+Megrelian is not endangered in the sense of the number of speakers, but it is substantially
+affected by Georgian and not spoken monolingually. These factors point to the urgency of
+documenting this language.
+Although Megrelians are often perceived as descendants of the ancient Kingdom of
+Colchis (Egrisi), the endonym megrel- ‘Megrelian’ was first mentioned in Prince Stepanoz’
+inscription in Old Georgian found in the At’eni Sioni church and dated back to 735 A.D. by
+Guram Abramišvili (1977). The text features a genitive NP k~ta da meg~rlta eris that is to be
+interpreted as kartvelta da megrelta eris ‘of the people of Kartli and Egrisi’. There are also
+numerous mentions in such historical sources as “Kartlis Cxovreba” (“The Georgian
+Chronicles”), compiled between the 9th and 14th centuries A.D.
+5 Such correspondence is written primarily in Georgian script. Latin and Cyrillic scripts are also used,
+e.g., in text messages or online chats. On the role of the Internet in the maintenance of Megrelian,
+see Vamling (2017).
+6 However, there are indeed enthusiasts of written Megrelian who have by now contributed 13,191
+articles to the Megrelian Wikipedia (accessed October 29, 2019; the counterpart numbers in
+Georgian on the same date are 132,483 entries), which clearly demonstrates these contributors’
+willingness to keep the language written.
+12.2 State of Research
+Megrelian inflectional and derivational morphology is relatively well studied. On the other
+hand, such linguistic domains as (suprasegmental) phonetics, syntax, and discourse structure
+still await in-depth research.
+12.2.1 Brief History of Research
+Megrelian data were mentioned for the first time in Güldenstädt’s cross-Caucasian
+dictionaries in the appendix to his Caucasian travel report (1791), in the form of a word list
+featuring ca. 250 lexical items. The first grammatical information on Megrelian appeared in
+Rosen’s (1846) comparative essay on Ossetian, Megrelian, Svan, and Abkhaz, where ten
+pages were devoted to Megrelian nouns, pronouns, and verbs, with several declension and
+conjugation samples provided. The foundation of linguistic descriptions was completed by
+Alexandre Cagareli (Tsagareli) who published Megrelian texts accompanied by Russian
+translations and an essay on Megrelian segmental phonetics (Tsagareli, 1880a, 1880b).
+12.2.2 Grammatical Descriptions and Dictionaries
+Several monographs address the language in Russian (Q’ipšiʒe, 1914; Tsagareli, 1880b) and
+Georgian (Čikobava, 1936; K’art’ozia, Gersamia, Lomia, & Cxadaia, 2011; Kiria, Ezugbaia,
+Memišiši, & Chukhua, 2015); there is also an 81-page-long survey of the extant research on
+Megrelian by Harris (1991b) in English.
+Megrelian data are also discussed in a number of monographs and articles devoted to
+particular domains of linguistic structure in native Georgian linguistics (Asatiani, 1952[2015];
+Axalaia, 2004; Č’umburiʒe, 1986; Dadiani, 2014; Margvelašvili, 1983; Mart’irosovi, 1964;
+Ǯorbenaʒe, 1991; Žγent’i, 1953), in Russia (Klimov 1965, 1986, 1998b; Klimov & Alekseev
+1980) and in the West (Boeder 2005, 2009, 2013; Cherchi 2003; Deeters, 1930; Harris, 1991a,
+1993; Hewitt, 1993, 2001, 2004, 2008b; Reseck 2014; Tuite 1998; Vamling & Tchantouria,
+1991, 1993, 2005).
+Megrelian lexicography has a rich tradition and, unless one counts Güldenstädt’s pilot
+word list, begins with a root-based Megrelian-Russian dictionary appended by Q’ipšiʒe to his
+(1914) grammar. The next achievement in the field belongs to Čikobava (Chikobava), who
+published a comparative Laz-Megrelian-Georgian dictionary in 1938. Further compendia saw
+the light of day almost sixty years later (Č’araia, 1997; Eliava, 1997), soon to be followed by
+Kaǯaia’s decades-long monumental work finally published in the form of a three-volume
+Megrelian-Georgian dictionary (2001–2002), which totals around 29,000 lexical entries
+(Rostovtsev-Popiel, 2014, p. 164), abundantly furnished with examples supplied with
+translations into Georgian. This dictionary was later amended in several ways: first translated
+into German as a Megrelian-German dictionary (Kaǯaia & Fähnrich, 2001), then
+complemented with a fourth volume by the author (2009), and finally augmented with the late
+Klimov’s Megrelian-Georgian-Russian dictionary co-authored by Kaǯaia and prepared for
+publication by Gadilia (2013), which added almost 4,000 new lexical items to the codified
+Megrelian lexicon (Rostovtsev-Popiel, 2014, p. 165). Furthermore, one has to mention
+Kobalia’s (2010) compendium featuring up to 90,000 entries.
+Megrelian textual materials available to date include official documents (an 1864
+translation of the 1861 Imperial Manifesto proclamation of the serf emancipation),
+newspapers (“Q’azaq’iši gazeti,
+” “K’omuna,
+” “Samargaloš čai,
+” “Samargaloš tutumi,
+”
+“Maxorxali”—all published between 1930 and 1938), and collections of folklore featuring
+text in verse and in prose (Beriʒe, 1920; Danelia & Canava, 1991; Gudava, 1975; K’art’ozia,
+2008; Lomia & Gersamia, 2012b; Q’ipšiʒe, 1914; Samušia, 1979, 1990; Šerozia & Memišiši,
+1994; Todua & Basilaia, 2007; Tsagareli, 1880a7; Xubua, 1937). In 1979, Hewitt published a
+Megrelian text, supplementing it with comprehensive interlinear glosses and meticulous
+commentaries on grammar: а first in the history of the field.8
+12.2.3 Electronic Resources and Corpora
+The main electronic resource providing a major collection of Megrelian data is TITUS
+(“Thesaurus Indogermanischer Text- und Sprachmaterialien”).9 Digitized within the
+framework of the “Armazi” project, the following materials are readily available online:
+7 All the texts in this collection are supplied with a parallel translation into Russian, whereas the first
+text (1880a, pp. 1–9) is also furnished with an ad hoc developed transliteration and abundant
+commentaries of the publisher.
+8 In their work on the development of interlinear glossing for Megrelian, Lomia and Gersamia (2012a,
+pp. 144–156) glossed and translated into English a 175-word-long fairy tale No. XII from
+Cagareli’s collection (1880a, p. 60).
+At the time of the writing of this chapter, within the framework of the project “IMMOCAL”
+(“Imperfective modalities in Caucasian languages”) supported by the French organization
+L’Agence nationale de la recherche (ANR), I was preparing for publication a number of fairy tales
+from Xubua’s (1937) collection (including texts No. II, V, IX, XI, XII, XXII, XXIII, and LVII), as
+well as several elicited fairy tales. The textual materials were provided with detailed interlinear
+glosses and English translations and delivered in form of a Fieldwork Language Explorer (FLEx)
+database. The data from this project are cited here as Rostovtsev-Popiel (2019).
+9 http://titus.fkidg1.uni-frankfurt.de/framee.htm?/index.htm.
+Megrelian texts from the “SMOMPK”10; Q’ipišʒe’s (1914) reader; Xubua (1937); as well as
+Danelia and Canava’s (1991) texts. However, these materials lack morphological annotation
+and translation,11 thus making them available only to Kartvelianists who focus on Megrelian
+or Zan, in general.
+This electronic resource also offers access to the digitized version of Kaǯaia’s Megrelian–
+Georgian dictionary (the first three volumes, 2001–2002).
+12.3 Phonetics and Phonology
+Scholarly literature on Megrelian phonetics and phonology, including the then-novel
+experimental approaches, is largely due to the fundamental works by Żγent’i (1953, 1965)
+who set the standards for future research.
+12.3.1 Segmental Units
+Megrelian has about 30 consonants, with few allophonic variations, and five vowels.12
+10 Russian “Sbornik materialov dlja opisanija mestnostej i plemën Kavkaza”, traditionally abbreviated
+as “SMOMPK” (“Collection of Materials on the Description of the Localities and Ethnicities of the
+Caucasus”), Vols. 10, 18, and 31 (1890, 1894, and 1902, respectively). See also the introduction to
+this volume.
+11 In this respect, the collection published by Lomia & Gersamia (2012b) has an advantage in that it
+provides a parallel close translation into Georgian.
+12 The transliteration adopted in this chapter sometimes deviates from the IPA convention. In Table
+12.1Consonants
+Table 12.1Consonants
+Stops and affricates Spirants Sonants
+Voiced Aspirated Ejective Voiced Voiceless
+Labials b pha p’ m, w (v [ʋ])
+Dentals d th t’ n
+Pre-alveolars ʒ [ʣ] ch [ʦh] c’ [ʦ’] z s r, lb
+Post-alveolars ǯ [ʤ] čh [ʧh] č’ [ʧ’] ž [ʒ] š [ʃ] j
+Velars g kh k’ γ [ʁ] x [χ]
+Post-velars q’ [χ’]
+Laryngeal Ɂc h
+a Aspirated stops and affricates will hereafter be represented without the aspiration character h
+.
+b
+Megrelian l is well-known in Georgia to be heavily palatalized as compared to l in its sister
+languages, as well as to the remaining Megrelian consonants. This palatalization can often result in
+j and/or deletion in some varieties of the language (e.g., in Mart’vili). c The glottal stop mainly
+represents the reflex of the Common Kartvelian q’ (cf. Georgian q’vint- versus Megrelian ʔvint- ‘dive’). In the
+absence of q’–ʔ minimal pairs, it is hardly possible to consider ʔ a separate phoneme in Megrelian.
+Table 12.2Vowels
+Front vowels Mid vowels Back vowels
+High i u
+Table 12.2Vowels
+, the respective IPA equivalents are given in square brackets.
+Central e [ɛ] ǝ [ɘ]a o
+Low a
+a The schwa ə, often referred to as the “irrational,” or “neutral,
+” vowel in traditionalist Georgian
+literature, is unlikely to have phonemic status and represents a central allophone of u, i, and o.
+According to Harris (1991b, p. 316), “[p]honetically, none of the vowels <…> is canonical. i
+is a slightly lowered high front, unrounded vowel. ɛ is generally lax, mid or high-mid,
+unrounded and is strongly retracted relatively to i <…> u is a relatively high, back, rounded
+vowel; o is high-mid, back, and rounded; while a is advanced back or central, low,
+unrounded. /ə/ seems to be phonetically mid, back, and unrounded.”
+Long vowels and diphthongs that can result from particular morphophonemic processes
+in Megrelian do not represent separate phonemes (see also Chapter 15).
+12.3.2 Suprasegmental Units
+The word stress is believed to be “weak dynamic-musical” (K’art’ozia et al., 2011, p. 62) and
+can sometimes be distinctive (cf., e.g., dóγuru ‘X died’ versus doγúru(n) ‘X will die’).
+However, such minimal pairs are rare. According to Gudava (1969, p. 106), stress typically
+falls on the penultimate syllable in bisyllabic words (e.g., k’óči ‘man’) and on the
+antepenultimate in trisyllabic words (e.g., ósuri ‘woman’, kóʔope(n) ‘X has apparently been’);
+the place of stress in trisyllabics can vary even within the same paradigm depending on the
+auslaut: it is the antepenultimate syllable in case the word ends in a vowel (p’č’árundi ‘I
+wrote/was writing X’), and the penultimate if the word ends in a consonant (p’č’arúndit ‘we
+wrote/were writing X’) (Gudava, 1969, p. 108; see also chapter 16).
+Megrelian intonation remains an underexplored area. Similarly to other Kartvelian
+languages, Megrelian has a sizable inventory of pitch contours; this has been remarked on
+both by speakers and researchers, but has not been studied systematically.16
+12.3.3 Phonotactics
+Most words in Megrelian are mono-, bi-, and trisyllabic, although longer sequences are also
+available (K’art’ozia et al., 2011, p. 61).
+Syllables can be open (V, CV),17 closed (VC, CVC), and have either a vocalic (V, VC) or
+consonantal onset (CV, CVC). The only major vocalism restriction is that ə is ruled out in the
+onset.
+With its modest vocalic inventory, as was set forth in Gudava and Gamq’reliʒe’s (1981)
+study, Megrelian stands out from the family “in having very strict and extensive principles
+governing the internal structure of consonant clusters; while other Kartvelian languages
+permit some accessive consonant clusters, Mingrelian permits only decessive clusters (in
+which each successive obstruent has a point of articulation further back in the oral cavity”
+(Harris, 1991b, pp. 317–318).
+A cluster can feature up to four consonants in the order A–B–C–D, as instantiated in Table
+12.3. Note that the items that belong to the same set may not co-occur within the same cluster
+(Harris, 1991b, pp. 317–318).
+Table 12.3
+16 See Chapter 17 for a discussion.
+17 Here, C can refer to either a single consonant or a consonant cluster.
+Consonant Sequences
+set A r, n sonorants
+set B set C d t t’, ʒ c c’, ǯ č č’, z s, ž š coronal obstruents
+g k k’, ɣ x, q’ back obstruents
+set D w labial
+This table should be read as follows: canonical clusters, to which the sequence applies, can
+represent the following types: A–B, A–C (e.g., margal- ‘Megrelian.ANIM’), A–D, B–C, B–D, C–D;
+A–B–C (e.g., arčkile(n) ‘X understands Y, lit. X can hear Y’), A–B–D, A–C–D, B–C–D; A–B–C–D
+(e.g., marʒγwan- ‘right’).
+18
+12.3.4 Phonological Processes
+K’art’ozia et al. (2011) devote substantial space (pp. 62–97) to the description of frequently
+occurring phonological processes in Megrelian. These include, but are not limited to, (i)
+assimilation and dissimilation (both progressive and, for the most part, (also distant)
+regressive, as in gag[i]nilasu > gegnilasu ‘X went mad’); (ii) affricatization (e.g., ǯoγor-s >
+ǯoγor-c ‘dog-DAT’ after sonorants, see sections 12.6.1 and 12.7.1) and desaffricatization (e.g.,
+c’vanǯ- > c’vand- ‘beard’); (iii) metathesis (e.g., c’ign- > c’ing- ‘book’); (iv) vowel reduction,
+which typically affects high vowels and which can be either partial or full (e.g., idu > idǝ > id
+‘X went’; gamik’osopes > gamǝk’osopes > gamk’osopes ‘Xs tore Y apart’); and (v) iotacism
+(e.g., mu je? < mu re? ‘what’s going on?’ lit. ‘what is X?’).
+18 For further information on the topic, see Gudava and Gamq’reliʒe (1981) and Harris (1991b, pp. 317–319,
+322).
+Word-final n typically undergoes deletion in case it is part of an affix, e.g., S.3PL -an in
+oč’k’omun-an > oč’k’omun-a ‘Xs will eat Y’, but remains recoverable once vocalic enclitics
+such as the interrogative =o are attached to the affixed expression, e.g., oč’k’omun-an=o?
+‘Will Xs eat Y?’. At the same time, n that occurs at the end of a root remains intact: te č’q’on
+‘this oak’ (here, n is exposed to the auslaut due to the reduction of NOM -i). The same applies
+to the complementizing enclitic =n(i) whose vowel component often undergoes reduction,
+which does not cause n deletion (see examples (1a) and (38)).
+There is a recent process featuring a reshaping of the complexes sk and šk into sk’ and
+šk’, respectively, a pattern specifically attested in Samurzaq’ano-Zugdidian: skua > sk’ua
+‘child’, uškur- > ušk’ur- ‘apple’, and so on.
+The documented history of Megrelian provides evidence that there once existed a law of
+the open syllable in the auslaut, which was characteristic of the language represented in
+Cagareli’s collection, but has steadily faded away ever since. By this law, a word ending in a
+consonant would attach a high vowel (viz., i, u, and their common allophone ə) to keep the
+auslaut vocalic. The choice of a euphonic vowel was typically conditioned by the vowel (i.e.
+either front or mid/back) in the preceding syllable, as in gagak’et=ĭ ‘X made you.SG Y=EV’
+versus mus=u ‘what.DAT=EV’ (Rostovtsev-Popiel, 2007).
+Table 12.4 demonstrates relevant statistics for fairy tales X and XI (Tsagareli, 1880a, pp.
+57–59) and their contemporary renditions.19
+Table 12.4
+Euphonic Vowels in the auslaut
+19 Phrase-by-phrase and free retellings, as well as backward translation via Georgian; years of
+research: 2004–2006; Samurzaq’ano-Zugdidian dialect.
+Text No. Word counts Auslaut EV counts Consonant-final word counts
+Absolute Proportion
+Tale X 217 55 0 0
+Rendition 1 218 21 72 0.33
+Rendition 2 222 11 70 0.32
+Rendition3 226 4 91 0.40
+Rendition 4 122 12 41 0.34
+Tale XI 346 101 0 0
+Rendition 1 379 22 186 0.49
+12.3.5 Phonological Word
+The phonological word in Megrelian remains underexplored (Boeder, 2005, p. 11). What little
+is known about it leans upon Gudava’s (1969) study on stress in Senak’ian. With a reference
+to this paper, Harris (1991b, p. 320) notes that “[c]litics form a phonetic unit with a host, and
+it is this phonetic unit that determines stress. Examples include the subordinator -ni and the
+conditional marker -da:20 komórtu-ni ‘that s/he came’ and domórtu-da ‘if s/he came’.
+”
+12.4 Lexical Classes
+Lexical classes are determined according to morphological and syntactic criteria.
+20 In the meantime, the euphonic vowels, which function similarly to regular clitics, fail to satisfy this criterion:
+they do not affect stress placement (Gudava, 1969, p. 111).
+12.4.1 Verbs
+As elsewhere in Kartvelian, an important distinction can be drawn between the finite verb and
+the nonfinite verb. The former typically serves as a main predicate and expresses a number of
+the categories discussed in sections 12.7.1 and 12.7.2. Nonfinite verb forms include masdars
+and participles that syntactically behave like nominals. Masdars are marked for case and
+aspect, whereas participles can additionally express number and tense, the latter of which can
+be either present, past, or future, whereas the allative case form of the future tense participle
+has grammaticalized into the supine (see section 12.7.4).
+12.4.2 Nominals
+Nominals inflect for case and number, whereby only heads tend to show full inflection.
+Adjectives, pronouns, and numerals inflect only when substantivized.
+The role of the noun in the expression of spatial semantics is significantly diminished as
+compared to Georgian and Svan, as such functions are taken over by the verb with its
+sophisticated system of spatial preverbs (Rostovtsev-Popiel, 2008, 2012; see also section
+12.7.3).
+12.4.3. Inflection-Free Lexical Classes
+Inflection-free lexical classes include adverbs, postpositions, conjunctions, particles, and
+interjections (see K’art’ozia et al., 2011, pp. 289–309; Kiria et al., 2015, pp. 693–761).
+Adverbs can be divided into the following functional groups: locative adverbs (e.g., tudo
+‘beneath, alow’), temporal adverbs (e.g., goγ(w)a ‘yesterday’), adverbs of manner (e.g.,
+ataš(i) ‘(in) this way’), adverbs of quantity (e.g., etizmaša ‘that many times’), adverbs of
+measure (e.g., namt’in(i) ‘excessively’), causal adverbs (e.g., tišen(i) ‘that’s why’), and
+interrogative adverbials (e.g., muč’o? ‘how?’).
+Adverbs can be either non-derived (e.g., ži(n(i)) ‘up/atop’) or derived (with fossilized
+markers of the dative, adverbial, ablative, or allative case), e.g., ška-s ‘between < in the
+middle’
+, gverd-o[t] ‘by half’, dud-še(n) ‘from the beginning < from the head’, šor-(i)ša ‘far
+thither’, respectively). On a specific use of the ergative case marking on adverbs, see example
+15 in section 12.8.2.1. Reduplication, either full or partial, is an important means of creating
+new adverbs, as in k’ini-k’ini ‘again and again’ (cf. k’in(i) ‘backward, again’), išo-ašo ‘back
+and forth’ (lit. ‘thither-hither’).
+Postpositions are bound expressions of either nominal or adverbial origin which take a
+noun-phrase complement in an oblique case (most typically genitive, either non-truncated or
+truncated, i.e., either with š or without it). Postpositions include -c’k’uma/-c’k’ala ‘with’, -
+sker(i) ‘like’, -ǯgu(r)a ‘of a kind’, -cal(i) ‘of a kind’, -mang(i) ‘of a kind’, -geša ‘about/in
+comparison’, -(ʔ)ure ‘toward’, -šoro ‘like; similar to’. The postposition -x is usually discussed
+as attaching to the allative case marker -(i)ša to express the meaning ‘up to/before’ (Q’ipšiʒe,
+1914, p. 0122, apud Kiria et al., 2015, p. 729). The resulting marker -(i)ša-x, however, occurs
+not only on nouns that use the suffix -(i)ša in the allative but also on personal pronouns that
+feature -da in the same case (see section 12.6.3), e.g., čkim-(i)ša-x ‘up to/before me’ instead
+of the expected variant *čkim-da-x; this circumstance might suggest that the complex suffix -
+(i)ša-x has grammaticalized into a new case marker.
+Postposition functions are also served by some adverbs, once they occur immediately to
+the right of a genitive NP (but remain phonologically independent), as in ʔude-š(i) c’imi
+house-GEN in.front ‘in front of the house’.
+Conjunctions and connectors divide into coordinating and subordinating and can be either
+simplex or complex. In terms of their origin, these expressions can be either non-derived or
+derived, the latter typically being based on pronominal stems.21
+Coordinating conjunctions include such items as do ‘and’ (which also coordinates NPs),
+mara ‘but’, var(d)a… var(d)a… ‘either… or…’, var(i) ‘or’, and xolo ‘whereas’.
+Subordinating conjunctions include such items as the clause-final enclitic =n(i)/=i, which
+operates as a polyfunctional complementizer ‘that; when; if’; complementizer nam(u)da
+‘that’; conditional clause-final enclitic =da ‘if’; causal raxan/raγan ‘because’,
+(a=/e=)(t)ešen(i) nam(u)da ‘because; in order to’, muč’o(t(i))… (e=)teš(i)… ‘(just) as…
+as…’, enclitic =o ‘when; as’,
+22 and so on.
+According to the traditional descriptions, particles can be functionally divided into
+interrogative (=o, see section 12.8.2.5); demonstrative (e.g., a! ‘here!’); indefinite (e.g., -ga in
+indefinite pronouns, see section 12.6.3); negative (e.g., var ‘no’); affirmative (e.g., ko ‘yes’;
+the latter two being also used as sentential adverbials); emphatic (e.g., xolo ‘too’); quotative
+(e.g., =mak QUOT1, see section 12.8.3.3); and modal (e.g., ok’o(n) ‘must’).
+23
+The inventory of interjections is quite rich and includes, but is not limited to, the
+following functional domains: sorrow/concern, remorse, request for attention,
+encouragement/call for action, termination, and (re-)assertion.24
+21 See K’art’ozia et al. (2010, pp. 301–305); Kiria et al. (2015, pp. 733–736); Q’ipšiʒe (1914, pp.
+0122–0123).
+22 On the origin of –o either from a question enclitic =o or from the copula o[ren], see K’art’ozia et al.
+(2011, pp. 396–398).
+23 See K’art’ozia et al. (2010, pp. 305–308); Kiria et al. (2015, pp. 741–754).
+24 See K’art’ozia et al. (2010, pp 308–309); Kiria et al. (2015, pp. 756–761); Q’ipšiʒe (1914, p. 0123).
+12.5 Morphology
+Megrelian morphology is primarily agglutinative with certain degrees of fusion, including the
+root ablaut (specifically, in verbs). Both inflection and derivation employ affixation as the
+basic type of morphological exponence, manifesting themselves in suffixation, prefixation,
+and circumfixation. In nominal inflection, suffixation is dominant, while verbs actively
+employ all three strategies. Verbal infixation is attested as well. However, it typically
+represents a result of mophophonological processes rather than purely morphological ones.
+For example, in Samurzaq’ano-Zugdidian, the mu part of the root muš- in v-muš-enk ‘I work’
+is reanalyzed as the PV mo- (which has an allomorph mu-), and the subject agreement marker
+v- migrates to the right of it, consequently undergoes assimilation and turns into p-, which
+ultimately results in mu<p>š-enk.
+The structure of the finite verb is quite complex, whereby the minimal morphological
+verbal template features the following structure: slot –2 agreement prefix—root—slot +7
+agreement suffix. Table 12.5 and Table 12.6 illustrate, in a simplified manner, the slot
+structure of the finite verb.
+Table 12.5 Finite Verb Prefixation
+SLOT –6 –5 –4 –3 –2 –1
+MARKER AFF/FOC/PFV/NEG/PROH PV(:PFV) IMPFV EVID IO/DO/S VERS
+Table 12.6 Finite Verb Suffixation
+SLOT +1 +2 +3 +4 +5 +6 +7 +8
+MARKER R.EXT AUX/CAUS ITR SM EM IND/SBJV IO/DO/S (SG/PL) COND
+12.6 Nominal Morphology
+As was mentioned above, nominals inflect for case and number. Nominals have no category
+of grammatical gender. However, animacy can determine adjective derivation and choice of
+the verbal lexeme that controls the noun (see section 12.9.2).
+12.6.1 Nouns
+Nouns distinguish ten cases, four of which are historically based on the genitive (allative,
+ablative 1 and 2, and benefactive) (cf. Klimov, 1962, pp. 93–99), and two numbers––singular
+and plural.
+Noun stems can be consonant- and vowel-final. Nouns with a consonant-final stem often
+feature the vowel i appearing between the stem and the case suffix. Some nouns with a vowel-
+final stem (typically but not exclusively monosyllabic), such as, e.g., da ‘sister’, insert the
+euphonic consonant l between the stem and the plural marker -ep to avoid stem-vowel
+contraction (compare NOM.SG cira ‘girl’ and NOM.PL cir-ep-i/*cira-ep-i versus NOM.SG da
+‘sister’ and NOM.PL da-l-ep-i/*d-ep-i). In the plural, declension follows the consonant-final
+stem pattern.
+Table 12.7
+Nominal Declension
+‘man’ ‘girl’ ‘sister’
+SG
+NOM k’oč-(i) cira-Ø da-Ø
+ERG k’oč-(i)-k cira-k da-k
+DAT k’oč-(i)-s / k’o-s cira-s da-s
+ADV k’oč-o(t) cira-t da-t
+INS k’oč-it cira-t da-t
+GEN k’oč-iš cira-š(i) da-š(i)
+ALL k’oč-(i)ša cira-ša da-ša
+ABL1 k’oč-(i)še(n) cira-še(n) da-še(n)
+ABL2 k’oč-(i)šen(i) cira-šen(i) da-šen(i)
+BEN k’oč-(i)šo(t) cira-šo(t) da-šo(t)
+PL
+NOM k’oč-ep-(i) cir-ep-(i) da-l-ep-(i)
+ERG k’oč-ep-(i)-k / k’oč-en-k cir-ep-(i)-k da-l-ep-(i)-k
+DAT k’oč-ep-(i)-s / k’oč-en-s/c cir-ep-(i)-s da-l-ep-(i)-s
+ADV k’oč-ep-o(t) cir-ep-o(t) da-l-ep-o(t)
+INS k’oč-ep-it cir-ep-it da-l-ep-it
+GEN k’oč-ep-iš cir-ep-iš da-l-ep-iš
+ALL k’oč-ep-(i)ša cir-ep-(i)ša da-l-ep-(i)ša
+ABL1 k’oč-ep-(i)še(n) cir-ep-(i)še(n) da-l-ep-(i)še(n)
+ABL2 k’oč-ep-(i)šen(i) cir-ep-(i)šen(i) da-l-ep-(i)šen(i)
+BEN k’oč-ep-(i)šo(t) cir-ep-(i)šo(t) da-l-ep-(i)šo(t)
+The plural marker -ep has an allomorph -en in the ergative and dative cases; this feature is
+characteristic of Samurzaq’ano-Zugdidian. This dialect sometimes also allows the
+affricatization of the dative case marker -s after consonants into -c (the same process also
+applying to the S.3SG marker -s in the PRS.IND and FUT.PFV.IND) (see Table 11).
+Spatial meanings are typically expressed by the DAT (which, in the absence of dedicated
+inessive or superessive forms, serves their functions), ALL and ABL125 case forms, as well as
+by postpositional and adverbial phrases, which typically include spatial postpositions or
+adverbs. Spatial meanings related to localization and motion are frequently expressed on the
+verb as well (see section 12.7.3).
+12.6.2 Adjectives
+Adjectives do not agree with their heads and typically precede them without showing case
+concord, but they can keep the stem augment -i (glossed here as BASE) if the stem is
+consonant-final.
+There are two main types of adjectives proper: classifying (to be discussed in section
+12.9.2) and qualitative adjectives. Qualitative adjectives feature five grades of comparison:
+(i) positive (e.g., skwam- ‘beautiful’);
+(ii) moderative (e.g., mo-skwam-e ‘beautiful to some extent’, formed with circumfix
+mo-
+___
+-e);
+(iii) equative (e.g., ma-skwam-a, si-skwam-a ‘as beautiful as’, circumfixes mo-
+___
+-a
+25 ABL2, diachronically of the same origin as ABL1, on the other hand, expresses non-spatial meanings
+such as ‘for X’s sake, because of X’. The main reason of representing these two basic functions
+separately––despite their formal affinity––is the fact that ABL2 -(i)šen(i) also features in the
+paradigm of personal pronouns, instead of expected -den(i) (see Table 12.8
+Declension of First and Second Person Personal Pronouns).
+for animates and si-
+___
+-a for inanimates, respectively; these forms take the standard of
+comparison in the genitive case) (see examples 1a,b));
+(iv) comparative (synthetic u-skwam-aš-, circumfix u-
+___
+-aš; and analytic umos(i)
+skwam- ‘more beautiful’, with the standard of comparison in the ablative case (see example
+2);
+(v) superlative (e.g., analytic arʒoš(i) umos(i)/ir k’oč(i)še(n) skwam- ‘the most
+beautiful; lit. [more] beautiful than all men/every man’) (see example 3).26
+(1) a. si muš mamonka rekǝn, vamičku.
+si mu-š[i] ma-monk’-a Ø-[o]r-e[n]-k=ǝ=n[i]
+2SG.NOM what-GEN EQ-heavy-EQ S2-be-SM-S2SG=EV=COMP
+va-m-i-čk-u[n]-Ø
+NEG-IO.1-VERS.OBJ-know-SM-S.3SG
+‘I don’t know how heavy you (SG) are.’ (lit. That you [SG] are as heavy as
+what, I don’t know)
+(Xubua, 1937, p. 100.29)
+b. ti kua muš simonk’a rdun, ma vapšu.
+ti kua-Ø mu-š[i] si-monk’-a Ø-[o]r-d-u=n[i]
+DEM.DIST stone-NOM what-GEN EQ-heavy-EQ S.3-be-EM-S.3SG.PST=COMP
+ma va-m-š-u[n]-Ø
+26 As is shown below, Megrelian verbal cross-referencing is quite complex. In the glosses, agreement
+in the verb is indicated as follows: first, the grammatical function of the agreement trigger
+(S(ubject), DO, IO), then after the dot, the person specification and, if applicable, the number
+specification.
+1SG.DAT NEG-IO.1-remember-SM-S.3SG
+‘I don’t remember how heavy that stone was.
+’
+(2) tena čkimde umaγalaši / umosi maγali rdu.
+tena-Ø čkim-de(n) u-maγal-aš-i
+DEM.PROX-NOM 1SG.OBL-ABL1 COMPR-tall-COMPR-NOM
+umos-i maγal-i Ø-[o]r-d-u
+more-NOM tall-NOM S.3-be-EM-S.3SG.PST
+‘X was taller than me.’
+(3) uelbek’iš arʒoš umos gišarčkineli romanep re: ...
+uelbek’-iš arʒo-š[i] umos-[i] gišarčkinel-i
+Houellebecq-GEN all-GEN more-[NOM] famous-NOM.BASE
+roman-ep-[i] Ø-[o]r-e[n]-Ø
+novel-PL-[NOM] S.3-be-SM-S.3SG
+‘Houellebecq’s most famous novels are: ...’
+(Megrelian Wikipedia on Michel Houellebecq)27
+12.6.3 Pronouns
+Pronouns can be divided into the following classes: personal, demonstrative (see section
+12.6.4), possessive, interrogative, relative, indefinite, negative, reciprocal, and quantifiers (see
+Harris, 1991b, pp. 328–334; Mart’irosovi, 1964, p. 84–262).
+27 Accessed November 27, 2018.
+As elsewhere in Kartvelian, first and second person personal pronouns show case
+syncretism in the core argument cases (NOM, ERG, DAT). Oblique cases of the singular
+pronouns are formed suppletively. Their instrumental and adverbial case forms are rarely
+attested (Harris, 1991b, p. 328). The other case forms (such as ALL, ABL1, and BEN that feature
+-d instead of -š found in other nominals) are diachronically transparent but slightly deviate
+from the regular declension pattern.
+Table 12.8
+Declension of First and Second Person Personal Pronouns
+‘1SG’ ‘2SG’ ‘1PL’ ‘2PL’
+NOM/ERG/DAT ma si čki(n) tkva(n)
+INS čkim-i-t skan-i-t čkin-i-t tkvan-i-t
+GEN čkim-i skan-i čkin-i tkvan-i
+ALL čkim-da skan-da čkin-da tkvan-da
+ABL1 čkim-de(n) skan-de(n) čkin-de(n) tkvan-de(n)
+ABL2 čkim-(i)šen(i) skan-(i)šen(i) čkin-(i)šen(i) tkvan-(i)šen(i)
+BEN čkim-o(t) skan-o(t) čkin-o(t) tkvan-o(t)
+The functions of the third person are served by demonstratives (t)ena and (t)ina (see section
+12.6.4) and, in anaphoric constructions, mu(n) (see section 12.8.2.6). The latter has regular
+nominal inflection, so the word-final n stays intact before vowels and lacks several case forms
+that are otherwise available in nominal declension (see Q’ipšiʒe, 1914, p. 041 and above).
+Possessive pronouns take the genitive forms of the personal pronouns as their stems and
+inflect regularly.
+The interrogatives include mi(n) ‘who’, mu(n) ‘what’, and nam(u) ‘which’; all these
+expressions have regular case marking. Derived interrogatives typically represent compounds
+of mu[n] ‘what’ with such roots as per-, ner-, sxi-, and so forth (see section 12.6.4), where the
+interrogative component replaces the demonstrative one(s). Further pronominal interrogatives
+are such items as mu-še(n(i)) and mu-ša ‘why’, mu-šo(t) ‘what for’, mu-žam(i) ‘when’, mu-č’o
+‘how’, and so on (see Mart’irosovi, 1964, pp. 283 ff.).
+Expressions employed in function of relative pronouns are formed from interrogative
+pronouns by means of attachment of the enclitic =t(i) (see section 12.8.3.2.), which elsewhere
+marks additive focus (cf. 27), e.g., nam(u)? ‘which?’ > namu=t(i) ‘which=REL,
+’ and
+ultimately goes back to the calque from the Old Georgian relativizer igi previously
+grammaticalized from the distal demonstrative igi (see, e.g., Fähnrich, 1994, p. 209) whose
+Megrelian counterpart is ti (see section 12.6.4.).
+Negative pronouns are likewise based on the interrogatives: mi-ta ‘no one’, mu-ta
+‘nothing’ (see 29).
+Indefinite pronouns are derived from basic interrogatives and include free-choice
+pronouns (e.g., mi-ti-n(i) ‘anyone’, mu-tu-n(i) ‘anything’, nam(u)-ti-n(i) ‘whichever’) and
+existential pronouns, also known as specific indefinites (e.g., mi-d(i)-ga-(ren) ‘someone’, mu-
+d(i)-ga-(ren) ‘something’,28 namu-d(i)-ga- ‘some’). Their formation involves the suffixes -ti
+(-di) and -ni; these expressions are historically connected with the marker of additive focus
+=t(i) and the polyfunctional complementizer=n(i), respectively (see sections 12.6.4, 12.8.3.1,
+and 12.8.3.2). The suffix -ga “is particular to the specific indefinite” (Harris, 1991b, p. 333).
+28 The suffix -ren goes back to the copula (compare (o)re(n) ‘X is’).
+There are two reciprocal pronouns—arti-an- and art-maži(r)a-—both meaning ‘one
+another’. These are based on art- ‘one’, -an ‘of the kind’, and maži(r)a- ‘second’
+(Mart’irosovi, 1964, p. 218, apud Harris, 1991b, p. 360).
+Quantifiers include such items as arʒo/arʒa ‘each, every, all’, ir- ‘every, all’, and šxwa
+‘other’ (Harris, 1991b, p. 334).
+12.6.4 Pronominals and Deixis
+Megrelian distinguishes between proximal and distal deictics; this opposition is primarily
+expressed by the vowel alternation featuring e for proximals and i for distals. The latter are
+unmarked and therefore likelier to occur in contexts where the referent is not in immediate
+proximity to the speaker (Rostovtsev-Popiel, 2009, pp. 24–25).
+The inventory of demonstratives is relatively rich due to such derivational means as the
+pronominal root t- and the suffix -na, which yield the following items: e versus i, t-e versus t-
+i, e-na versus i-na, and t-e-na versus t-i-na, all of these expressions meaning ‘this’ versus
+‘that’. The pronouns with -na occur in the substantive function (compare examples 2 and 40),
+whereas the ones without -na can be used both substantively and attributively. Compare
+examples (37) for the former use and (1b), (14), (15), (40), and (41), showing these pronouns
+in the attributive function.
+Megrelian also has the vocalic proclitics a= and e=, which can be roughly interpreted as
+proximal and distal intensifiers (similar to the particles vot ‘over here’ and von ‘over there’ in
+Russian). These elements attach to the left of t- and represent markers of secondary spatial
+contrast. The expressions a=t-e and a=t-e-na thus typically refer to items that are closer than
+those referred to by regular proximals, whereas the function of e= in distals can vary.
+According to my fieldwork data, e=t-i and e=t-i-na are typically used in the Zugdidi region to
+point to objects that are located closer to the speaker than those marked by regular distals,
+while speakers from Gali, on the contrary, tend to use this emphasis to refer to objects that are
+remoter than those marked by regular distals (Rostovtsev-Popiel, 2009, p. 24).
+Table 12.9 illustrates the basic derivations of proximals, whereby formation of
+their distal counterparts is similar in almost every way, with only three reservations: (i)
+the primary distal deictic vowel e corresponds to proximal a (e.g., t-a-k ‘here’ versus t-
+e-k ‘there’); (ii) the other primary distal deictic vowel i correlates with proximal e
+(e.g., t-e-ner- ‘one of this kind’ versus t-i-ner- ‘one of that kind’); and (iii) the
+secondary distal deictic vowel e= counterparts proximal a= (e.g., a=t-ak-ian- ‘one
+from right over here’ versus e=t-e-k-ian- ‘one from right over there’).
+Table 12.9
+Derivation of Proximal Deictic Expressions
+a= t a- -šo(t) ‘right over here’
+(t) a- -šo(t) ‘over here’
+a- mar (-ine) ‘right over here’
+a= t a- k (-ine) ‘right here’
+(t) a- k (-ine) ‘here’
+Secondary deictic vowel
+Pronominal root
+Primary deictic vowel
+Adverbial/lexical root
+Augment
+Directional/adverbial suffix
+Adjectivizer
+Translation
+(t) a- ʔure (-ša) ‘hither’
+a= t a- ʔure (-ša) ‘right hither’
+(t) a- ʔure -še(n) ‘hence’
+a= t a- ʔure -še(n) ‘right hence’
+(t) a- k a= t a- k (t) a- š a= t a- š (t) e- cal, per, ner,
+ǯgu(r)a,
+gwar/gur,
+mang(i)
+a= t e- cal, per, ner,
+ǯgu(r)a,
+gwar/gur,
+mang(i)
+(t) e- cal, per, ner,
+ǯgu(r)a,
+gwar/gur,
+mang(i)
+a= t e- cal, per, ner,
+ǯgu(r)a,
+gwar/gur,
+mang(i)
+(t) e- sxi, z[o]ma a= t e- sxi, z[o]ma -ian ‘one from here’
+-ian ‘one from right here’
+‘one of this kind’
+‘one of this very kind’
+‘one of this kind’
+‘one of this very kind’
+-o(t) ‘this way’
+-o(t) ‘right this way’
+‘this many/much’
+‘right this many/much’
+12.6.5 Numerals
+Megrelian employs a combined decimal and vigesimal numerical system. 30 The basic
+numeral roots, which also function as stems of cardinals, are art- ‘one’, žir- ‘two’, sum-
+‘three’, o(n)tx- ‘four’, xut- ‘five’, amšw- ‘six’, škwit- ‘seven’, (b)ruo ‘eight’, čxoro ‘nine’, vit-
+‘ten’, eč- ‘twenty’, and oš- ‘hundred’. All other numerals are derived from these expressions.
+Cardinals from 11 to 19 are formed according to the model vit- ‘ten’ + -[d]o- ‘and’ + one
+of the basic elements from ‘one’ to ‘nine’, e.g., vit-o-žir- ‘12’, vit-o-bruo ‘18’. To form a
+cardinal from 20 to 29, Megrelian uses the model eč- ‘20’ + -do- ‘and’ + one of the basics,
+e.g., eč-do-art- ‘21’, eč-do-amšw- ‘26’. The formation of items from 30 to 39 employs the
+model eč- ‘20’ + -do- ‘and’ + ‘10’ + one of the basics, e.g., eč-do-vit- ‘30’, eč-do-vit-o-xut-
+‘35’, eč-do-vit-o-čxoro ‘39’. A complex prefix is added to create higher numerals, compare
+eč-do-škvit- ‘27’, žir-n-eč-do-škvit- ‘47’ (lit. ‘two times twenty and seven’), sum-on-eč-do-
+škvit- ‘67’ (lit. ‘three times twenty and seven’), and otx-[o]n-eč-do-škvit- ‘87’ (lit. ‘four times
+twenty and seven’). Hundreds are expressed by the root oš- prefixed by the relevant basics
+from the basic set, such as otx-oš- ‘400’. To say ‘one thousand’, one would use either the
+Megrelian word vit-oš- (lit. ‘10 times hundred’) or the one adapted from Georgian, viz.
+a(n)tas-.
+The circumfix ma-
+___
+-a is used to form ordinals; consider the same derivation used for
+equatives, mentioned in section 12.6.2. For example, sum- ‘three’ > ma-s(u)m-a ‘third’. The
+prefixal part precedes the last element in complex numerals: sum-on-eč-do-ma-škvit-a ‘67th’
+(lit. ‘three times twenty and seventh’), žar-n-eč-do-ma-vit-[d]o-ži(r)-a ‘52nd’ (lit. ‘two times
+twenty and twelvth’).
+30 This section owes much to Vamling and Tchantouria’s (2005) paper on Megrelian and Laz, with
+some examples cited directly from there.
+Multiplicatives are formed by means of the complex suffix -(i)ša-x: xut-(i)ša-x ‘5 times’,
+eč-(i)ša-x ‘20 times’. Compare the similarity with the marker -(i)ša-x mentioned in section
+12.6.1.
+Fractions take the circumfix na-
+___
+-or-/-al-: na-sum-or- ‘one third’, na-ontx-al- ‘one
+fourth’. Compare the similarity of the prefixal part of the circumfix with the participial prefix
+na- mentioned in section 12.7.4.
+Distributives are formed by means of reduplication: žir-žir- ‘two each, two by two’, sum-
+sum- ‘three each, three by three’.
+Similarly to other quantifiers, such as brel- ‘many, much’ and (č’i)č’e ‘few, little’,
+numerals are usually followed by nouns in singular (e.g., sum-i c’ana three-NOM year.NOM,
+not c’an-ep-i year-PL-NOM ‘three years’), whereby plural is allowed with animates (e.g., sum-i
+ǯimak’oč-ep-i three-NOM friend-PL-NOM ‘three friends’).
+12.7 Verbal Morphology
+The following categories are expressed by the Megrelian finite verb: tense, aspect, mood, and
+evidentiality,31 person, and number. Compared to the other languages in the Kartvelian
+family, Megrelian features a greater number of the TAME paradigms, has a lower number of
+suppletive verbal stems, and provides for a particularly rich set of prefixal derivations.
+Valency alternations in Megrelian are quite elaborate. Megrelian has active
+monotransitives and ditransitives, intransitives, decausatives (with passive readings available),
+and inverted statives (see section 12.8.2.1). Nearly all verbs can undergo causativization
+(double causatives also being possible) and applicativization (see section 12.8.2.3).
+31 These are abbreviated as TAME in this chapter, in contrast to the traditional tripartite term TAM.
+12.7.1 Tense-Aspect-Mood-Evidentiality
+The morphology of the Megrelian verb is largely agglutinative. Morphophonological fusion is
+found primarily in the prefixal domain (see section 12.3.4). The basic structure of the
+Megrelian finite verb has already been addressed in Tables 12.5 and 12.6. The TAME system
+encompasses four Series,32 namely, the present-future Series I, the aorist-optative Series II,
+the perfect Series III, and the dedicated evidential Series IV.
+Tense is expressed throughout the extensive system of TAME Series. The Series I PRS
+IND, Series III PRF IMPFV IND (in its evidential reading, see later in this section), and Series IV
+EVID IMPFV IND can all encode present. Series I IMPF IND and Series II AOR IND encode past
+events. The future is encoded by the Series I FUT TAMEs and Series IV EVID PLUPRF PFV
+COND.
+The category of mood includes IND, SBJV, COND, AND IMP and is expressed in all the
+Series.
+The category of aspect is expressed throughout the whole system (with the only formal
+constraint found in Series I (where PV + PRS = FUT, this being a secondary aspect-to-tense
+development). The basic rule is that if a verb carries a slot –5 preverb, then it is likely to be
+32 The term “Series” in Kartvelian studies conventionally refers to groups of TAME paradigms that
+share categorial (e.g., tense and evidentiality), morphological (e.g., stem formation and agreement
+markers), and morphosyntactic (e.g., case-marking alignment) properties. See later in this section;
+see also Chapter 11 and Tuite (2017), with further references therein.
+perfective (on preverbs, see section 12.7.3).33 In the absence of a preverb, the verb form is
+likely to be imperfective (see Table 12.10).
+Furthermore, Megrelian also features two types of dedicated imperfectives, both
+belonging to the domain of inflection. The first one involves specific auxiliaries (see Table
+11.11
+Verbal Series I) to produce imperfective futures, a TAME pattern uncharacteristic of
+Kartvelian, see examples (5) and (6). The second pattern, nowadays unique to the variety
+spoken in Mart’vili, makes use of the slot –4 prefix (t(i))m(a)- to form secondary
+imperfectives, viz., iteratives and habituals (typically in the PRS and IMPF) (Č’umburiʒe, 1986,
+pp. 36–37; Harris, 1991b, p. 342; K’art’ozia et al., 2010, pp. 195, 200; Mač’avariani, 1974, p.
+133; Reseck, 2014, pp. 116–117) from inherently perfective verbs.
+(4) zura ir c’anas txirs gitmak’orobunc.
+zura-Ø ir c’ana-s txir-s ge-t[i]ma-Ø-k’orob-un-s
+Zura-NOM every year-DAT hazelnut-DAT PV-IMPFV-DO.3-collect-SM-S.3SG
+‘Zura collects hazelnuts (e.g., picking them up from the bottom of the tree) every
+year.’
+(Arkadiev, 2015, p. 140)
+This example illustrates a set of complex conditions on the use of the secondary
+imperfectivizer. The starting point here is the simplex verb k’orobuns ‘X collects Y’; it is
+imperfective and does not specify the manner of action. The perfective of k’orobuns is formed
+with help of the slot –5 preverb ge- ‘upward’, with the resulting form ge-k’orobuns. In
+33 Verbs of motion and position do not usually obey this rule, thus carrying preverbs in both PFV and
+IMPFV TAMEs and distinguishing aspects suppletively (in particular, in Series II).
+addition to perfectivizing, ge- also modifies the lexical meaning of the verb, in such a way
+that ge-k’orobuns now means ‘X will pick something up from a low surface’ (e.g., from the
+floor). This new form is inherently perfective, so in order to use it imperfectively, a new
+prefix is needed. This prefix is taken from slot –4, and the resulting verb, shown in (4), keeps
+the specialized lexical semantics of picking something from below.34
+Table 12.10 illustrates TAME formation for the verb č’arua ‘write’ (Class I), with a third
+person subject and direct object.
+Table 12.10
+Verbal Series IIa
+SLOT
+–5 0 +6 +7
+TAME
+AOR IMPFV IND č’ar -u
+AOR PFV IND do- č’ar -u
+AOR IMPRF SBJV (OPT)/IMP IMPFV č’ar -a -s
+AOR PRF SBJV (OPT)/IMP PFV do- č’ar -a -s
+Note: The AOR OPT and IMP TAMEs have distinct forms only in 2.S, namely featuring (do-)č’ar-a ‘so
+that you (SG) write X’ versus (do-)č’ar-i! ‘write X!’, respectively.
+a Series II is listed before Series I, because the latter derives from Series II both diachronically and
+synchronically (the slot +4 thematic suffix in Table 11 (aka “Series Marker”) is the primary means of Series I
+stem formation for Class I verbs).
+34 For a typological perspective and the mechanisms of secondary imperfectivization, see Wiemer and
+Seržant (2017).
+Two TAMEs listed in Table 11 feature the auxiliaries iɁuapu(n)/iɁi(n) and iɁuapudu that, as
+stand-alone words, represent the third person FUT IND and FUT COND of the copula,
+respectively. The person and number inflection of FUT IMPRF IND and FUT IMPRF COND only
+affects the lexical verb leaving the AUX intact:
+(5) p’č’arunda {iɁuapu(n)/iɁi(n)}
+v-č’ar-un-d-a-Ø iɁuapu(n)/iɁi(n)
+S.1-write-SM-EM-SBJV-S.1 AUX.IND
+‘I will be writing X’ (lit. ‘it will be that I write X’)
+(6) č’arundat iɁuapudu
+Ø-č’ar-un-d-a-t iɁuapudu
+DO.3-write-SM-EM-SBJV-PL AUX.COND
+‘If you (PL) would be/had been writing X’ (lit. it would be/had been
+that you (PL) write X’)
+Note that the respective forms of the lexical verbs underlying the auxiliaries in the above examples are
+ip’uapuk/ip’ik ‘I will be(come)’ and iɁuapudut ‘you (PL) would be(come)/would have
+been/become’.
+Table 11.11
+Verbal Series I
+SLOT
+–5 0 +4 +5 +6 +7 +8 AUX
+TAME
+PRS IND č’ar -un -s/-c
+FUT PFV IND do- č’ar -un -s/-c
+PRS SBJV č’ar -un -d -a -s
+FUT PFV SBJV do- č’ar -un -d -a -s
+IMPF IND č’ar -un -d -u
+FUT COND do- č’ar -un -d -u
+IMPF COND č’ar -un -d (-u) -k’o(n)
+(FUT) PFV COND do- č’ar -un -d (-u) -k’o(n)
+FUT IMPFV IND č’ar -un -d -a -s iɁuapu(n)/iɁi(n)
+FUT IMPFV COND č’ar -un -d -a -s -k’o(n) iɁuapudu
+As was mentioned in section 12.6.1, the S.3SG marker -s that occurs in the first two TAMEs
+right after consonant can undergo affrication, specifically after stem markers ending in n, and
+thus be represented as -c.
+In Table 12.12, we see slot –2 and –1 prefixes; these are directly involved in the
+formation of Series III for Class I and III verbs (see section 12.8.2.1). In the first, second, and
+third person forms, distinct markers are used, e.g., PRF IMPFV IND m-i-č’aru(n) ‘I have
+apparently written X’; g-i-č’aru(n) ‘you (SG) have apparently written X’; Ø-u-č’aru(n) ‘X has
+apparently written Y’.
+Table 12.12
+Verbal Series III
+SLOT
+TAME
+PRF IMPFV IND Ø- u- č’ar -u(n)
+PRF PFV IND d(o)- Ø- u- č’ar -u(n)
+–5 –2 –1 0 +1 +5 +6 +7 +8
+PLUPRFIMPFV IND Ø- u- č’ar -u -d -u
+PLUPRF PFV IND d(o)- Ø- u- č’ar -u -d -u
+PRF IMPFV SBJV Ø- u- č’ar -u -d -a -s
+PRF PFV SBJV d(o)- Ø- u- č’ar -u -d -a -s
+PRF IMPFV COND Ø- u- č’ar -u -d (-u) -k’o(n)
+PRF PFV COND d(o)- Ø- u- č’ar -u -d (-u) -k’o(n)
+The development of evidentiality is a recent phenomenon that has evolved from Series III
+perfect (cf. Šabašvili, 2009; Topadze Gäumann, 2011), but, for reasons particular to
+Megrelian verbal morphology, failed to encompass the entire verb system (the major problem
+being that Class IV verbs lack Series III forms). In order to compensate for the deficiency of
+evidential-friendly Series III perfects, Megrelian made use of past tense participles formed
+with the prefix no-/na-, see section 12.7.4 and Kiria et al. (2015, pp. 572–573). These forms,
+combined with the copula, gave rise to a dedicated evidential set. Classes I–III were also
+brought into the system of dedicated evidential encoding. As a result, currently there are two
+competing TAME Series capable of expressing evidential semantics in all Classes other than
+IV (Rostovtsev-Popiel, 2018).
+Table 12.13
+Verbal Series IV
+SLOT
+–5 –3 0 +1 +4 +5 +6 +7 +8
+TAME
+EVID IMPFV IND no- č’ar -u -e(n) -Ø
+EVID PFV IND du- no- č’ar -u -e(n) -Ø
+EVID PLUPRF IMPF IND no- č’ar -u -e -d -u
+EVID PLUPRF PFVCOND du- no- č’ar -u -e -d -u
+EVID IMPFV SBJV no- č’ar -u -e -d -a -s
+EVID PFV SBJV du- no- č’ar -u -e -d -a -s
+EVID IMPFV COND no- č’ar -u -e -d (-u) -k’o(n)
+EVID PFV COND du- no- č’ar -u -e -d (-u) -k’o(n)
+In complex sentences, sequence of tenses can apply, which is summarized in Table 12.14 (an
+amended citation from K’iziria, 1982, pp. 127–128, apud Harris, 1991b, p. 381):
+Table 12.14
+Sequence of Tenses in the Complex Sentence
+Verb of the
+matrix clause
+Verb of the
+dependent clause
+PRS AOR SBJV (OPT)/PRS SBJV/FUT SBJV
+IMPF PRF COND
+AOR PRF SBJV/PRF COND
+12.7.2 Person and Number
+There are three persons and two numbers encoded by affixes in slots –1 and +8 (see Harris,
+1991b, pp. 337–341; Lacroix, 2014). The “valency” slot –2 can also be involved, in case the
+verb (i) is either an applicative or a causative, (ii) belongs to the inverted subtype of Class IV,
+or (iii) belongs to either Class I or Class III and represents a Series III TAME form (see
+sections 12.7.1 and 12.8.2.1).
+Subject, direct object, and indirect object can all be indexed by agreement markers on the
+verb. Table 12.15 andTable 12.16 demonstrate the agreement paradigm of the verb ʒirapa
+‘see’ (Class I) in the present and aorist indicative forms.
+Table 12.15
+Agreement in PRS INDa
+1SG 1PL 2SG 2PL 3SG 3PL
+DO
+S
+1SG r-ʒir-un-k r-ʒir-un-t v-ʒir-un-k v-ʒir-un-k
+1PL r-ʒir-un-t r-ʒir-un-t v-ʒir-un-t v-ʒir-un-t
+2SG m-ʒir-un-k m-ʒir-un-a(n) Ø-ʒir-un-k Ø-ʒir-un-k
+2PL m-ʒir-un-t m-ʒir-un-a(n) Ø-ʒir-un-t Ø-ʒir-un-t
+3SG m-ʒir-un-s m-ʒir-un-a(n) r-ʒir-un-s r-ʒir-un-a(n) Ø-ʒir-un-s Ø-ʒir-un-s
+3PL m-ʒir-un-a(n) m-ʒir-un-a(n) r-ʒir-un-s r-ʒir-un-a(n) Ø-ʒir-un-a(n) Ø-ʒir-un-a(n)
+a In modern speech, both the subject prefix v- and the object prefix m- are typically realized as b-
+before voiced consonants; the object marker r- is a positional allomorph of g- that occurs before
+consonants (all but r, whereby g- can subsist), as in, e.g., g-riču/r-riču ‘X bit you (SG)’.
+Table 12.16
+Agreement in AOR IND
+1SG 1PL 2SG 2PL 3SG 3PL
+DO
+S
+1SG r-ʒir-i-Ø r-ʒir-i-t v-ʒir-i-Ø v-ʒir-i-Ø
+1PL r-ʒir-i-t r-ʒir-i-t v-ʒir-i-t v-ʒir-i-t
+2SG m-ʒir-i-Ø m-ʒir-i-t Ø-ʒir-i-Ø Ø-ʒir-i-Ø
+2PL m-ʒir-i-t m-ʒir-i-t Ø-ʒir-i-t Ø-ʒir-i-t
+3SG m-ʒir-u m-ʒir-es r-ʒir-u r-ʒir-es Ø-ʒir-u Ø-ʒir-u
+3PL m-ʒir-es m-ʒir-es r-ʒir-es r-ʒir-es Ø-ʒir-es Ø-ʒir-es
+12.7.3 Preverbs
+Megrelian features a sophisticated system of spatial preverbs that are nowadays represented as
+several dozen non-detachable derivational prefixes (slot –5 in Table 12.5). Apart from the
+secondary function of the expression of the perfective aspect,35 preverbs express precise and
+semantically subtle spatial meanings (Arkadiev, 2015; Asatiani, 1952; Hewitt, 2004, pp. 284–
+315; Reseck, 2014). Table 12.18 illustrates the degree of this precision (an extract from
+Kobalava, Topadze Gäumann, & Gersamia, 2017, p. 92) exemplifying semantic nuances of
+the spatial value “inside.”
+Table 12.17
+Spatial Meanings Expressed by Preverbs: General Meaning ‘inside’
+Verbs of motion:
+Verbs of position:
+‘X went/got inside/inwards’
+‘X sits/is inside’
+Semantic specification of the
+goal/localization
+35 The aspectual functions of preverbs and further prefixes in Megrelian were briefly touched upon in
+section 12.7.1. For more information, see K’art’ozia et al., 2011, pp. 193–195; Kiria et al., 2015, p.
+360–364; Reseck, 2014, pp. 111–126).
+(d)ino-rtu (d)ino-xe(n) deep, vertical, and half-open
+aša-rtu aša-xe(n) open and vertical
+miša-rtu miša-xe(n) dense, horizontal, and open
+mito-rtu mito-xe(n) dense, horizontal, and closed
+— mila-xe(n) vertical and closed
+First of all, this table shows that the preverbs listed are bisyllabic complex prefixes that can be
+attached by the same stem while deriving diverse lexical items. Next, Megrelian complex
+preverbs can appear not only on verbs of motion but also on verbs of position. The spatial
+import of preverbs is generally similar in both types of verbs, with subtle differences though.
+In particular, the positional mila-xe(n) ‘X is/sits inside (of the house/at home; with an
+implication that X does not want to come out and do anything worthy of doing)’, does not
+have a motion counterpart, such as *mila-rtu.
+36 There are also numerous cases when various
+stems of verbs of position correlate in different ways with the same preverb, as in ala-rtu ‘X
+went down thither’ versus ala-ǯan(u(n)) ‘X lies at the bottom (e.g., down in a ditch)’, but ala-
+xe(n) ‘X sits outside’.
+Apart from the concept ‘inside’, the basic spatial values expressed by preverbs in
+Megrelian include ‘outside’
+,
+‘up(ward)’
+,
+‘down(ward)’
+,
+‘beside/next’
+,
+‘ahead’
+,
+‘away’
+,
+‘in
+front’
+,
+‘(at/to the) back’
+,
+‘over’
+,
+‘through’
+,
+‘wide of the mark’
+,
+‘around’
+,
+‘among’
+,
+‘in a closed
+space’, and ‘together’. Some of these spatial concepts can be encoded simultaneously and,
+similarly to the examples reviewed for ‘inside’, focus on specific ways of traversing the path
+or semantic nuances of position. Consider such examples as ek’[a]-m[o]išu ‘X was coming
+36 The existing motion verb form molartu with the preverb mola- means ‘X came hither away with
+me/us’ and does not belong to the mila-/mola- alternation paradigm.
+up hither (up the stairs/up the hill)’ versus eš[a]-m[o]išu ‘X was coming hither inside (up the
+ladder/from the pit)’ (Rostovtsev-Popiel, 2016).
+As the translations of the examples suggest, preverbs can also express spatial deixis. The
+preverbal inventory includes (i) dedicated deictic expressions (these being simplex preverbs
+mo- ‘hither’ and me- ‘thither’, see (7), (10), (14), (26), (40), (43)); (ii) hybrid deictic-
+directional preverbs (e.g., mola- ‘hither away with me/us’, mida- ‘thither away,
+’ see (11),
+(44)); and (iii) pseudo-compositional preverbs (e.g., muto-
+‘here among Xs’, mito-
+‘there
+among Xs,’ see (8), (9), (23), (30)), synchronically non-compositional preverbs that either
+express deixis in addition to direction/localization (e.g., k’ila- ‘hither over distance’, ela-
+‘thither downward inside’) or are deictically neutral (e.g., ic’o- ‘in front’ in ic’o-xvalama
+‘meet/come across X on one’s way’).
+Note that the spatial deictic function of dedicated preverbs mo- ‘hither’ and me- ‘thither’
+can be extended onto verbs that are not typically associated with motion:
+(7) a. ingars b. moingars
+Ø-i-ngar-s mo-Ø-i-ngar-s
+S,3-VERS.SUBJ-weep-S.3SG PV-S.3-VERS.SUBJ-weep-S.3SG
+‘X weeps’ ‘X comes hither weeping’
+(Reseck, 2014, pp. 189–190)
+In addition to the above functions, the Megrelian preverb system can express the semantic
+category of contact versus separation (Hewitt, 2004, pp. 309, 312), a function that is primarily
+realized by means of attaching slot –6 prefixes, viz., ko- and ga-, respectively, to a verb
+carrying a complex preverb. Hewitt cites such constructions as the ones in (8) and (9) that
+feature ko- to mark contact and ga- to mark separation on the verbs with the same
+preverb mik’o-
+.
+(8) st’ols kǝmk’udoxodi.
+st’ol-s ko-m[i]k’o-[v]-u-doxod-i-Ø
+table-DAT CONT-PV-[S.1]-VERS.OBJ-sit.down-IND-S.1
+‘I sat down to/at the side of the table.’
+(9) uškuri gemk’oc’ili!
+uškur-i ga-m[i]k’o-Ø-c’il-i
+apple-NOM SEP-PV-DO.3-pluck-IMP
+‘Pick the apple (off the tree)!’
+However, the values of this category can also be expressed by means of preverbs as such
+(ano-, ala-, me-, etc.), without recruiting additional prefixes, such as ko- and ga- (Rostovtsev-
+Popiel, 2008, 2012):
+(10) bošik c’q’armaluša {anortu/alartu/mertu}.
+boš-i-k c’q’armalu-ša ano-Ø-rt-u /ala-Ø-rt-u /me-Ø-rt-u
+boy-BASE-ERG river-ALL PV-S.3-go-S.3SG.PST
+‘The boy {went down into/went down to/went toward} the river.’
+Overall, the Megrelian preverb system features a total of 13 simplex preverbs (including 6
+Georgian preverbs within the verbal lexical items borrowed from Georgian along with the
+verbal lexemes carrying them and morphologically accommodated in Megrelian) and 24
+bisyllabic complex preverb prototypes of the (C)VCV- structure (gima-, ek’o-
+, miša-, etc.). The
+exact inventory of preverbs varies depending on a local variety of Megrelian, semantic
+differences between similar items with a vowel change in the first syllable (which often
+results in a deictic contrast between DIST CiCV- and PROX CuCV-), and even individual
+preferences.37 To complicate things even more, the meaning of a preverb can undergo
+significant change when combined with the aforementioned slot –6 prefixes ko- and ga-. As
+was shown in examples (8) and (9), when juxtaposed with these prefixes, preverbs can
+undergo semantic modification and sometimes entirely change their original meaning within
+the preverbed verbal lexeme.
+12.7.4. Non-finite Verb Forms
+Nonfinite verb forms include masdars, participles, and supines.
+Masdars are verbal nouns that encode event nominalizations (e.g., č’arua ‘the
+process/way of writing’). Their function is close to that of the infinitive. Masdars express the
+category of aspect and inflect for case. Numberwise they are always singular.
+Masdar formation from a stem involves suffixation, the actual array of affixes being wide
+and often requiring an ad hoc explanation, although it has been possible to make certain
+generalizations in this respect.38
+37 Over my one-and-a-half decade-long fieldwork on preverbs in Megrelian, I have not yet
+encountered a native speaker who would provide data during the elicitation that would match any
+other language consultant’s results, which circumstance might prompt the assumption that the
+Megrelian preverb system is in large measure individually conditioned.
+38 The full list of suffixes includes: -u-a, -ap-a, -ap-
+, -op-a, -in-
+, -or-
+, -ir-
+, -r-, -on-
+, -en-
+, -a/-eb-a, -al-
+a, -am-a, -um-a, -oš-
+, -un-
+, -an-a, -ior-/-iol-. Some of these are complex, i.e., consist of a SM and
+Megrelian has an array of participles. They are sensitive to perfective and imperfective
+aspects and inflect for case and number, once substantivized. Although there is a tradition in
+scholarly literature to ascribe a particular value of the category of grammatical voice to the
+participles,39 this topic remains a matter of debate for Megrelian, as well as for the rest of
+Kartvelian. At least two of the five types listed in Table 12.18 are contextually oriented (see
+Haspelmath, 1994; Shagal, 2017, pp. 38ff., 71–83).
+Table 12.18
+Participles Formed from the Verb č’arua ‘write’
+PRS ma-č’ar-al-/č’ar-u ‘one who writes/writer’
+PST (PFV) (do-)č’ar-il- ‘one written’
+PST IPFV na-č’ar-a ‘one written’
+FUT (PASS/ACT) o-č’ar-al- ‘one to be written/one who is to write X’
+PRVT (PASS/ACT) u-č’ar-u ‘one unwritten/one who has not written X’
+The stem of the future participle with another suffixal part of the circumfix, viz., -u, is also
+used to form supines (i.e., adverbs of purpose) by means of attaching the suffix -ša (evidently
+related to the ALL case marker-(i)ša) (see Table 12.7
+Nominal Declension), e.g., o-č’ar-u-ša ‘in order to write (X)’.41
+MSD proper (e.g., -eb-a), whereas some others are simplex, e.g., -a or -in- (see K’art’ozia et al.,
+2011, pp. 275–279; Kiria et al., 2015, pp. 650–664).
+39 See K’art’ozia et al. (2011, pp. 279–286); Kiria et al. (2015, pp. 664–686).
+41 For typological parallels, see Aikhenvald (2008).
+(11) k’ini midartes onadiruša bošenk.
+k’in=i mida-Ø-rt-es o-nadir-u-ša boš-ep-k
+back=EV PV-S.3-go-S,3SG.PST SUPINE-hunt-SUPINE-ALL boy-PL-ERG
+‘The boys left for hunting again.’
+(Xubua, 1937, p. 100.34)
+12.8 Syntax
+Megrelian syntax remains an underexplored field. The discussion in this section is confined to
+general remarks, touching upon the existing data commented upon in the scholarly literature.
+12.8.1 Noun phrases
+Modifiers typically precede their heads (Harris, 1991b, p. 361; K’art’ozia et al., 2011, p. 314;
+Lomtaʒe, 1954, p. 211; Q’ipšiʒe, 1914, pp. 032–033; Testelec, 1998a, pp. 247–254). In this
+order, modifiers neither agree with their heads in number nor show case concord.42
+(12) a. eǯgua ǯgiri osuri
+eǯgu[r]a ǯgir-i osur-i
+this.kind good-NOM woman-NOM
+‘such a good wife’
+b. eǯgua ǯgiri osuriš
+42 In this respect, only the suffix -i in the nominative NP can with great reserve be viewed as a trace of
+case concord. On the morphosyntax of the reversed order of constituents, see K’art’ozia et al.
+(2010, pp. 315).
+eǯgu[r]a ǯgir-i osur-iš
+this.kind good-BASE woman-GEN
+‘of such a good wife’
+In possessive phrases, the genitive possessor precedes the possessum nominal, as in (13).
+(13) čkim(i) ǯimaš(i) Ɂude
+čkim-(i) ǯima-š(i) Ɂude-Ø
+1SG.POSS-(BASE) brother-GEN house-NOM
+‘my brother’s house’
+However, Megrelian also provides evidence of the so-called floating genitives (see Creissels,
+2013), whereby the possessum, viz., gverd t’q’ebi-s ‘half (of the) hide-DAT’ in the following
+example, can be moved to the left of the possessor, viz., te t’ura-ši-s ‘this jackal-GEN-DAT’;
+note that in this instance, the postposed possessor shows case concord with its head:
+(14) gverd t’q’ebis kimerčantia sia te t’urašisia.
+gverd t’q’eb-i-s ko-me-r-č-an-t=i=a si=a
+half hide-BASE-DAT PRF-PV-IO.2-give-SM-PL=EV=QUOT 2SG.DAT=QUOT
+te t’ura-ši-s=i=a
+DEM.PROX jackal-GEN-DAT=EV=QUOT
+‘We will give you (SG) a half of this jackal hide.
+’
+(Xubua, 1937, p. 262.23, apud K’art’ozia et al., 2010, p. 315)
+12.8.2 Simple Clauses
+Two essential morphological and morphosyntactic features that are most salient for the
+structure of the simple clause in Megrelian are verb class and case marking.
+12.8.2.1 Verb Classes
+Megrelian, similarly to its sister languages, features four verb classes, whose distribution rests
+upon “morphological and/or morphosyntactic criteria” (Cherchi, 2003, p. 30). These are: (i)
+active dynamic verbs, typically bi- and trivalent transitives (e.g., write, eat), (ii) intransitives
+with patientive semantics (e.g., hide, rot) and their applicatives (e.g., hide from X, rot at X’s
+place), (iii) intransitives with agentive semantics (e.g., sing, play), and (iv) inverted statives
+that are typically bivalent (e.g., love, hate). Classes I and III case-shift entirely, and Class II as
+well, see Table 12.19, whereas Class IV verbs case-shift only partially, thus only affecting the
+case of the second argument (i.e., the theme/stimulus object that becomes a formal subject of
+particular TAMEs):
+(15) osurc xolo keɁoropǝ te ndemk ʒalamk.
+osur-s xolo k[o]-Ø-e-Ɂor-op-u
+woman-DAT ADD AFFIRM-3.IO-VERS.REL-love-AUG- S.3SG.PST
+te ndem-k ʒalam-k
+DEM.PROX daeva-ERG very.much-ERG
+‘The woman, in her turn, fell greatly in love with this daeva.’
+(Xubua, 1937, p. 96.23)
+Note that, in addition to the ergative encoding of the stimulus in such constructions, the verb
+in Series II can also trigger the appearance of the ergative case marker -k on adverbs of
+measure as well (which neither occurs in other Series in Megrelian nor elsewhere in
+Kartvelian under any circumstances). Compare ʒalam-k ‘greatly-ERG’ in example (15) (on
+this pattern, see Harris, 1991b, p. 375, with a reference to K’ač’arava, 1969, pp. 505–506).
+12.8.2.2 Case Marking
+Case-marking alignment depends on a given verb class and TAME Series. Table 12.19
+summarizes the main patterns. Recall that Class IV lacks Series III TAMEs, which means that
+perfect, resultative, and evidential grammatical semantics can only be expressed in such verbs
+by means of Series IV TAMEs.
+Table 12.19
+Case-Marking Alignment across Verb Classes and TAME Series
+Series I Series II Series III Series IV
+Class I NOM–DAT(–DAT) ERG–NOM(–DAT) DAT–NOM(–ALL) NOM–DAT(–DAT)
+Class II NOM(–DAT) ERG(–DAT) DAT (–DAT/ALL) NOM(–DAT)
+Class III NOM(–DAT) ERG(–NOM) DAT(–NOM) NOM(–DAT)
+Class IV DAT(–NOM) DAT(–ERG) DAT(–NOM)
+12.8.2.3 Valency-Changing Operations
+The inventory of valency change devices includes a wide range of increasing and decreasing
+operations, the expression of most of which requires the use of a so-called versionizer (also
+referred to in the literature as “version vowel/marker” or “pre-root vowel,” slot –1) (see Table
+12.5 Finite Verb Prefixation), such as o- in 50 (causative), i- in (17) (anticausative), and a-
+in (18) (stative of uncontrolled intention).43
+(16) matkualapuans
+m-a-tkw-al-apu-an-s
+IO.3-CAUS-say-R.EXT-CAUS-SM-
+S.3SG
+‘X makes me say Y’
+(17) itkualapuapu(n)
+Ø-i-tkw-al-apu-apu[n]-Ø
+S.3-VERS.SUBJ-say-R.EXT-CAUS-SM-S.3SG
+‘X is about to be said (by Y)’
+(18) matkualapuapu(n)
+m-a-tkw-al-apu-apu[n]-Ø
+IO.1-VERS.REL-say-R.EXT-CAUS-SM-S.3SG
+‘I can’t help saying X’
+Unlike the other Kartvelian languages where the decausative (often identified as passive) can
+additionally express potential semantics, Megrelian employs a dedicated potential distinct
+from the passive (19)) (Klimov, 1986, p. 72; Šerozia, 1984), which features both monovalent
+(20) and bivalent verb forms (21), the latter example representing an applicative derived from
+a potential passive (decausative).
+43 For a detailed discussion, see Rostovtsev-Popiel (2015); Gérardin and Rostovtsev-Popiel (2016).
+(19) ič’aru(n)
+Ø-i-č’ar-u[n]-Ø
+S.3-VERS.SUBJ-write-SM-S.3SG
+‘X is written (by Y)’
+(20) ič’are(n)
+Ø-i-č’ar-e[n]-Ø
+S.3-VERS.SUBJ-write-SM.POT-
+S.3SG
+‘X can be written (by Y)’
+(21) ač’are(n)
+Ø-a-č’ar-e[n]-Ø
+IO.3-VERS.REL-write-SM.POT-S.3SG
+‘X can be written by Y’, reanalyzed as ‘Y can write X’44
+Reflexive and reciprocal relations are not marked on the verb. The reflexive expression is the
+pronoun dud-, whose original meaning is ‘head’:
+(22) skan dudǝšo zedmet’ vapirka.
+skan dud-išo[t] zedmet’-[i] va-Ø-i-pirk-a-Ø
+2SG.POSS REFL-BEN too.much-[NOM] NEG-S.2-VERS.SUBJ-think-OPT-S.2
+‘You (SG) should not think too much of yourself.
+’
+44 For a detailed discussion of the consequences of this reanalysis, see Rostovtsev-Popiel (2018).
+The reciprocal pronoun is artian-:
+(23) burtiš mitoγalaši uk’uli maburteep artians oxut’olǝna.
+burt-iš mito-γ-ala-ši uk’ul=i maburte-ep-[i]
+ball-GEN PV-bring-MSD-GEN after=EV footballer-PL-[NOM]
+artian-s Ø-o-xut’-ol-un-a[n]
+RECP-DAT IO.3-VERS.LOC-hug-R.EXT-SM-S.3PL
+‘After scoring a goal, footballers are hugging each other.
+’
+12.8.2.4 Word Order
+Since Megrelian marks grammatical relations in terms of both head marking and dependent
+marking, there is no surprise that it enjoys a relatively free word order. However, the neutral
+word orders are SOV and SVO (Testelec, 1998a, p. 236).
+(24) Giorgik tu manʒgares kaaʒiru.
+giorgi-k tu-Ø manʒgare-s
+Giorgi-ERG piglet-NOM neighbor-DAT
+ko-Ø-o-ʒir-u
+AFFIRM-IO.3-VERS.LOC-present-S.3SG.PST
+‘Giorgi gave a piglet to his neighbor as a present.
+’
+Word order in embedded clauses is more constrained; in particular, masdars and participles
+tend to appear in the final position of the clause they head, as in 0).
+(25) a. Mananas vak’o, (namda) manʒgares velisp’et’i kaʒiras.
+Manana-s va-Ø-[o]-k’-o[n]-Ø nam[u]da
+Manana-DAT NEG-IO.3-[VERS.LOC]-want-SM-S.3SG COMP
+manʒgare-s velisp’et’-i ko-Ø-o-ʒir-a-s
+neighbor-DAT bicycle-NOM AFFIRM-IO.3-VERS.LOC-present-OPT-S.3SG
+‘Manana does not want to give her neighbor {her/a} bicycle as a present’.
+b. Mananas vak’o manʒgareša velisp’et’iš ʒirapa.
+Manana-s va-Ø-[o]-k’-o[n]-Ø manʒgare-ša
+Manana-DAT NEG-IO.3-[VERS.LOC]-want-SM-S.3SG neighbor-ALL
+velisp’et’-iš ʒir-ap-a-Ø
+bycicle-GEN present-SM-MSD-NOM
+‘Manana does not want to give her neighbor {her/a} bicycle as a present.’
+c. Mananas onarγu velisp’et’i manʒgareša oʒirapalo.
+Manana-s Ø-o-narγ-u[n]-Ø velisp’et’-i
+Manana-DAT IO.3-VERS.LOC-be.reluctant-SM-S.3SG bicycle-NOM
+manʒgare-ša o-ʒir-ap-al-o[t]
+neighbor-ALL PTCP.FUT-present-SM-PTCP.FUT-ADV
+‘Manana is reluctant to give her neighbor {her/a} bicycle as a present.’
+12.8.2.5 Negation
+Apart from constructions with negative pronouns (see later in this section), negation is
+restricted to the verbal domain (slot –6 va- in Table 12.5; compare the “proclitic treatment” in
+Harris, 1991b, pp. 378–379). Negation of non-verbal constituents requires the insertion of a
+negated copula in the relevant clause:
+(26) mumak skuas para meču axali maukanaš Ɂidiriš vare, ǯvešiš.
+muma-k skua-s para-Ø me-Ø-č-u
+father-ERG child-DAT money-NOM PV-IO.3-give-S.3SG.PST
+axal-i maukana-š[i] Ɂid-ir-iš va-Ø-[o]r-e[n]-Ø ǯveš-iš
+new-BASE car-GEN buy-MSD-GEN NEG-S.3-be-SM-S.3SG old-GEN
+‘The father gave his son money to buy an old car, not a new one.’
+Prohibitives either use va- with the optative or the marker nu(m)-/ni(m)- in the present or
+future:
+(27) vadop’ila do mati k’oči gaɁik.
+va-do-m-[Ɂv]il-a-Ø do ma=ti k’oč-i
+NEG-PV-DO.1-kill-OPT-S.2 and 1SG.NOM=ADD man-NOM
+g-a-Ɂ-i-k
+IO.2-VERS.REL-become-SM-S.1SG
+‘Don’t kill me and I will become a helpful man for you (SG), too.’
+(Xubua, 1937, p. 99:19)
+(28) iro si nuragadank, šxwas xolo kourčkili.
+iro si nu[m]-Ø-ragad-an-k šxwa-s xolo
+always 2SG.NOM PROH-S.2-talk-SM-S.2SG other-DAT ADD
+ko-Ø-u-rčkil-i
+IMP-IO.3-VERS.OBJ-listen-IMP
+‘Don’t talk all the time yourself (SG), listen also to others.’
+(K’art’ozia et al., 2010, p. 307)
+The negative pronouns, such as mi-ta ‘nobody’ and mu-ta ‘nothing’, preclude the use of va-
+on the verb (Harris, 1991b, 379; Mart’irosovi, 1964, p. 387; Topuria, 1923, p. 103). Thus,
+there is no double negation (i.e., the use of the negated verb va-rγolank would be
+unacceptable in this context):
+(29) mara si mutas rγolank.
+mara si muta-s r-γol-an-k
+but 2SG.DAT nothing-DAT IO.2-do-SM-S.1SG
+‘But I won’t do anything (bad) to you (SG).’
+(Xubua, 1937, p. 59:10)
+12.8.2.6 Question Formation
+Yes-no questions usually include the interrogative enclitic =o attached to the predicate. In
+case the predicate is a verb (which is the by far the most frequent option), this verb also takes
+a slot –6 prefix (such as ko-
+, ga-, and o-), if possible.45 Both non-negated and negated
+question structures are used.
+(30) osurep pacxas kumtorenano?
+osur-ep-[i] pacxa-s ko-m[u]to-Ø-[o]r-en-an=o
+woman-PL-[NOM] outdoor.kitchen-DAT AFFIRM-PV-S.3-be-SM-S.3PL=Q
+‘Are the women in the outdoor kitchen?’
+(31) kiraša vagok’onano k’očia?
+kira-ša va-g-o-k’-on-an=o k’oč-i=a
+hire-ALL NEG-IO.2-VERS.LOC-want-IO.PL=QST man-NOM=QUOT
+‘Don’t y’all want a hired laborer? [Ombolia] asked.’
+(Xubua, 1937, p. 53.24)
+45 Some verbs, e.g., those featuring mola- and mida- preverbs, do not combine with slot –6 prefixes.
+In wh-questions, the interrogative enclitic=o cannot occur. The wh-NP tends to immediately
+precede the verb, although this generalization calls for further research (compare, e.g., the
+reversed word order in example (35)). The basic types of wh-questions are illustrated below:
+(32) mu doč’u bebik?
+mu-Ø do-Ø-č’[w]-u bebi-k
+what-NOM PV-DO.3-fry-S.3SG.PST grandma-ERG
+‘What did grandma cook?’
+(33) so odinu begok skan škwildosagani?
+so[d] Ø-o-din-u bego-k skan-[i]
+where DO.3-FACT-lose-S.3SG.PST Bego-ERG 2SG.POSS-[NOM/BASE]
+škvil-do-sagan-i
+bow-and-arrow-NOM
+‘Where did Bego lose your (SG) bow?’
+(34) a. miš dop’at’ižapa vak’o diasaxlisis?
+mi-š[i] do-p’at’iž-ap-a-Ø va-Ø-[o]-k’-o[n]-Ø
+who-GEN PV-invite-SM-MSD-NOM NEG-IO.3-[VERS.LOC]-want-SM-S.3SG
+diasaxlis-i-s
+housewife-BASE-DAT
+‘Who does the housewife not want to invite?’
+b. mi vak’o diasaxlisis daap’at’ižasǝn?
+mi-š[i] va-Ø-[o]-k’-o[n]-Ø diasaxlis-i-s
+who-GEN NEG-IO.3-[VERS.LOC]-want-SM-S.3SG housewife-BASE-DAT
+da-Ø-o-p’at’iž-a-s=ǝ=n
+PV-DO.3-VERS.NEUTRAL-invite-OPT-S.3SG=EV=COMP
+‘Who does the housewife not want to invite?’
+(35) “odudias” ixvamandǝ k’oč mus?
+odudia-s Ø-i-xvam-an-d-u k’oč-[i] mu-s
+Odudia-DAT DO.3-VERS.SUBJ-pray-SM-EM-S.3SG.PST man-[NOM] what-DAT
+‘What did a man pray for in “Odudia”’? (‘prime place’, a name of the church)
+(Lomia & Gersamia, 2012b, p. 150.4)
+12.8.2.7 Anaphora
+In anaphoric constructions, possession is expressed by the possessive pronoun muš that goes
+back to the genitive case form of the third person pronoun mu(n) (other possible anaphors are
+demonstrative pronouns in the substantive function; however, their syntactic properties are
+different and will not be discussed here).
+(36) lak’vi muš k’udes ek’otxoz.
+lak’v-i muš k’udel-s ek’o-Ø-txoz-[un]-Ø
+puppy-NOM POSS tail-DAT PV-IO.3-pursue-[SM]-S.3SG
+‘The puppy is chasing its (own) tail.’
+12.8.3 Complex Sentences
+Complex sentences include complex sentences proper and sentences with quoted or reported
+speech. The former are introduced either by =t(i) or =n(i)/=i, whereby additional
+complementizers, such as nam(u)da ‘that’, are available as well. Section 12.8.3.3 adresses
+reported speech constructions.
+12.8.3.1 Complement and Adverbial Clauses
+There are two general complementizers: nam(u)da ‘that’, restricted to complement clauses,
+and enclitic =n(i)/=i that can mark most types of subordinate clauses. The former typically
+opens a complement clause, as in (37), whereas the enclitic =n(i)/=i attaches to the predicate,
+as in (1a), (1b), (34), (40), (41), (42). In this paragraph, a less usual instance is provided,
+namely a sentence with =n(i) attaching to the direct object, see (38).
+(37) xvarak kigioxvilu, namda ʒγabi tiš maskwama rdu tiš siskwamaše toli
+vačatxinedu.
+xvara-k ko-ge-Ø-o-xvil-u
+baldie-ERG AFFIRM-PV-DO.3-VERS.NEUTR-discern-S.3SG.PST
+nam[u]da ʒγab-i ti-š[i] ma-skwam-a
+COMP girl-NOM DEM.DIST-GEN EQ-beautiful-EQ
+Ø-[o]r-d-u ti-š[i] skwam-še[n] tol-[i]
+S.3-be-EM-S.3SG.PST DEM.DIST-GEN beauty-ABL1 eye-[NOM]
+v[a]-Ø-a-čatxin-e-d-u
+NEG-IO.3-POT-take.off-POT-EM-S.3SG.PST
+‘The baldie noticed that the girl was so beautiful that he could not take his
+eyes off her beauty.’
+(Rostovtsev-Popiel, 2019)
+(38) xvarak muč’o koʒiru ǯarin, dit’q’obu.
+xvara-k muč’o ko-Ø-ʒir-[u] ǯar-i=n[i]
+baldie-ERG how PFV-DO.3-see-[S.3SG.PST] army-NOM=COMP
+do-Ø-i-t’q’ob-u
+PV-S.3-VERS.SBJ-hide-S.3SG.PST
+‘When the baldie saw the retinue, he hid.’
+(Rostovtsev-Popiel, 2019)
+12.8.3.2 Relative Clauses and Clefts
+Relative clauses are introduced by a relative pronoun/pronominal element, such as, e.g.,
+namu(=t(i)) in examples (39) and (40). A relative clause can also include the general
+complementizer =n(i)/=i (already mentioned in section 12.8.3), which typically attaches to
+the predicate of the relative clause. Conditions on the co-occurrence of the relative pronoun
+and complementizer await further research, but there is evidence that =n(i)/=i is optional in
+restrictive relative clauses that feature the relative pronoun namu=t(i) and obligatory in non-
+restrictive clauses with the relative pronoun without the relativizer =ti:
+(39) k’aba, namut lelas muk’akundu(ni), gvalo ǯgiro oskwand.
+k’aba-Ø namu-Ø=t[i] lela-s muk’[o]-Ø-o-kun-d-u=(ni)
+dress-NOM which-NOM=REL Lela-DAT PV-IO.3-VERS.LOC-wear-S.3SG.PST=(COMP)
+gvalo ǯgiro Ø-o-skwam-d-[u]
+entirely well DO.3-CAUS-beautify-EM-[S.3SG.PST]
+‘The dress that Lela was wearing in the theater suited her quite well.’
+(40) ate šara, nam šaras giorgi geɁunduni, atena xolo meurs wišo.
+ate šara-Ø nam[u] šara-s giorgi-Ø
+DEM.PROX road-NOM which road-DAT Giorgi-NOM
+ge-Ø-Ɂun-d-u=ni atena xolo me-Ø-wl-s wišo
+PV-IO.3-have.ANIM-EM-S.3SG.PST=COMP DEM.PROX ADD PV-S.3-go-S.3SG thither
+‘This road, which road Giorgi took/was following, it goes that way, too.’
+(Danelia & Canava 1979: 204.20–21, apud K’art’ozia et al. 2010: 349–350)
+Once there is no relative pronoun in the relative clause, the use of=n(i)/=i is mandatory:
+(41) kotomi doɁviluni, ti osurs ipčinenk.
+kotom-i do-Ø-Ɂvil-u=ni ti osur-s
+chicken-NOM PV-DO.3-kill-S.3SG.PST=COMP DEM.DIST woman-DAT
+v-i-čin-en-k
+S.1-VERS.SUBJ-know.ANIM-SM-S.1SG
+‘I know the woman who killed the chicken.
+’
+(Hewitt, 2004, p. 200)
+Harris (1993) and Q’ipšiʒe (1914, pp. 0140–0141) have described cleft constructions. These
+consist of a relative clause and the matrix clause with a pivot, i.e., the cleft constituent, the
+case of the pivot is determined by the verb in the relative clause:
+(42) mu boruls re, ragadankin?
+mu borul-s Ø-[o]r-e[n]-Ø Ø-ragad-an-k=i=n[i]
+what nonsense-DAT S3-be-SM-
+DO3-talk-SM-S2SG=EV=COMP
+S3SG
+‘What nonsense are you (SG) talking?’ (lit. ‘what nonsense.DAT is it that you
+(SG) speak’)
+(Rostovtsev-Popiel, 2019)
+In this instance, one could expect the nominative case marking in the matrix clause had the
+matrix clause been isolated: mu-Ø re? what-NOM is ‘what is (X)?’ But here, the case marking
+on the wh-word is determined by the subordinate clause predicate ragadank ‘you (SG) talk X’
+(Class I, PRS IND) (see Table 12.19
+Case-Marking Alignment across Verb Classes and TAME Series).
+12.8.3.3 Reported Speech
+Exponents introducing reported speech and thought are =mak that refers to the first person
+singular, =a that is used with all other persons not excluding first person plural (already cited
+in examples 14 and 31), and the second person instructive =šo.
+(43) kumort ašomak, ašo!
+ko-mo-Ø-rt-[i] ašo=mak ašo
+AFFIRM-PV-S.2-go-[IMP] hither=QUOT.1 hither
+‘Come here, I said, here!’
+(44) kuc’i: vač’ark doγurušo do midursi.
+k[o]-Ø-u-c’-i vač’ar-k do-Ø-γur-u=šo
+AFFIRM-IO.3-VERS.OBJ-tell-
+merchant-ERG PV-S.3-die-S.3SG.PST=INSTRUCTIVE
+IMP
+do mid[a]-Ø-wl-s=i
+and PV-S.3-go-S.3SG=EV
+‘Tell him: “The merchant died” and he will go away.
+’
+(Rostovtsev-Popiel, 2019)
+12.9 Lexicon
+A large number of lexical items go back to Common Kartvelian, Georgian-Zan, and
+Megrelian-Laz strata. This original lexical inventory has been enriched by borrowings from
+Georgian, Russian, and, to some extent, Abkhaz. All other lexical borrowing layers can hardly
+be viewed as significant.
+12.9.1 Phonosemantic Component in the Lexicon
+Megrelian possesses dozens of (either entirely or partially reduplicated) onomatopoetic items
+that constitute, in Klimov’s words, “gradual systems” within the semantic clusters they group
+in (compare, e.g., cki-ckon-u-a ‘pluck off lightly’, c’k’i-c’k’on-u-a ‘nip off squeamishly while
+eating’, ʒgi-ʒgon-u-a ‘pluck off bigger pieces’, ǯgi-ǯgon-u-a ‘tear off brutally’) (Klimov,
+1986, p. 77).
+In their recent study on phonosemantics, Gersamia et al. (2016, pp. 63, 449), with a
+reference to Kobalava (1979), point out that it is unrealistic to aim at providing an exhaustive
+list of such clusters, making it impossible to count the resulting lexical items as such, for most
+of those are typically produced ad hoc in discourse. According to Gudava (1958) and K’iziria
+(1982) apud Gersamia et al. (2016, pp. 130–131; 461–462), the latter page numbers referring
+to an ample summary in English), consonant phonosemantics in Megrelian stems––to a large
+extent similarly to the rest of Kartvelian––can be represented as shown in Table 12.20:
+Table 12.20
+Consonant Phonosemantics
+Phonation type voiced voiceless aspirated spirants and
+Phono-semantic
+large, plump, heavy weakened, little,
+notions expressed
+non-abrupt,
+superficial, light,
+(action being
+voiceless ejectives
+small, abrupt,
+negative emotional
+component
+performed) in the air
+The hissing consonants tend to be associated with small size and lightness, whereas the
+hushing consonants convey the semantics of a larger size and heaviness. Sonorants distribute
+phonosemantically in such a way that r is associated with abrupt dynamics of the action and l
+typically marks smoothness and non-abruptness, while n correlates with neutral dynamics.
+The vocalic sound symbolism features a basic opposition of a and i, the former standing
+for wide and open manner of the action and the latter expressing semantics of doing/dealing
+with something small, narrow, upward, rounded, and/or bent.
+12.9.2 Animacy and Selectional Restrictions in the Lexicon
+The parameter of animacy (see section 12.6) affects the classification of adjectives.
+Adjectives frequently form lexical pairs based on the animacy/inanimacy of the noun they
+modify.46 In such instances, inanimate-modifying adjectives are derived by the suffix -ur/-ul
+46 In this domain of Megrelian grammar, animates only include human beings and anthropomorphized
+entities; vehicles that entirely conceal the driver and passengers often belong here, too.
+attached to the stem, as in šon- ‘Svan.ANIM’ versus šon-ur- ‘Svan.INAN’. The suffix -ar/-al
+derives animate-modifying adjectives, as in zugdid-ar- ‘one from Zugdidi.ANIM’ versus
+zugdid-ur- ‘one from Zugdidi.INAN’. Consider (45):
+(45) zugidar k’očis vaʔidire namduli zugiduri ʔvali.
+zug[d]id-ar k’oč-i-s
+Zugdidi-ADJ.ANIM man-BASE-DAT
+va-Ø-[a]-ʔid-ir-e[n]-Ø
+NEG-IO.3-[POT]-buy-R.EXT-SM.POT-S.3SG
+namdul-i zug[d]id-ur-i ʔval-i
+genuine-NOM Zugdidi-ADJ.INAN-NOM cheese-NOM
+‘A man from Zugdidi cannot buy genuine Zugdidian cheese (anymore).
+’
+The suffix -ur can be generalized and thus derive adjectives referring both to animates and
+inanimates (Kiria et al., 2015, pp. 151ff.). Furthermore, it can also attach to stems that are
+already (at least historically) marked for animacy (e.g., with the suffix -al): marg-al-
+‘Megrelian.ANIM’ versus marg-al-ur- ‘Megrelian.INAN’.
+Moreover, there are also several non-derived qualitative adjectival pairs that are
+inherently marked for animacy, i.e., they can modify either animate or inanimate nouns but
+are neither diachronically connected nor derived from each other (as is the case of classifying
+adjectives) Compare, for example, rčini osuri ‘old lady’ and ǯveši Ɂude ‘old house’ (note that
+rčini Ɂude ‘old.ANIM house’ is not acceptable, whereas ǯveši osuri ‘old.INAN woman’ gets
+phraseologically reanalyzed as a ‘wise woman (but definitely not a young lady)’).
+This selectional pattern manifests itself to a greater degree in a number of verb pairs,
+either suppletive or, more seldom, diachronically connected, that are sensitive to the animacy
+of their argument. This argument can be an object of a bivalent verb, as in (46), or the subject
+of a monovalent verb, as in (47).
+(46) a. da p’uns
+da-Ø m-[i]-[Ɂ]un-s
+sister-NOM IO.1-[VERS.SUBJ]-have.ANIM-S.3SG
+‘I have a sister’
+b. Ɂude miγu
+Ɂude-Ø m-i-γ[w]-u[n]-Ø
+house-NOM IO.1-VERS.OBJ-have.INAN-SM-S.3SG
+‘I have a house’
+(47) a. k’oči geǯanu
+k’oč-i ge-Ø-ǯan-u[n]-Ø
+man-NOM PV-S.3-lie.ANIM-SM-S.3SG
+‘a man lies flat’
+b. txiri geʒu
+txir-i ge-Ø-ʒ-u[n]-Ø
+hazelnut-NOM PV-S.3-lie.INAN-SM-S.3SG
+‘a hazelnut lies (e.g., on the ground)’
+Moreover, particular concepts, such as, e.g., ‘stand’, can be reflected in the lexicon in up to
+four distinct ways, this variation depending on whether the argument denotes a human being,
+an animal, a plant, or an artefact:
+(48) a. k’oči gere b. čxou gebiǯu(n)
+k’oč-i ge-Ø-[o]r-e[n]-Ø čxou-Ø ge-Ø-biǯ-u[n]-Ø
+man-NOM PV-S.3-be-SM-S.3SG cow-NOM PV-S.3-stand-SM-S.3SG
+‘a man stands’ ‘a cow stands’
+c. ǯa gečans d. mašna gedgu(n)
+ǯa-Ø ge-Ø-čan-s mašna-Ø ge-Ø-dg-u[n]-Ø
+tree-NOM PV-S.3-grow-S.3SG car-NOM PV-S.3-stand-SM-S.3SG
+‘a tree stands’ ‘a car stands’
+Furthermore, an additional restrictive pattern exists that characterizes particular verbs
+governing either singular or plural subjects or direct objects (this being a common trait in
+Kartvelian) (see, e.g., Klimov, 1986; Klimov & Alekseev, 1980; Tuite, 1998). For example,
+there are two roots for ‘throw’, viz., Ɂot- in doɁotama and rγw- in dorγwapa, the former being
+used with singular and the latter with plural direct objects.
+Acknowledgments
+I would like to express my gratitude to Gilles Authier, Laura Becker, Merab Čuxua (Merab
+Chukhua), Dmitry Ganenkov, Rusudan Gersamia, Maria Polinsky, and Mak’a Tetraʒe (Maka
+Tetradze) for their valuable comments on earlier drafts of this chapter. My thanks also go to
+everyone who took part in the review of an earlier draft of this chapter on Academia.edu.

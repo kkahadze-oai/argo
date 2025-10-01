@@ -204,6 +204,13 @@ def find_lemma_entry(file_path, search_term):
                     # Check if the lemma starts with our search term followed by a number
                     is_base_lemma_match = re.match(rf'^{re.escape(search_term.lower())}[0-9]+$', current_lemma.lower())
                     
+                    # Check for variant forms (e.g., "chkim-i" matches "chkim-i//chke'm-i")
+                    is_variant_match = False
+                    if '//' in current_lemma:
+                        # Split by // and check if any variant matches
+                        variants = current_lemma.lower().split('//')
+                        is_variant_match = any(search_term.lower() == variant.strip() for variant in variants)
+                    
                     # Check for hyphenated forms (e.g., "zhiri" matches "zhir-i")
                     is_hyphenated_match = False
                     # If search_term ends with 'i'
@@ -211,13 +218,17 @@ def find_lemma_entry(file_path, search_term):
                         base = search_term.lower()[:-1]  # Remove the 'i'
                         hyphenated = f"{base}-i"
                         is_hyphenated_match = hyphenated == current_lemma.lower()
+                        # Also check against variants if present
+                        if '//' in current_lemma and not is_hyphenated_match:
+                            variants = current_lemma.lower().split('//')
+                            is_hyphenated_match = any(hyphenated == variant.strip() for variant in variants)
                     
                     # Only check dehyphenated match if current_lemma doesn't start with hyphen
                     is_dehyphenated_match = False
                     if not current_lemma.startswith('-'):
                         is_dehyphenated_match = current_lemma.lower().replace('-', '') == search_term.lower()
                     
-                    if is_exact_match or is_base_lemma_match or is_hyphenated_match or is_dehyphenated_match:
+                    if is_exact_match or is_base_lemma_match or is_variant_match or is_hyphenated_match or is_dehyphenated_match:
                         recording = True
                         current_entry = [line.strip()]
                     else:
@@ -309,17 +320,29 @@ def translate_lemma(file_path, lemma, debug_output=False):
     # Find the entries for the lemma
     entry_texts = find_lemma_entry(file_path, lemma)
     
-    # If no entries found, try to lemmatize the word and search again
+    # If no entries found, try hyphenated form with "-i" first (higher priority)
     if not entry_texts:
-        lemmatized_form = lemmatize_mingrelian(lemma)
-        # Only search again if the lemmatized form is different from the original
-        if lemmatized_form != lemma:
+        # For words ending in consonants, try the hyphenated "-i" form first
+        if (not lemma.startswith('-') and not '-' in lemma and 
+            lemma[-1] not in ['a', 'i', 'e', 'o', 'u', 'h', 's']):
+            hyphenated_form = lemma + '-i'
             if debug_output:
-                print("PRINTING LEMMATIZED FORM: ", lemmatized_form)
-            entry_texts = find_lemma_entry(file_path, lemmatized_form)
-            # If entries found with the lemmatized form, log this
+                print(f"Trying hyphenated form: {hyphenated_form}")
+            entry_texts = find_lemma_entry(file_path, hyphenated_form)
             if entry_texts and debug_output:
-                print(f"Found entries using lemmatized form: {lemmatized_form}")
+                print(f"Found entries using hyphenated form: {hyphenated_form}")
+        
+        # If still no entries found, try to lemmatize the word and search again
+        if not entry_texts:
+            lemmatized_form = lemmatize_mingrelian(lemma)
+            # Only search again if the lemmatized form is different from the original
+            if lemmatized_form != lemma:
+                if debug_output:
+                    print("PRINTING LEMMATIZED FORM: ", lemmatized_form)
+                entry_texts = find_lemma_entry(file_path, lemmatized_form)
+                # If entries found with the lemmatized form, log this
+                if entry_texts and debug_output:
+                    print(f"Found entries using lemmatized form: {lemmatized_form}")
     
     if not entry_texts:
         return [(lemma, None, None, None, None, None)]
