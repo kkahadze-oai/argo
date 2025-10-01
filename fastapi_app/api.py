@@ -4,6 +4,10 @@ from pydantic import BaseModel
 import os
 import sys
 from pathlib import Path
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
 
 # Add the src directory to the path so we can import modules from it
 sys.path.append(str(Path(__file__).parent.parent))
@@ -28,8 +32,8 @@ class PromptIn(BaseModel):
     prompt: str
     api_key: str
     target_language: str = "english"  # Default to English if not specified
-    provider: str = "openai"  # "openai" or "anthropic"
-    model: str = None  # Optional: specify model name (uses provider default if None)
+    provider: str = None  # "openai" or "anthropic" (if None, reads from env)
+    model: str = None  # Optional: specify model name (if None, reads from env)
 
 # Response model
 class ResponseOut(BaseModel):
@@ -55,16 +59,22 @@ def is_mkhedruli(text):
     """Check if text contains Georgian Mkhedruli script characters."""
     return bool(re.search('[\u10D0-\u10FF]', text))
 
-def process_prompt(prompt_text, api_key, provider="openai", model=None):
+def process_prompt(prompt_text, api_key, provider=None, model=None):
     """
     Process the prompt text using the specified LLM provider.
     
     Args:
         prompt_text: Text to translate
         api_key: API key for the LLM provider
-        provider: "openai" or "anthropic"
-        model: Optional model name (uses provider default if None)
+        provider: "openai" or "anthropic" (if None, reads from LLM_PROVIDER env var, defaults to "openai")
+        model: Optional model name (if None, reads from LLM_MODEL env var, then uses provider default)
     """
+    # Use environment variables if provider/model not specified
+    if provider is None:
+        provider = os.getenv("LLM_PROVIDER", "openai")
+    if model is None:
+        model = os.getenv("LLM_MODEL")
+    
     # Initialize LLM client
     try:
         llm_client = LLMClient(provider=provider, model=model, api_key=api_key)
@@ -248,7 +258,7 @@ async def chat(data: PromptIn):
     if not data.api_key:
         raise HTTPException(status_code=400, detail="API key is required")
     
-    if data.provider not in ["openai", "anthropic"]:
+    if data.provider is not None and data.provider not in ["openai", "anthropic"]:
         raise HTTPException(status_code=400, detail="Provider must be 'openai' or 'anthropic'")
     
     # Process the prompt
