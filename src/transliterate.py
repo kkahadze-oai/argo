@@ -48,6 +48,7 @@ def latinized_to_mkhedruli(text):
         'h': 'ჰ',
         'e\'': 'ჷ',
         '՚': 'ჸ',  # For apostrophes that may appear in latinized text
+        "'": 'ჸ'
     }
     
     # Process multi-character sequences first, then single characters
