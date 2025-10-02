@@ -39,10 +39,10 @@ LLM_MODEL=gpt-4o  # or gpt-4o-mini, gpt-3.5-turbo, etc.
 
 # Anthropic configuration (if using Claude)
 ANTHROPIC_API_KEY=your_anthropic_key_here
-# LLM_MODEL=claude-3-5-sonnet-20241022  # or claude-3-opus-20240229, etc.
+# LLM_MODEL=claude-sonnet-4-5-20250929  # or claude-3-5-sonnet-20241022, etc.
 
 # Optional: specify a different model for long-context operations
-LLM_LONG_CONTEXT_MODEL=gpt-4o  # or claude-3-5-sonnet-20241022
+LLM_LONG_CONTEXT_MODEL=gpt-4o  # or claude-sonnet-4-5-20250929
 ```
 
 ### 3. Run the Translation Tool
@@ -90,7 +90,7 @@ curl -X POST "http://localhost:8000/chat" \
     "prompt": "your mingrelian text",
     "api_key": "your_anthropic_key",
     "provider": "anthropic",
-    "model": "claude-3-5-sonnet-20241022"
+    "model": "claude-sonnet-4-5-20250929"
   }'
 ```
 
@@ -104,7 +104,7 @@ client = get_default_llm_client()
 response = client.complete("Your Mingrelian text here")
 
 # Or specify provider directly
-client = LLMClient(provider="anthropic", model="claude-3-5-sonnet-20241022", api_key="sk-ant-...")
+client = LLMClient(provider="anthropic", model="claude-sonnet-4-5-20250929", api_key="sk-ant-...")
 response = client.complete("Your Mingrelian text here")
 ```
 
@@ -117,7 +117,8 @@ response = client.complete("Your Mingrelian text here")
 - `gpt-3.5-turbo`
 
 ### Anthropic Models
-- `claude-3-5-sonnet-20241022` (default, recommended)
+- `claude-sonnet-4-5-20250929` (default, recommended)
+- `claude-3-5-sonnet-20241022`
 - `claude-3-opus-20240229` (most capable)
 - `claude-3-sonnet-20240229`
 - `claude-3-haiku-20240307` (fastest, cheapest)

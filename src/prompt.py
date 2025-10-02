@@ -33,7 +33,7 @@ load_dotenv()
 # Set LLM_PROVIDER in .env to "openai" or "anthropic"
 # Set LLM_MODEL in .env to specify which model to use
 DEFAULT_PROVIDER = os.getenv("LLM_PROVIDER", "openai")
-DEFAULT_MODEL = os.getenv("LLM_MODEL", "gpt-4o")  # or "claude-3-5-sonnet-20241022" for Claude
+DEFAULT_MODEL = os.getenv("LLM_MODEL", "gpt-4o")  # or "claude-sonnet-4-5-20250929" for Claude
 LONG_CONTEXT_MODEL = os.getenv("LLM_LONG_CONTEXT_MODEL", DEFAULT_MODEL)
 
 # ANSI color codes for terminal output
