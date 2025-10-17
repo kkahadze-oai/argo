@@ -94,25 +94,71 @@ class LLMClient:
         import openai
         client = openai.OpenAI(api_key=self.api_key)
         
-        # Use standard chat completions for all models
-        messages = []
+        # GPT-5 Pro models use the new v1/responses endpoint
+        is_gpt5_pro = "gpt-5-pro" in self.model.lower()
         
-        if system_prompt:
-            messages.append({"role": "system", "content": system_prompt})
-        
-        messages.append({"role": "user", "content": prompt})
-        
-        kwargs = {
-            "model": self.model,
-            "messages": messages,
-            "temperature": self.temperature,
-        }
-        
-        if self.max_tokens:
-            kwargs["max_tokens"] = self.max_tokens
-        
-        response = client.chat.completions.create(**kwargs)
-        return response.choices[0].message.content
+        if is_gpt5_pro:
+            # Use the v1/responses endpoint for GPT-5 Pro
+            # Build messages array for the prompt object
+            messages = []
+            
+            if system_prompt:
+                messages.append({"role": "system", "content": system_prompt})
+            
+            messages.append({"role": "user", "content": prompt})
+            
+            kwargs = {
+                "model": self.model,
+                "prompt": messages,  # Pass messages array as the prompt object
+            }
+            
+            # Add optional parameters
+            if self.temperature is not None:
+                kwargs["temperature"] = self.temperature
+            if self.max_tokens:
+                kwargs["max_tokens"] = self.max_tokens
+            
+            response = client.responses.create(**kwargs)
+            
+            # Handle different possible response structures
+            if hasattr(response, 'output_text'):
+                return response.output_text
+            elif hasattr(response, 'text'):
+                return response.text
+            elif hasattr(response, 'content'):
+                if isinstance(response.content, str):
+                    return response.content
+                elif isinstance(response.content, list) and len(response.content) > 0:
+                    return response.content[0].text if hasattr(response.content[0], 'text') else str(response.content[0])
+            elif hasattr(response, 'choices') and len(response.choices) > 0:
+                choice = response.choices[0]
+                if hasattr(choice, 'text'):
+                    return choice.text
+                elif hasattr(choice, 'message'):
+                    return choice.message.content
+            else:
+                # Fallback: return string representation
+                return str(response)
+        else:
+            # Use standard chat completions for other models
+            messages = []
+            
+            if system_prompt:
+                messages.append({"role": "system", "content": system_prompt})
+            
+            messages.append({"role": "user", "content": prompt})
+            
+            kwargs = {
+                "model": self.model,
+                "messages": messages,
+                "temperature": self.temperature,
+            }
+            
+            if self.max_tokens:
+                kwargs["max_tokens"] = self.max_tokens
+            
+            response = client.chat.completions.create(**kwargs)
+            return response.choices[0].message.content
     
     def _complete_anthropic(self, prompt: str, system_prompt: Optional[str] = None) -> str:
         """Complete using Anthropic Claude API."""
