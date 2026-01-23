@@ -13,7 +13,6 @@ load_dotenv()
 
 # Add the src directory to the path so we can import modules from it
 sys.path.append(str(Path(__file__).parent.parent))
-from src.transliterate import latinized_to_mkhedruli, mkhedruli_to_latinized
 from src.llm_client import LLMClient
 from src.single_call_translator import translate as single_call_translate
 from src.logger import (
@@ -103,10 +102,8 @@ def format_output_for_legacy(result, source_lang, target_lang, source_text):
         # Detect if source is mkhedruli or latinized
         if is_mkhedruli(source_text):
             output['mingrelian_mkhedruli'] = source_text
-            output['mingrelian_latinized'] = mkhedruli_to_latinized(source_text)
         else:
             output['mingrelian_latinized'] = source_text
-            output['mingrelian_mkhedruli'] = latinized_to_mkhedruli(source_text)
         
         if target_lang == 'english':
             output['english'] = translation
@@ -117,10 +114,8 @@ def format_output_for_legacy(result, source_lang, target_lang, source_text):
         # Target is mingrelian
         if is_mkhedruli(translation):
             output['mingrelian_mkhedruli'] = translation
-            output['mingrelian_latinized'] = mkhedruli_to_latinized(translation)
         else:
             output['mingrelian_latinized'] = translation
-            output['mingrelian_mkhedruli'] = latinized_to_mkhedruli(translation)
         
         if source_lang == 'english':
             output['english'] = source_text
