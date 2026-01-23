@@ -1,413 +1,280 @@
-# Argo - Mingrelian Language Translation Tool
+# Argo - Mingrelian Translation Backend
 
-A powerful tool for translating Mingrelian text with support for multiple LLM providers (OpenAI GPT and Anthropic Claude).
+FastAPI backend for the Mingrelian translation application. Provides translation services between Mingrelian, Georgian, and English using LLM-augmented dictionary lookups.
 
 ## Features
 
-- **Multi-LLM Support**: Switch between OpenAI (GPT) and Anthropic (Claude) seamlessly
-- **Unified API**: All LLM calls centralized through a single abstraction layer
-- **FastAPI Web Interface**: RESTful API for integration with other applications
-- **Command Line Interface**: Direct script execution for quick translations
-- **Flexible Configuration**: Environment-based provider and model selection
+- **Multi-directional Translation**: Translate between any pair of Mingrelian, Georgian, and English
+- **Multiple LLM Providers**: Support for OpenAI (GPT-4o, GPT-5.2), Anthropic (Claude), and Google (Gemini)
+- **Smart Dictionary Lookups**: Standalone word matching with short-circuit optimization
+- **Google Translate Bridge**: Instant translations via high-resource language bridging
+- **Comprehensive Logging**: Structured logging for debugging prompts, responses, and errors
+- **Single API Call**: Optimized to use only one LLM call per translation
 
 ## Quick Start
 
 ### 1. Install Dependencies
 
 ```bash
-# For OpenAI (GPT)
-pip install openai
+bash run_local.sh
+```
 
-# For Anthropic (Claude)
-pip install anthropic
+Or manually:
 
-# Or install both
-pip install openai anthropic
+```bash
+python3 -m venv venv
+source venv/bin/activate
+pip install -r fastapi_app/requirements.txt
 ```
 
 ### 2. Set Up Environment Variables
 
-Create a `.env` file:
+Create a `.env` file in the argo root directory:
 
 ```bash
-# Choose your provider (default: openai)
-LLM_PROVIDER=openai  # or "anthropic"
-
-# OpenAI configuration
+# OpenAI (optional)
 OPENAI_API_KEY=your_openai_key_here
-LLM_MODEL=gpt-4o  # or gpt-4o-mini, gpt-3.5-turbo, etc.
 
-# Anthropic configuration (if using Claude)
+# Anthropic (optional)
 ANTHROPIC_API_KEY=your_anthropic_key_here
-# LLM_MODEL=claude-sonnet-4-5-20250929  # or claude-3-5-sonnet-20241022, etc.
 
-# Optional: specify a different model for long-context operations
-LLM_LONG_CONTEXT_MODEL=gpt-4o  # or claude-sonnet-4-5-20250929
+# Google Gemini (optional)
+GEMINI_API_KEY=your_gemini_key_here
+
+# Default provider (optional, defaults to openai)
+LLM_PROVIDER=openai  # or "anthropic" or "gemini"
+
+# Default model (optional)
+LLM_MODEL=gpt-4o  # or claude-sonnet-4-5-20250929, gemini-3-flash-preview, etc.
+
+# Logging level (optional, defaults to INFO)
+LOG_LEVEL=INFO  # or DEBUG for more verbose logs
 ```
 
-### 3. Run the Translation Tool
+### 3. Run the Server
 
 ```bash
-# Command line interface
-python3 ./src/prompt.py
+# Using the run script
+bash run_local.sh
 
-# Or start the web API
-python3 -m fastapi_app.api
+# Or manually
+source venv/bin/activate
+uvicorn fastapi_app.api:app --reload --host 127.0.0.1 --port 8000
 ```
 
-## Usage
+The API will be available at `http://localhost:8000`
 
-### Command Line
+## API Usage
 
-```bash
-# Use default provider (from .env)
-python3 ./src/prompt.py
+### Translation Endpoint
 
-# Test with specific providers
-LLM_PROVIDER=openai python3 ./src/prompt.py
-LLM_PROVIDER=anthropic python3 ./src/prompt.py
-```
+**POST** `/chat`
 
-### Web API
-
-Start the FastAPI server and make requests:
-
-```bash
-# Using OpenAI
-curl -X POST "http://localhost:8000/chat" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "prompt": "your mingrelian text",
-    "api_key": "your_openai_key",
+```json
+{
+  "prompt": "მა",
+  "api_key": "your_api_key",
+  "source_language": "mingrelian",
+  "target_language": "english",
     "provider": "openai",
     "model": "gpt-4o"
-  }'
-
-# Using Claude
-curl -X POST "http://localhost:8000/chat" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "prompt": "your mingrelian text",
-    "api_key": "your_anthropic_key",
-    "provider": "anthropic",
-    "model": "claude-sonnet-4-5-20250929"
-  }'
+}
 ```
 
-### Programmatic Usage
+**Parameters:**
+- `prompt` (string, required): Text to translate
+- `api_key` (string, required): API key for the LLM provider
+- `source_language` (string, optional): Source language - "mingrelian", "georgian", or "english" (default: "mingrelian")
+- `target_language` (string, optional): Target language - "mingrelian", "georgian", or "english" (default: "english")
+- `provider` (string, optional): LLM provider - "openai", "anthropic", or "gemini" (reads from env if not specified)
+- `model` (string, optional): Model name (reads from env if not specified, then uses provider default)
 
-```python
-from src.llm_client import LLMClient, get_default_llm_client
+**Response (SSE Stream):**
 
-# Use environment configuration
-client = get_default_llm_client()
-response = client.complete("Your Mingrelian text here")
+The endpoint streams JSON events with translation progress:
 
-# Or specify provider directly
-client = LLMClient(provider="anthropic", model="claude-sonnet-4-5-20250929", api_key="sk-ant-...")
-response = client.complete("Your Mingrelian text here")
+```json
+{"translation": "I", "source_text": "მა", "target_text": "I", "source_language": "mingrelian", "target_language": "english"}
 ```
 
 ## Supported Models
 
-### OpenAI Models
-- `gpt-4o` (default, recommended)
-- `gpt-4o-mini` (faster, cheaper)
-- `gpt-4-turbo`
-- `gpt-3.5-turbo`
+### OpenAI
+- `gpt-4o` (default)
+- `gpt-4o-mini`
+- `gpt-5.2`
 
-### Anthropic Models
-- `claude-sonnet-4-5-20250929` (default, recommended)
+### Anthropic
+- `claude-sonnet-4-5-20250929` (default)
 - `claude-3-5-sonnet-20241022`
-- `claude-3-opus-20240229` (most capable)
-- `claude-3-sonnet-20240229`
-- `claude-3-haiku-20240307` (fastest, cheapest)
+- `claude-3-opus-20240229`
+
+### Google
+- `gemini-3-flash-preview` (default)
+- `gemini-2.0-flash-exp`
 
 ## Architecture
 
-### Translation Pipeline (RAG-based)
+### Translation Pipeline
 
-The translation system uses a multi-stage Retrieval-Augmented Generation (RAG) pipeline:
+The system uses an optimized single-call translation approach with multiple fallback strategies:
 
 ```
-User Input (Mingrelian)
-       ↓
-┌──────────────────────────────────────┐
-│ PHASE 0: Corpus Search (Priority)   │ ⚡ NEW: Search corpus FIRST
-│ Source: en_to_xmf.json               │
-│ • Exact match → Skip dictionary      │
-│ • Word-in-phrase → Skip dictionary   │
-│ • Fuzzy match → Also search dict    │
-└──────────────────┬───────────────────┘
-                   ↓
-┌──────────────────────────────────────┐
-│ PHASE 1: Dictionary Lookup           │ (Conditional - only if needed)
-│ Source: kajaia.txt                    │
-│ • Exact match                         │
-│ • Lemmatization                       │
-│ • Partial text search                 │
-│ • Fuzzy matching (last resort)       │
-└──────────────────┬───────────────────┘
-                   ↓
-┌──────────────────────────────────────┐
-│ PHASE 2: First LLM Call              │ (Conditional - only if dict entries)
-│ Task: Translate Georgian → English   │
-│ Output: JSON format                   │
-└──────────────────┬───────────────────┘
-                   ↓
-┌──────────────────────────────────────┐
-│ PHASE 3: Second LLM Call (Adaptive)  │ ⚡ NEW: Two paths
-│ Path A: Full (dictionary exists)     │
-│   • Include grammar (Harris, Popiel) │
-│   • Complex analysis (~6500 tokens)  │
-│ Path B: Simplified (corpus-only)     │
-│   • Just get Georgian (~800 tokens)  │
-│   • 87% token reduction!             │
-└──────────────────┬───────────────────┘
+User Input
+    ↓
+┌─────────────────────────────────────────┐
+│ 1. Exact Dictionary Match Check         │
+│    - Check sentence_pairs.tsv           │
+│    - Check gal.tsv (Russian)            │
+│    - Check kk.tsv (Russian/Georgian)    │
+│    → If found: INSTANT RETURN (no LLM)  │
+└─────────────┬───────────────────────────┘
+              ↓
+┌─────────────────────────────────────────┐
+│ 2. Google Translate Bridge              │
+│    TO Mingrelian:                        │
+│      - Translate input → Russian/etc     │
+│      - Search dicts for Mingrelian       │
+│    FROM Mingrelian:                      │
+│      - Search for any high-resource lang │
+│      - Google Translate → target lang    │
+│    → If found: INSTANT RETURN (no LLM)  │
+└─────────────┬───────────────────────────┘
+              ↓
+┌─────────────────────────────────────────┐
+│ 3. Direct Google Translate              │
+│    Georgian ↔ English (no Mingrelian)   │
+│    → If applicable: INSTANT RETURN      │
+└─────────────┬───────────────────────────┘
+              ↓
+┌─────────────────────────────────────────┐
+│ 4. LLM-Based Translation                │
+│    - Build context from dictionaries    │
+│    - Standalone word matching (priority)│
+│    - Construct prompt with examples     │
+│    - Single LLM API call                │
+│    - Extract translation from response  │
+└─────────────┬───────────────────────────┘
                    ↓
            Final Translation
 ```
 
-### Performance Optimizations
+### Dictionary Data Sources
 
-The system includes three major optimizations for corpus hits (e.g., "ჯოხო"):
+Located in `fastapi_app/data/`:
 
-| Optimization | Impact | Savings |
-|-------------|--------|---------|
-| **Corpus-First Search** | Skip dictionary when corpus has exact/phrase match | Eliminates 33+ low-quality lookups |
-| **Conditional First LLM** | Skip when no dictionary entries exist | 100% savings on first LLM call |
-| **Simplified Second LLM** | Use light prompt for corpus-only queries | 87% token reduction (6500→800) |
+1. **sentence_pairs.tsv** - English-Mingrelian parallel sentences
+2. **gal.tsv** - Russian-Mingrelian dictionary
+3. **kk.tsv** - Mingrelian-Russian-Georgian dictionary (4 columns: word, IPA, Russian, Georgian)
+4. **kajaia_cleaned.txt** - Large Georgian-Mingrelian reference (used for context, not extractive lookups)
+5. **harris.txt** - Grammar reference
 
-**Combined Result:** 90% faster, 91% cheaper for corpus hits (10-12s → 1-2s, $0.22 → $0.02)
+### Optimization Strategies
 
-### Data Sources
+1. **Standalone Word Matching**: Prioritizes exact word matches (surrounded by spaces) over substring matches to reduce irrelevant context
 
-1. **Parallel Corpus** (`data/en_to_xmf.json`)
-   - Mingrelian-English parallel translations
-   - Highest priority for exact/phrase matches
-   - Authentic usage examples
+2. **Short-Circuit for Extractive Dictionaries**: If a standalone match is found in sentence_pairs.tsv, gal.tsv, or kk.tsv, the system skips searching kajaia_cleaned.txt
 
-2. **Dictionary** (`data/kajaia.txt`)
-   - Mingrelian-Georgian dictionary
-   - Used when corpus doesn't have matches
-   - Supports lemmatization and fuzzy search
+3. **Instant Lookup**: If an exact match for the full input is found in extractive dictionaries, translation is returned instantly without any LLM call
 
-3. **Grammar References** (`data/harris.txt`, `data/popiel.txt`)
-   - Only loaded when analyzing dictionary entries
-   - Skipped for corpus-only queries
+4. **Google Translate Bridge**: Leverages Google Translate for high-resource languages to find Mingrelian translations or intermediate translations without LLM calls
 
-### LLM Integration
+## Logging
 
-All LLM API calls are centralized in `src/llm_client.py`:
+Logs are automatically saved to the `logs/` directory:
 
-```
-Application Code
-       ↓
-  LLMClient (src/llm_client.py)
-       ↓
-  ┌────┴────┐
-  ↓         ↓
-OpenAI   Anthropic
-  API       API
-```
+- `translator_YYYYMMDD.log` - All logs (DEBUG level and above)
+- `errors_YYYYMMDD.log` - Error logs only
 
-**Benefits:**
-- **Single Source of Truth**: All LLM calls in one place
-- **Easy Switching**: Change providers without touching app code
-- **Testability**: Mock the LLMClient for testing
-- **Consistency**: Same error handling and logging everywhere
-- **Extensibility**: Add new providers easily
-- **Cost Optimization**: Quickly test which provider/model is most cost-effective
+**Log files include:**
+- Translation requests with language pairs
+- Full prompts sent to LLMs
+- Full LLM responses
+- Extracted translations
+- Instant lookup results
+- Error details with context
 
-## Cost Comparison
-
-| Provider | Model | Cost (per 1M tokens) | Best For |
-|----------|-------|---------------------|----------|
-| OpenAI | gpt-4o | $2.50 / $10.00 | General purpose |
-| OpenAI | gpt-4o-mini | $0.15 / $0.60 | High volume |
-| Anthropic | claude-3-opus | $15.00 / $75.00 | Complex tasks |
-| Anthropic | claude-3-sonnet | $3.00 / $15.00 | Balanced |
-| Anthropic | claude-3-haiku | $0.25 / $1.25 | High speed |
-
-*Note: Prices are approximate and may change. Check provider pricing pages for current rates.*
-
-## API Reference
-
-### LLMClient
-
-```python
-class LLMClient:
-    def __init__(
-        self,
-        provider: Literal["openai", "anthropic"] = "openai",
-        api_key: Optional[str] = None,
-        model: Optional[str] = None,
-        temperature: float = 1.0,
-        max_tokens: Optional[int] = None
-    )
-```
-
-**Parameters:**
-- `provider`: Which LLM provider to use
-- `api_key`: API key (reads from env if None)
-- `model`: Model name (uses provider default if None)
-- `temperature`: Sampling temperature (0.0-2.0)
-- `max_tokens`: Maximum response tokens
-
-**Methods:**
-- `complete(prompt: str, system_prompt: Optional[str] = None) -> str`: Send a prompt and get response
-
-### Helper Functions
-
-```python
-# Get a client using environment variables
-from src.llm_client import get_default_llm_client
-client = get_default_llm_client()
-
-# Quick completion functions
-from src.llm_client import complete_with_openai, complete_with_claude
-response = complete_with_openai("Your prompt")
-response = complete_with_claude("Your prompt")
-```
-
-## Troubleshooting
-
-### "API key not found"
-Make sure you've set the appropriate API key in `.env`:
-- `OPENAI_API_KEY` for OpenAI
-- `ANTHROPIC_API_KEY` for Anthropic
-
-### "anthropic package not installed"
-Install it: `pip install anthropic`
-
-### "Invalid model name"
-Check the supported models list above and make sure you're using a valid model name for your provider.
-
-### Rate Limits
-If you hit rate limits:
-- For OpenAI: Use `gpt-4o-mini` or `gpt-3.5-turbo` (higher limits)
-- For Anthropic: Use `claude-3-haiku-20240307` (higher limits)
-
-## Adding New Providers
-
-To add support for a new LLM provider (e.g., Cohere, Mistral):
-
-1. Add the provider to `LLMProvider` type in `llm_client.py`
-2. Add initialization logic in `__init__`
-3. Add a `_complete_<provider>` method
-4. Update the `complete` method to route to your new provider
-
-Example:
-
-```python
-def _complete_cohere(self, prompt: str, system_prompt: Optional[str] = None) -> str:
-    """Complete using Cohere API."""
-    # Your implementation here
-    pass
-```
-
-## Migration from Direct API Calls
-
-### Old Code (Direct OpenAI calls)
-```python
-import openai
-openai.api_key = os.getenv("OPENAI_API_KEY")
-
-response = openai.chat.completions.create(
-    model="gpt-4o",
-    messages=[{"role": "user", "content": "Your prompt"}]
-)
-result = response.choices[0].message.content
-```
-
-### New Code (Using LLMClient)
-```python
-from src.llm_client import get_default_llm_client
-
-client = get_default_llm_client()
-result = client.complete("Your prompt")
+**Environment variable:**
+```bash
+LOG_LEVEL=DEBUG  # For more verbose logging
 ```
 
 ## Project Structure
 
 ```
 argo/
-├── src/
-│   ├── llm_client.py         # Central LLM abstraction layer
-│   ├── prompt.py             # Main translation orchestration
-│   ├── prompts.py            # Prompt construction (full & simplified)
-│   ├── corpus_search.py      # Parallel corpus search
-│   ├── translate.py          # Dictionary lookup & lemmatization
-│   ├── transliterate.py      # Latinized ↔ Mkhedruli conversion
-│   └── extract_definition.py # Definition extraction
-├── data/
-│   ├── en_to_xmf.json        # Mingrelian-English parallel corpus
-│   ├── kajaia.txt            # Mingrelian-Georgian dictionary
-│   ├── harris.txt            # Grammar reference
-│   └── popiel.txt            # Grammar reference
 ├── fastapi_app/
-│   └── api.py                # Web API interface
-├── .env                      # Environment configuration
-└── README.md                 # This file
+│   ├── api.py              # FastAPI application & /chat endpoint
+│   ├── requirements.txt    # Python dependencies
+│   └── data/               # Dictionary and reference data
+│       ├── sentence_pairs.tsv
+│       ├── gal.tsv
+│       ├── kk.tsv
+│       ├── kajaia_cleaned.txt
+│       └── harris.txt
+├── src/
+│   ├── single_call_translator.py  # Core translation logic
+│   ├── llm_client.py              # LLM provider abstraction
+│   ├── transliterate.py           # Script conversion utilities
+│   └── logger.py                  # Logging configuration
+├── tests/
+│   ├── test_api.py         # API testing script
+│   └── test.html           # HTML test interface
+├── logs/                   # Log files (gitignored)
+├── venv/                   # Virtual environment (gitignored)
+├── .env                    # Environment variables (gitignored)
+├── env.example             # Example environment file
+├── run_local.sh            # Local development script
+└── README.md               # This file
 ```
 
-## How It Works
+## Development
 
-### Example: Translating "joxo" (ჯოხო)
+### Running Tests
 
 ```bash
-$ echo "joxo" | python3 src/prompt.py
+# Test the API
+python tests/test_api.py --text "მა" --source mingrelian --target english
+
+# Or use the HTML interface
+open tests/test.html
 ```
 
-**Step 1: Corpus Search** (~100ms)
-```
-✓ Found exact match in corpus: ჯოხო → "call_sb/sth_(by_name), refer"
-✓ Found 5 usage examples in authentic text
-→ SKIP dictionary search (corpus has high-quality data)
-```
+### Adding New Dictionary Data
 
-**Step 2: Dictionary Search**
-```
-⏭️ SKIPPED (corpus has everything)
-```
+1. Add TSV/TXT files to `fastapi_app/data/`
+2. Update search functions in `src/single_call_translator.py`
+3. Add to prompt construction as needed
 
-**Step 3: First LLM Call**
-```
-⏭️ SKIPPED (no dictionary entries to translate)
-```
+### Debugging
 
-**Step 4: Second LLM Call** (~1-2s, simplified prompt)
-```
-Input: Corpus translations + "Provide Georgian equivalent"
-Output: Georgian: ჰქვია | English: to call (by name)
-```
+- Set `LOG_LEVEL=DEBUG` in `.env` for detailed logs
+- Check `logs/translator_YYYYMMDD.log` for full request/response traces
+- Check `logs/errors_YYYYMMDD.log` for error details
 
-**Total Time:** ~1-2 seconds (was 10-12s before optimization)  
-**Total Cost:** ~$0.02 (was $0.22 before optimization)
+## Deployment
 
-### Example: Word Not in Corpus
+This backend is designed to be deployed on platforms like Render, Heroku, or Railway.
 
-If the word isn't in the corpus, the system falls back to the full pipeline:
+**Key files for deployment:**
+- `fastapi_app/requirements.txt` - Dependencies
+- `fastapi_app/api.py` - Entry point
+- Environment variables must be set in the platform's dashboard
 
-```
-Step 1: Corpus search → No matches
-Step 2: Dictionary search → Find entries via lemmatization/fuzzy
-Step 3: First LLM → Translate Georgian dictionary entries to English
-Step 4: Second LLM → Full analysis with grammar context
-```
-
-This ensures the system always provides results, prioritizing fast corpus lookups when available.
+**Render example:**
+- Build Command: `pip install -r fastapi_app/requirements.txt`
+- Start Command: `uvicorn fastapi_app.api:app --host 0.0.0.0 --port $PORT`
 
 ## Contributing
 
-When adding new features or providers:
+When contributing:
 
-1. All LLM interactions should go through `src/llm_client.py`
-2. Maintain backward compatibility
-3. Add appropriate error handling
-4. Update documentation
-5. Test with multiple providers
+1. Keep all LLM calls centralized in `src/llm_client.py`
+2. Add comprehensive logging for debugging
+3. Update dictionary data in `fastapi_app/data/` as needed
+4. Test with multiple LLM providers
+5. Update this README with any architectural changes
 
 ## License
 
-[Add your license information here]
+MIT License

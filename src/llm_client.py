@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-LLM Client abstraction layer to support multiple LLM providers (OpenAI, Anthropic Claude, etc.)
+LLM Client abstraction layer to support multiple LLM providers (OpenAI, Anthropic Claude, Google Gemini, etc.)
 """
 import os
 from typing import Optional, Literal
@@ -10,12 +10,12 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Provider type
-LLMProvider = Literal["openai", "anthropic"]
+LLMProvider = Literal["openai", "anthropic", "gemini"]
 
 class LLMClient:
     """
     Unified interface for different LLM providers.
-    Supports OpenAI (GPT) and Anthropic (Claude).
+    Supports OpenAI (GPT), Anthropic (Claude), and Google (Gemini).
     """
     
     def __init__(
@@ -30,7 +30,7 @@ class LLMClient:
         Initialize the LLM client.
         
         Args:
-            provider: Which LLM provider to use ("openai" or "anthropic")
+            provider: Which LLM provider to use ("openai", "anthropic", or "gemini")
             api_key: API key for the provider (if None, will try to get from env)
             model: Model name to use (if None, will use default for provider)
             temperature: Sampling temperature (0.0 to 2.0)
@@ -70,8 +70,27 @@ class LLMClient:
                 raise ImportError(
                     "anthropic package not installed. Install it with: pip install anthropic"
                 )
+        
+        elif provider == "gemini":
+            try:
+                from google import genai
+                self.client_lib = genai
+                self.api_key = api_key or os.getenv("GEMINI_API_KEY")
+                # Use model from parameter, then env var LLM_MODEL, then default
+                self.model = model or os.getenv("LLM_MODEL") or "gemini-3-flash-preview"
+                
+                if not self.api_key:
+                    raise ValueError("Gemini API key not found. Set GEMINI_API_KEY in .env or pass api_key parameter.")
+                
+                # Initialize the new genai client
+                self.genai_client = genai.Client(api_key=self.api_key)
+                
+            except ImportError:
+                raise ImportError(
+                    "google-genai package not installed. Install it with: pip install google-genai"
+                )
         else:
-            raise ValueError(f"Unsupported provider: {provider}. Use 'openai' or 'anthropic'.")
+            raise ValueError(f"Unsupported provider: {provider}. Use 'openai', 'anthropic', or 'gemini'.")
     
     def complete(self, prompt: str, system_prompt: Optional[str] = None) -> str:
         """
@@ -88,6 +107,8 @@ class LLMClient:
             return self._complete_openai(prompt, system_prompt)
         elif self.provider == "anthropic":
             return self._complete_anthropic(prompt, system_prompt)
+        elif self.provider == "gemini":
+            return self._complete_gemini(prompt, system_prompt)
     
     def _complete_openai(self, prompt: str, system_prompt: Optional[str] = None) -> str:
         """Complete using OpenAI API."""
@@ -165,6 +186,31 @@ class LLMClient:
         
         response = self.client.messages.create(**kwargs)
         return response.content[0].text
+    
+    def _complete_gemini(self, prompt: str, system_prompt: Optional[str] = None) -> str:
+        """Complete using Google Gemini API with the new google.genai SDK."""
+        # Build the configuration
+        config = {
+            "temperature": self.temperature,
+        }
+        
+        if self.max_tokens:
+            config["max_output_tokens"] = self.max_tokens
+        
+        # Build contents list
+        contents = []
+        if system_prompt:
+            contents.append({"role": "system", "parts": [{"text": system_prompt}]})
+        contents.append({"role": "user", "parts": [{"text": prompt}]})
+        
+        # Generate response using new SDK
+        response = self.genai_client.models.generate_content(
+            model=self.model,
+            contents=contents,
+            config=config
+        )
+        
+        return response.text
 
 
 def get_default_llm_client(
@@ -222,5 +268,21 @@ def complete_with_claude(prompt: str, model: str = "claude-sonnet-4-5-20250929",
         str: The response text
     """
     client = LLMClient(provider="anthropic", model=model, api_key=api_key)
+    return client.complete(prompt)
+
+
+def complete_with_gemini(prompt: str, model: str = "gemini-3-flash-preview", api_key: Optional[str] = None) -> str:
+    """
+    Quick function to complete a prompt with Gemini.
+    
+    Args:
+        prompt: The prompt text
+        model: Gemini model name
+        api_key: Optional API key (uses env var if not provided)
+        
+    Returns:
+        str: The response text
+    """
+    client = LLMClient(provider="gemini", model=model, api_key=api_key)
     return client.complete(prompt)
 

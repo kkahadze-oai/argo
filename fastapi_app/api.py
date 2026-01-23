@@ -13,40 +13,47 @@ load_dotenv()
 
 # Add the src directory to the path so we can import modules from it
 sys.path.append(str(Path(__file__).parent.parent))
-from src.prompt import extract_translations
 from src.transliterate import latinized_to_mkhedruli, mkhedruli_to_latinized
-from src.prompts import (
-    get_initial_translation_prompt,
-    get_follow_up_phrase,
-    get_grammar_text,
-    get_after_phrase,
-    get_follow_up_prompt,
-    log_to_file
-)
 from src.llm_client import LLMClient
+from src.single_call_translator import translate as single_call_translate
+from src.logger import (
+    setup_logger,
+    log_translation_request,
+    log_translation_result,
+    log_error
+)
 import re
-
-# Import dictionary processing functions
-from src.translate import translate_lemma, search_containing_word, lemmatize_mingrelian, find_close_lemma_matches
 
 # Request model
 class PromptIn(BaseModel):
     prompt: str
-    api_key: str
-    target_language: str = "english"  # Default to English if not specified
-    provider: str = None  # "openai" or "anthropic" (if None, reads from env)
+    api_key: str = None  # Optional: if None, server will use default Gemini key
+    source_language: str = "mingrelian"  # Source language: "mingrelian", "georgian", or "english"
+    target_language: str = "english"  # Target language: "mingrelian", "georgian", or "english"
+    provider: str = None  # "openai", "anthropic", or "gemini" (if None, reads from env)
     model: str = None  # Optional: specify model name (if None, reads from env)
 
 # Response model
 class ResponseOut(BaseModel):
-    mingrelian_latinized: str
-    mingrelian_mkhedruli: str
-    georgian: str
-    english: str
+    source_text: str
+    target_text: str
+    source_language: str
+    target_language: str
+    # Legacy fields for backward compatibility
+    mingrelian_latinized: str = ""
+    mingrelian_mkhedruli: str = ""
+    georgian: str = ""
+    english: str = ""
     full_response: str = None
 
 # Initialize FastAPI app
 app = FastAPI(title="Mingrelian Translator API")
+
+# Setup logger
+logger = setup_logger('api')
+
+# Setup logger
+logger = setup_logger('api')
 
 # Configure CORS to allow all origins
 app.add_middleware(
@@ -61,13 +68,87 @@ def is_mkhedruli(text):
     """Check if text contains Georgian Mkhedruli script characters."""
     return bool(re.search('[\u10D0-\u10FF]', text))
 
-def process_prompt(prompt_text, api_key, provider=None, model=None):
+
+def format_output_for_legacy(result, source_lang, target_lang, source_text):
     """
-    Process the prompt text using the specified LLM provider.
+    Format the new single-call output to match legacy format for backward compatibility.
+    
+    Args:
+        result: Result dict from single_call_translate
+        source_lang: Source language
+        target_lang: Target language
+        source_text: Original input text
+        
+    Returns:
+        dict: Formatted result with legacy fields populated
+    """
+    translation = result['translation']
+    full_response = result['full_response']
+    
+    # Initialize all fields
+    output = {
+        'source_text': source_text,
+        'target_text': translation,
+        'source_language': source_lang,
+        'target_language': target_lang,
+        'mingrelian_latinized': '',
+        'mingrelian_mkhedruli': '',
+        'georgian': '',
+        'english': '',
+        'full_response': full_response
+    }
+    
+    # Populate legacy fields based on language directions
+    if source_lang == 'mingrelian':
+        # Detect if source is mkhedruli or latinized
+        if is_mkhedruli(source_text):
+            output['mingrelian_mkhedruli'] = source_text
+            output['mingrelian_latinized'] = mkhedruli_to_latinized(source_text)
+        else:
+            output['mingrelian_latinized'] = source_text
+            output['mingrelian_mkhedruli'] = latinized_to_mkhedruli(source_text)
+        
+        if target_lang == 'english':
+            output['english'] = translation
+        elif target_lang == 'georgian':
+            output['georgian'] = translation
+    
+    elif target_lang == 'mingrelian':
+        # Target is mingrelian
+        if is_mkhedruli(translation):
+            output['mingrelian_mkhedruli'] = translation
+            output['mingrelian_latinized'] = mkhedruli_to_latinized(translation)
+        else:
+            output['mingrelian_latinized'] = translation
+            output['mingrelian_mkhedruli'] = latinized_to_mkhedruli(translation)
+        
+        if source_lang == 'english':
+            output['english'] = source_text
+        elif source_lang == 'georgian':
+            output['georgian'] = source_text
+    
+    else:
+        # Neither source nor target is mingrelian (georgian <-> english)
+        if source_lang == 'english':
+            output['english'] = source_text
+            output['georgian'] = translation
+        elif source_lang == 'georgian':
+            output['georgian'] = source_text
+            output['english'] = translation
+    
+    return output
+
+
+async def stream_translation(prompt_text, api_key, source_language="mingrelian", target_language="english", provider=None, model=None):
+    """
+    Stream translation with a single LLM API call.
+    Yields JSON events for progress updates.
     
     Args:
         prompt_text: Text to translate
         api_key: API key for the LLM provider
+        source_language: Source language ("mingrelian", "georgian", or "english")
+        target_language: Target language ("mingrelian", "georgian", or "english")
         provider: "openai" or "anthropic" (if None, reads from LLM_PROVIDER env var, defaults to "openai")
         model: Optional model name (if None, reads from LLM_MODEL env var, then uses provider default)
     """
@@ -77,352 +158,55 @@ def process_prompt(prompt_text, api_key, provider=None, model=None):
     if model is None:
         model = os.getenv("LLM_MODEL")
     
+    # Log the translation request
+    log_translation_request(
+        logger, 
+        prompt_text, 
+        source_language, 
+        target_language, 
+        provider,
+        model or 'default'
+    )
+    
     # Initialize LLM client
     try:
         llm_client = LLMClient(provider=provider, model=model, api_key=api_key)
     except Exception as e:
-        raise HTTPException(status_code=400, detail=f"Failed to initialize LLM client: {str(e)}")
-    
-    # Determine if input is mkhedruli or latinized
-    if is_mkhedruli(prompt_text):
-        mkhedruli = prompt_text
-        latinized = mkhedruli_to_latinized(prompt_text)
-    else:
-        mkhedruli = latinized_to_mkhedruli(prompt_text)
-        latinized = prompt_text
-    
-    # Load grammar for translation
-    grammar_path = Path(__file__).parent.parent / 'data' / 'harris.txt'
-    try:
-        with open(grammar_path, 'r') as file:
-            grammar = file.read()
-    except FileNotFoundError:
-        # If harris.txt doesn't exist, use an empty string
-        grammar = ""
-    
-    # Default dictionary file path
-    dict_file = Path(__file__).parent.parent / 'data' / 'kajaia.txt'
-    
-    # Create a variable to collect all output similar to prompt.py
-    dict_entries = []
-    all_entries = []
-    
-    # Break the string into words
-    words = latinized.split()
-    
-    # Process each word similar to prompt.py
-    for word in words:
-        # Check if the word is in Mkhedruli script and convert if needed
-        original_word = word
-        if is_mkhedruli(word):
-            latinized_word = mkhedruli_to_latinized(word)
-            dict_entries.append(f"Input in Mkhedruli script: {word}")
-            dict_entries.append(f"Converted to latinized form: {latinized_word}")
-            word = latinized_word
-        else:
-            dict_entries.append(f"Latinized Mingrelian word: {word}")
-        
-        # Get translation results for this word - use debug_output=False to avoid console printing
-        results = translate_lemma(dict_file, word, debug_output=False)
-        
-        # Show Mkhedruli form - only if input was originally latinized
-        if not is_mkhedruli(original_word):
-            dict_entries.append(f"Mkhedruli Mingrelian word: {latinized_to_mkhedruli(word)}")
-        
-        if len(results) == 1 and results[0][1] is None:
-            # No direct translation found, try with lemmatized form
-            lemmatized_word = lemmatize_mingrelian(word)
-            if lemmatized_word != word:
-                dict_entries.append(f"Trying lemmatized form: '{lemmatized_word}'")
-                lemma_results = translate_lemma(dict_file, lemmatized_word, debug_output=False)
-                
-                # If we found results with the lemmatized form
-                if not (len(lemma_results) == 1 and lemma_results[0][1] is None):
-                    dict_entries.append(f"Found translation for lemmatized form '{lemmatized_word}'")
-                    for curr_lemma, definition, mingrelian, definition_line, entry_text, georgian_word in lemma_results:
-                        if entry_text:
-                            # Store the complete entry text
-                            all_entries.append(f"Match for lemmatized form '{lemmatized_word}' of '{word}':\n{entry_text}")
-                        else:
-                            # If no entry found
-                            all_entries.append(f"No translation found for lemmatized form '{lemmatized_word}' of '{word}'")
-                    continue  # Skip to next word since we found a match with the lemmatized form
-                
-                # Look for similar lemmas to the lemmatized form
-                dict_entries.append(f"Looking for similar lemmas (edit distance of 1) to lemmatized form '{lemmatized_word}'...")
-                lemma_close_matches = find_close_lemma_matches(dict_file, lemmatized_word, max_distance=1)
-                
-                if lemma_close_matches:
-                    # Process similar lemmas
-                    dict_entries.append(f"Found {len(lemma_close_matches)} similar lemmas with small differences to lemmatized form")
-                    all_entries.append(f"Similar lemmas found for '{lemmatized_word}'")
-            
-            # Try to find direct similar matches
-            dict_entries.append(f"Looking for similar lemmas (edit distance of 1) to '{word}'...")
-            close_matches = find_close_lemma_matches(dict_file, word, max_distance=1)
-            
-            if close_matches:
-                dict_entries.append(f"Found {len(close_matches)} similar lemmas with small differences")
-                all_entries.append(f"Similar direct lemmas found for '{word}'")
-            else:
-                # Last resort, search for occurrences
-                dict_entries.append(f"\nNo direct or similar match in dictionary found for '{word}'. Searching for occurrences...")
-                
-                # Transliterate to Georgian
-                georgian_word = latinized_to_mkhedruli(word)
-                dict_entries.append(f"'{word}' transliterates to: '{georgian_word}'")
-                
-                # Search for occurrences of this word in the dictionary
-                containing_results = search_containing_word(dict_file, word)
-                
-                if containing_results:
-                    dict_entries.append(f"Found {len(containing_results)} entries containing '{georgian_word}'")
-                    all_entries.append(f"Partial matches found for '{word}'")
-                else:
-                    all_entries.append(f"No translation or references found for '{word}' ({georgian_word})")
-        else:
-            for curr_lemma, definition, mingrelian, definition_line, entry_text, georgian_word in results:
-                if entry_text:
-                    # Store the complete entry text
-                    all_entries.append(entry_text)
-                else:
-                    # If no entry found
-                    all_entries.append(f"No translation found for '{word}'")
-    
-    # Add the complete entries section to the dict_entries
-    dict_entries.append("\n" + "="*40)
-    dict_entries.append("COMPLETE TRANSLATION ENTRIES:")
-    dict_entries.append("="*40 + "\n")
-    
-    for entry in all_entries:
-        dict_entries.append(entry)
-        dict_entries.append("\n" + "-"*40 + "\n")
-    
-    # Get initial prompt
-    initial_prompt = get_initial_translation_prompt(dict_entries, logging_mode=True)
-    
-    try:
-        # Initial API call using LLM client
-        initial_response_text = llm_client.complete(initial_prompt)
-        
-        # Log the initial response to a file
-        log_to_file(initial_response_text, 'initial_response_log.txt', True)
-        
-        # Prepare follow-up prompt
-        follow_up_phrase = get_follow_up_phrase(latinized, mkhedruli)
-        grammar_text = get_grammar_text(grammar)
-        
-        # Create follow-up prompt
-        follow_up_prompt = get_follow_up_prompt(
-            follow_up_phrase, 
-            grammar_text, 
-            initial_response_text, 
-            dict_entries,
-            logging_mode=True
-        )
-        
-        # Make follow-up API call using LLM client
-        follow_up_response_text = llm_client.complete(follow_up_prompt)
-        
-        # Log the follow-up response to a file
-        log_to_file(follow_up_response_text, 'followup_response_log.txt', True)
-        
-        # Extract Georgian and English translations
-        georgian_translation, english_translation = extract_translations(follow_up_response_text)
-        
-        # Return translations
-        return {
-            'mingrelian_latinized': latinized,
-            'mingrelian_mkhedruli': mkhedruli,
-            'georgian': georgian_translation,
-            'english': english_translation,
-            'full_response': follow_up_response_text
-        }
-        
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"API error: {str(e)}")
+        log_error(logger, e, {'provider': provider, 'model': model})
 
-async def stream_translation(prompt_text, api_key, provider=None, model=None):
-    """
-    Stream translation progress with updates after first API call.
-    Yields JSON events for progress updates.
-    """
-    # Use environment variables if provider/model not specified
-    if provider is None:
-        provider = os.getenv("LLM_PROVIDER", "openai")
-    if model is None:
-        model = os.getenv("LLM_MODEL")
-    
-    # Initialize LLM client
-    try:
-        llm_client = LLMClient(provider=provider, model=model, api_key=api_key)
-    except Exception as e:
         yield f"data: {json.dumps({'error': f'Failed to initialize LLM client: {str(e)}'})}\n\n"
         return
     
-    # Determine if input is mkhedruli or latinized
-    if is_mkhedruli(prompt_text):
-        mkhedruli = prompt_text
-        latinized = mkhedruli_to_latinized(prompt_text)
-    else:
-        mkhedruli = latinized_to_mkhedruli(prompt_text)
-        latinized = prompt_text
-    
-    # Load grammar for translation
-    grammar_path = Path(__file__).parent.parent / 'data' / 'harris.txt'
     try:
-        with open(grammar_path, 'r') as file:
-            grammar = file.read()
-    except FileNotFoundError:
-        grammar = ""
-    
-    # Default dictionary file path
-    dict_file = Path(__file__).parent.parent / 'data' / 'kajaia.txt'
-    
-    # Create a variable to collect all output similar to prompt.py
-    dict_entries = []
-    all_entries = []
-    
-    # Break the string into words
-    words = latinized.split()
-    
-    # Process each word similar to process_prompt function
-    for word in words:
-        # Check if the word is in Mkhedruli script and convert if needed
-        original_word = word
-        if is_mkhedruli(word):
-            latinized_word = mkhedruli_to_latinized(word)
-            dict_entries.append(f"Input in Mkhedruli script: {word}")
-            dict_entries.append(f"Converted to latinized form: {latinized_word}")
-            word = latinized_word
-        else:
-            dict_entries.append(f"Latinized Mingrelian word: {word}")
+        # Call the single-call translator
+        print(f"Starting translation: {source_language} → {target_language}")
+        log_translation_request(
+            logger, 
+            prompt_text, 
+            source_language, 
+            target_language, 
+            provider,
+            model or 'default'
+        )
+        result = single_call_translate(
+            input_text=prompt_text,
+            source_lang=source_language,
+            target_lang=target_language,
+            llm_client=llm_client
+        )
+        print(f"Translation complete")
         
-        # Get translation results for this word
-        results = translate_lemma(dict_file, word, debug_output=False)
-        
-        # Show Mkhedruli form - only if input was originally latinized
-        if not is_mkhedruli(original_word):
-            dict_entries.append(f"Mkhedruli Mingrelian word: {latinized_to_mkhedruli(word)}")
-        
-        if len(results) == 1 and results[0][1] is None:
-            # No direct translation found, try with lemmatized form
-            lemmatized_word = lemmatize_mingrelian(word)
-            if lemmatized_word != word:
-                dict_entries.append(f"Trying lemmatized form: '{lemmatized_word}'")
-                lemma_results = translate_lemma(dict_file, lemmatized_word, debug_output=False)
-                
-                # If we found results with the lemmatized form
-                if not (len(lemma_results) == 1 and lemma_results[0][1] is None):
-                    dict_entries.append(f"Found translation for lemmatized form '{lemmatized_word}'")
-                    for curr_lemma, definition, mingrelian, definition_line, entry_text, georgian_word in lemma_results:
-                        if entry_text:
-                            all_entries.append(f"Match for lemmatized form '{lemmatized_word}' of '{word}':\n{entry_text}")
-                        else:
-                            all_entries.append(f"No translation found for lemmatized form '{lemmatized_word}' of '{word}'")
-                    continue
-                
-                # Look for similar lemmas to the lemmatized form
-                dict_entries.append(f"Looking for similar lemmas (edit distance of 1) to lemmatized form '{lemmatized_word}'...")
-                lemma_close_matches = find_close_lemma_matches(dict_file, lemmatized_word, max_distance=1)
-                
-                if lemma_close_matches:
-                    dict_entries.append(f"Found {len(lemma_close_matches)} similar lemmas with small differences to lemmatized form")
-                    all_entries.append(f"Similar lemmas found for '{lemmatized_word}'")
-            
-            # Try to find direct similar matches
-            dict_entries.append(f"Looking for similar lemmas (edit distance of 1) to '{word}'...")
-            close_matches = find_close_lemma_matches(dict_file, word, max_distance=1)
-            
-            if close_matches:
-                dict_entries.append(f"Found {len(close_matches)} similar lemmas with small differences")
-                all_entries.append(f"Similar direct lemmas found for '{word}'")
-            else:
-                # Last resort, search for occurrences
-                dict_entries.append(f"\nNo direct or similar match in dictionary found for '{word}'. Searching for occurrences...")
-                
-                # Transliterate to Georgian
-                georgian_word = latinized_to_mkhedruli(word)
-                dict_entries.append(f"'{word}' transliterates to: '{georgian_word}'")
-                
-                # Search for occurrences of this word in the dictionary
-                containing_results = search_containing_word(dict_file, word)
-                
-                if containing_results:
-                    dict_entries.append(f"Found {len(containing_results)} entries containing '{georgian_word}'")
-                    all_entries.append(f"Partial matches found for '{word}'")
-                else:
-                    all_entries.append(f"No translation or references found for '{word}' ({georgian_word})")
-        else:
-            for curr_lemma, definition, mingrelian, definition_line, entry_text, georgian_word in results:
-                if entry_text:
-                    all_entries.append(entry_text)
-                else:
-                    all_entries.append(f"No translation found for '{word}'")
-    
-    # Add the complete entries section to the dict_entries
-    dict_entries.append("\n" + "="*40)
-    dict_entries.append("COMPLETE TRANSLATION ENTRIES:")
-    dict_entries.append("="*40 + "\n")
-    
-    for entry in all_entries:
-        dict_entries.append(entry)
-        dict_entries.append("\n" + "-"*40 + "\n")
-    
-    # Prepare initial prompt
-    initial_prompt = get_initial_translation_prompt(dict_entries, logging_mode=True)
-    
-    try:
-        # Initial API call using LLM client
-        print("Starting initial API call...")
-        initial_response_text = llm_client.complete(initial_prompt)
-        print(f"Initial response received (length: {len(initial_response_text)})")
-        
-        # ✨ FIRST API CALL COMPLETE - Send progress update
-        progress_event = f"data: {json.dumps({'progress': 50, 'message': 'First translation complete'})}\n\n"
-        print(f"Sending progress event: {progress_event.strip()}")
-        yield progress_event
-        
-        # Log the initial response to a file
-        log_to_file(initial_response_text, 'initial_response_log.txt', True)
-        
-        # Prepare follow-up prompt
-        follow_up_phrase = get_follow_up_phrase(latinized, mkhedruli)
-        grammar_text = get_grammar_text(grammar)
-        
-        # Create follow-up prompt
-        follow_up_prompt = get_follow_up_prompt(
-            follow_up_phrase, 
-            grammar_text, 
-            initial_response_text, 
-            dict_entries,
-            logging_mode=True
+        # Format output for legacy compatibility
+        formatted_result = format_output_for_legacy(
+            result=result,
+            source_lang=source_language,
+            target_lang=target_language,
+            source_text=prompt_text
         )
         
-        # Make follow-up API call using LLM client
-        print("Starting follow-up API call...")
-        follow_up_response_text = llm_client.complete(follow_up_prompt)
-        print(f"Follow-up response received (length: {len(follow_up_response_text)})")
-        
-        # Log the follow-up response to a file
-        log_to_file(follow_up_response_text, 'followup_response_log.txt', True)
-        
-        # Extract Georgian and English translations
-        print("Extracting translations...")
-        georgian_translation, english_translation = extract_translations(follow_up_response_text)
-        print(f"Georgian: {georgian_translation[:50]}...")
-        print(f"English: {english_translation[:50]}...")
-        
         # Send final result
-        result = {
-            'mingrelian_latinized': latinized,
-            'mingrelian_mkhedruli': mkhedruli,
-            'georgian': georgian_translation,
-            'english': english_translation,
-            'full_response': follow_up_response_text
-        }
-        final_event = f"data: {json.dumps({'result': result})}\n\n"
-        print(f"Sending final result event (length: {len(final_event)})")
+        final_event = f"data: {json.dumps({'result': formatted_result})}\n\n"
+        print(f"Sending final result")
         yield final_event
         print("Stream completed successfully")
         return
@@ -432,33 +216,61 @@ async def stream_translation(prompt_text, api_key, provider=None, model=None):
         error_details = traceback.format_exc()
         print(f"ERROR in stream_translation: {str(e)}")
         print(error_details)
-        yield f"data: {json.dumps({'error': f'API error: {str(e)}'})}\n\n"
+        log_error(logger, e, {
+            'input_text': prompt_text,
+            'source_language': source_language,
+            'target_language': target_language,
+            'provider': provider,
+            'model': model
+        })
+        yield f"data: {json.dumps({'error': f'Translation error: {str(e)}'})}\n\n"
         return
+
 
 @app.post("/chat")
 async def chat(data: PromptIn):
     """
-    Process a Mingrelian text and return translations with streaming progress.
+    Process text translation between Mingrelian, Georgian, and English.
     
     Parameters:
-    - prompt: Text in Mingrelian (either latinized or mkhedruli script)
+    - prompt: Text to translate
     - api_key: API key for the LLM provider
-    - target_language: Language for translation (english or georgian)
-    - provider: LLM provider to use ("openai" or "anthropic")
+    - source_language: Source language ("mingrelian", "georgian", or "english")
+    - target_language: Target language ("mingrelian", "georgian", or "english")
+    - provider: LLM provider to use ("openai", "anthropic", or "gemini")
     - model: Optional model name (uses provider default if None)
     """
     if not data.prompt:
         raise HTTPException(status_code=400, detail="Prompt text is required")
     
-    if not data.api_key:
-        raise HTTPException(status_code=400, detail="API key is required")
+    # Default to Gemini if no API key provided (free tier)
+    api_key = data.api_key
+    provider = data.provider
+    model = data.model
     
-    if data.provider is not None and data.provider not in ["openai", "anthropic"]:
-        raise HTTPException(status_code=400, detail="Provider must be 'openai' or 'anthropic'")
+    if not api_key:
+        # Use server-side Gemini key for free public access
+        provider = "gemini"
+        model = model or "gemini-2.5-flash-lite"
+        api_key = os.getenv("GEMINI_API_KEY")  # Server-side key
+        if not api_key:
+            raise HTTPException(status_code=500, detail="Server API key not configured")
+    
+    if provider is not None and provider not in ["openai", "anthropic", "gemini"]:
+        raise HTTPException(status_code=400, detail="Provider must be 'openai', 'anthropic', or 'gemini'")
+    
+    # Validate language parameters
+    valid_languages = ["mingrelian", "georgian", "english"]
+    if data.source_language not in valid_languages:
+        raise HTTPException(status_code=400, detail=f"Source language must be one of: {', '.join(valid_languages)}")
+    if data.target_language not in valid_languages:
+        raise HTTPException(status_code=400, detail=f"Target language must be one of: {', '.join(valid_languages)}")
+    if data.source_language == data.target_language:
+        raise HTTPException(status_code=400, detail="Source and target languages must be different")
     
     # Return streaming response
     return StreamingResponse(
-        stream_translation(data.prompt, data.api_key, data.provider, data.model),
+        stream_translation(data.prompt, api_key, data.source_language, data.target_language, provider, model),
         media_type="text/event-stream",
         headers={
             "Cache-Control": "no-cache",

@@ -46,11 +46,9 @@ coverage.xml
 .env.*
 
 # Application-specific log files
-initial_prompt_log.txt
-initial_response_log.txt
-followup_prompt_log.txt
-followup_response_log.txt
+logs/
 *.log
+!logs/.gitkeep
 
 # Text and data files
 /*.txt
