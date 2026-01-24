@@ -5,6 +5,7 @@ Adapted from explore_rag_dict.ipynb notebook.
 """
 import re
 import string
+from functools import lru_cache
 from pathlib import Path
 from typing import Callable, Optional
 try:
@@ -62,7 +63,9 @@ def _get_data_path(filename: str) -> str:
 def _is_standalone_match(text: str, word: str) -> bool:
     """
     Check if word appears as a standalone word in text (not as part of another word).
-    Uses regex word boundaries to match complete words only.
+    Supports Mingrelian headword notations like `ნუმ(უ)` by allowing non-word
+    characters (punctuation/whitespace) between letters while still enforcing
+    standalone boundaries.
     
     Args:
         text: Text to search in
@@ -71,11 +74,54 @@ def _is_standalone_match(text: str, word: str) -> bool:
     Returns:
         bool: True if word appears standalone, False otherwise
     """
-    # Escape special regex characters in the word
-    escaped_word = re.escape(word)
-    # Use word boundaries \b to match complete words only
-    pattern = r'\b' + escaped_word + r'\b'
-    return bool(re.search(pattern, text, re.IGNORECASE))
+    word = (word or "").strip()
+    if not word:
+        return False
+    return _compiled_word_pattern(word, standalone=True).search(text) is not None
+
+
+def _is_substring_match(text: str, word: str) -> bool:
+    """
+    Like a basic `word in text` check, but also surfaces dictionary headword
+    variants where punctuation appears between letters (e.g., `नुम(უ)`).
+    """
+    word = (word or "").strip()
+    if not word:
+        return False
+    # Fast path: direct substring
+    if word in text:
+        return True
+    # Slow path: fuzzy "letters separated by punctuation" regex
+    return _compiled_word_pattern(word, standalone=False).search(text) is not None
+
+
+@lru_cache(maxsize=4096)
+def _compiled_word_pattern(word: str, standalone: bool) -> re.Pattern:
+    """
+    Compile and cache the regex used for matching `word`.
+
+    - For short tokens (<=2 chars), we use strict contiguous matching to avoid
+      excessive false-positives and keep matching fast.
+    - For longer tokens, we allow *punctuation (not whitespace)* between
+      characters so queries like `ნუმუ` match `ნუმ(უ)` without accidentally
+      matching across separate words like `... ანუ ... მუზმა ...`.
+    """
+    escaped = re.escape(word)
+    if len(word) <= 2:
+        core = escaped
+    else:
+        # Allow punctuation/symbols between letters, but do NOT allow whitespace.
+        # This keeps matches within a token (e.g., parentheses in headwords).
+        sep = r"[^\w\s]*"
+        core = sep.join(re.escape(ch) for ch in word)
+
+    if standalone:
+        # Prefer lookarounds over \b for robust Unicode behavior.
+        pattern = r"(?<!\w)" + core + r"(?!\w)"
+    else:
+        pattern = core
+
+    return re.compile(pattern, re.IGNORECASE)
 
 
 # English
@@ -106,7 +152,7 @@ def grep_search_pairs(word: str) -> tuple[str, bool]:
                     standalone_output += "Mingrelian: " + mingrelian + "\n"
                     standalone_output += "English: " + english
                     standalone_output += "========\n"
-                elif word in line:
+                elif _is_substring_match(line, word):
                     # Word appears as substring
                     substring_output += "Mingrelian: " + mingrelian + "\n"
                     substring_output += "English: " + english
@@ -148,7 +194,7 @@ def grep_search_gal(word: str) -> tuple[str, bool]:
                     standalone_output += "Mingrelian: " + mingrelian
                     standalone_output += "Russian: " + russian + "\n"
                     standalone_output += "========\n"
-                elif word in line or word.lower() in line:
+                elif _is_substring_match(line, word) or _is_substring_match(line, word.lower()):
                     # Word appears as substring
                     substring_output += "Mingrelian: " + mingrelian
                     substring_output += "Russian: " + russian + "\n"
@@ -193,7 +239,7 @@ def grep_search_kk(word: str) -> tuple[str, bool]:
                     standalone_output += "Russian: " + russian + "\n"
                     standalone_output += "Georgian: " + georgian
                     standalone_output += "========\n"
-                elif word in line or word.lower() in line:
+                elif _is_substring_match(line, word) or _is_substring_match(line, word.lower()):
                     # Word appears as substring
                     substring_output += "Mingrelian: " + mingrelian + "\n"
                     substring_output += "Russian: " + russian + "\n"
@@ -233,7 +279,7 @@ def grep_search_kajaia(word: str) -> str:
             # Standalone match found
             standalone_output += entry.strip()
             standalone_output += "\n========\n"
-        elif word in entry:
+        elif _is_substring_match(entry, word):
             # Substring match
             substring_output += entry.strip()
             substring_output += "\n========\n"
