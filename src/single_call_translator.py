@@ -125,7 +125,7 @@ def _compiled_word_pattern(word: str, standalone: bool) -> re.Pattern:
 
 
 # English
-def grep_search_pairs(word: str) -> tuple[str, bool]:
+def grep_search_pairs(word: str, *, standalone_only: bool = False) -> tuple[str, bool]:
     """
     Search sentence_pairs.tsv for English translations, prioritizing standalone word matches.
     Returns: (result_string, has_standalone_matches)
@@ -158,16 +158,16 @@ def grep_search_pairs(word: str) -> tuple[str, bool]:
                     substring_output += "English: " + english
                     substring_output += "========\n"
     
-    # Return standalone matches if found, otherwise substring matches
+    # Return standalone matches if found, otherwise substring matches (unless standalone_only)
     if standalone_output != "========\n":
         return standalone_output, True
-    elif substring_output != "========\n":
+    elif (not standalone_only) and substring_output != "========\n":
         return substring_output, False
     return "", False
 
 
 # Russian
-def grep_search_gal(word: str) -> tuple[str, bool]:
+def grep_search_gal(word: str, *, standalone_only: bool = False) -> tuple[str, bool]:
     """
     Search gal.tsv for Russian translations, prioritizing standalone word matches.
     Returns: (result_string, has_standalone_matches)
@@ -200,16 +200,16 @@ def grep_search_gal(word: str) -> tuple[str, bool]:
                     substring_output += "Russian: " + russian + "\n"
                     substring_output += "========\n"
     
-    # Return standalone matches if found, otherwise substring matches
+    # Return standalone matches if found, otherwise substring matches (unless standalone_only)
     if standalone_output != "========\n":
         return standalone_output, True
-    elif substring_output != "========\n":
+    elif (not standalone_only) and substring_output != "========\n":
         return substring_output, False
     return "", False
 
 
 # Russian and Georgian
-def grep_search_kk(word: str) -> tuple[str, bool]:
+def grep_search_kk(word: str, *, standalone_only: bool = False) -> tuple[str, bool]:
     """
     Search kk.tsv for Russian and Georgian translations, prioritizing standalone word matches.
     Returns: (result_string, has_standalone_matches)
@@ -246,16 +246,16 @@ def grep_search_kk(word: str) -> tuple[str, bool]:
                     substring_output += "Georgian: " + georgian
                     substring_output += "========\n"
     
-    # Return standalone matches if found, otherwise substring matches
+    # Return standalone matches if found, otherwise substring matches (unless standalone_only)
     if standalone_output != "========\n":
         return standalone_output, True
-    elif substring_output != "========\n":
+    elif (not standalone_only) and substring_output != "========\n":
         return substring_output, False
     return "", False
 
 
 # Georgian
-def grep_search_kajaia(word: str) -> str:
+def grep_search_kajaia(word: str, *, standalone_only: bool = False) -> str:
     """
     Search kajaia_cleaned.txt for Georgian dictionary entries.
     Splits text by empty lines and returns the block containing the search term.
@@ -284,10 +284,10 @@ def grep_search_kajaia(word: str) -> str:
             substring_output += entry.strip()
             substring_output += "\n========\n"
     
-    # Return standalone matches if found, otherwise substring matches
+    # Return standalone matches if found, otherwise substring matches (unless standalone_only)
     if standalone_output != "========\n":
         return standalone_output
-    elif substring_output != "========\n":
+    elif (not standalone_only) and substring_output != "========\n":
         return substring_output
     return ""
 
@@ -339,6 +339,142 @@ def grep_search_from_mingrelian(word: str) -> str:
     Search all dictionaries from Mingrelian word.
     Short-circuits kajaia search if standalone matches found in extractive dictionaries.
     """
+    def _mkhedruli_has_letters(s: str) -> bool:
+        return any('\u10D0' <= ch <= '\u10FF' for ch in s)
+
+    def _ends_with_mkhedruli_vowel(s: str) -> bool:
+        if not s:
+            return False
+        # Include Mingrelian schwa letter (ჷ) as vowel-like in our data.
+        return s[-1] in {"ა", "ე", "ი", "ო", "უ", "ჷ"}
+
+    def _case_strip_candidates_mkhedruli(w: str) -> list[str]:
+        """
+        Conservative case-ending stripping for Mingrelian nouns/adjectives.
+        Based on Harris (§2.1.1.1): cases include nominative -i, narrative -k, dative -s,
+        genitive -iš, allative -iša, ablative -iše, instrumental -it, designative -išo(t),
+        adverbial -o(t). After vowel-final stems, initial i drops (so -š, -ša, -še, -t, -šo(t)).
+
+        We keep this intentionally narrow to avoid trash results:
+        - only run if no dictionary matches were found across all four sources
+        - strip ONE suffix per attempt (longest-first), then optionally strip plural
+        - generate a small set of candidates (including optional +ი for consonant-final stems)
+        """
+        w = (w or "").strip()
+        if len(w) < 4 or not _mkhedruli_has_letters(w):
+            return []
+
+        EMPHATIC_VOWELS = ["ი", "ჷ", "უ"]  # Harris: -i, -ə, -u (Mkhedruli schwa ≈ ჷ)
+
+        # Base case endings (Harris §2.1.1.1), longest-first to avoid partial stripping.
+        base_suffixes = [
+            # Ablative
+            "იშე",   # -iše (consonant stems)
+            "შე",    # -še  (vowel stems)
+            # Allative
+            "იშა",   # -iša (consonant stems)
+            "შა",    # -ša  (vowel stems)
+            # Genitive
+            "იშ",    # -iš  (consonant stems)
+            "შ",     # -š   (vowel stems)
+            # Designative
+            "იშოთ",  # -išo(t) (consonant stems)
+            "შოთ",   # -šo(t)  (vowel stems)
+            # Instrumental / adverbial
+            "ით",    # instrumental -it (consonant stems)
+            "ოთ",    # adverbial -ot
+            "ო",     # adverbial -o
+            "თ",     # instrumental/adverbial -t (vowel stems)
+            # Narrative / dative (single consonant markers)
+            "კ",     # narrative -k
+            "ს",     # dative -s
+            "ც",     # dative variant -c (Z-S dialect, after consonant stems)
+        ]
+
+        # Emphatic vowels can follow narrative/dative/genitive/instrumental markers,
+        # and occasionally adverbial/designative (Harris p.14).
+        emphatic_applicable = [
+            "კ", "ს", "ც",     # narrative/dative
+            "იშ", "შ",         # genitive
+            "ით", "თ",         # instrumental (and t-variant)
+            "ოთ", "ო",         # occasionally adverbial
+            "იშოთ", "შოთ",     # occasionally designative
+        ]
+
+        # Add case+emphatic variants (e.g., კი, კჷ, კუ; იში, etc.).
+        emphatic_suffixes = [s + v for s in emphatic_applicable for v in EMPHATIC_VOWELS]
+
+        # Combine and ensure longest-first (then lexicographic for stability).
+        suffixes = sorted(set(base_suffixes + emphatic_suffixes), key=lambda x: (-len(x), x))
+
+        out: list[str] = []
+        for suf in suffixes:
+            if w.endswith(suf) and len(w) > len(suf) + 2:
+                stem = w[:-len(suf)]
+                if len(stem) >= 3:
+                    # Prefer nominative (+ი) form first for consonant-final stems,
+                    # since dictionary headwords are typically nominative.
+                    if not _ends_with_mkhedruli_vowel(stem):
+                        out.append(stem + "ი")
+                        out.append(stem)
+                    else:
+                        out.append(stem)
+
+                    # Optional plural stripping (Harris §2.1.1.2: plural marker -ef in Mkhedruli = "ეფ")
+                    # Only after a successful case-strip.
+                    # Also handle narrative/dative plural allomorphs -ენ/-ემ (Harris: -en/-em),
+                    # but only as a fallback after stripping a case marker.
+                    plural_variants = ["ეფ", "ენ", "ემ"]
+                    for pv in plural_variants:
+                        if stem.endswith(pv) and len(stem) >= len(pv) + 3:
+                            base = stem[:-len(pv)]
+                            if not _ends_with_mkhedruli_vowel(base):
+                                out.append(base + "ი")
+                                out.append(base)
+                            else:
+                                out.append(base)
+                break
+
+        # De-dup while preserving order
+        seen = set()
+        deduped: list[str] = []
+        for c in out:
+            if c not in seen and c != w:
+                deduped.append(c)
+                seen.add(c)
+        return deduped
+
+    def _preverb_strip_candidates_mkhedruli(w: str) -> list[str]:
+        """
+        Verb-only fallback: strip SIMPLE preverbs (Ivanishvili & Soselia).
+        Runs only if we got zero hits from all other lookup methods.
+
+        Simple preverbs (Mkhedruli):
+        - V-type: ა-, ო-, ე-
+        - CV-type: გა-, გო-, გე-, და-, დო-, წა-, მე-, მო-, შე-
+        """
+        w = (w or "").strip()
+        if len(w) < 5 or not _mkhedruli_has_letters(w):
+            return []
+
+        preverbs = [
+            # CV-type (2 chars)
+            "გა", "გო", "გე",
+            "და", "დო",
+            "წა",
+            "მე", "მო",
+            "შე",
+            # V-type (1 char)
+            "ა", "ო", "ე",
+        ]
+
+        out: list[str] = []
+        for pv in preverbs:
+            if w.startswith(pv) and len(w) > len(pv) + 2:
+                out.append(w[len(pv):])
+                break
+        return out
+
     output = f"\nResults for {word}:\n"
     
     # Run extractive dictionary searches
@@ -353,8 +489,81 @@ def grep_search_from_mingrelian(word: str) -> str:
     # Only search kajaia if no standalone matches found in extractive dictionaries
     has_any_standalone = pairs_has_standalone or gal_has_standalone or kk_has_standalone
     
+    kajaia_result = ""
     if not has_any_standalone:
-        output += grep_search_kajaia(word)
+        kajaia_result = grep_search_kajaia(word)
+        output += kajaia_result
+
+    # If absolutely nothing matched across all four sources, try a conservative
+    # case-suffix stripping fallback (e.g., ...თ → stem).
+    case_fallback_applied = False
+    if not (pairs_result or gal_result or kk_result or kajaia_result):
+        for stem in _case_strip_candidates_mkhedruli(word):
+            # First: standalone-only search. If we find any standalone match for this
+            # candidate, we return ONLY standalone matches and stop (no partial matches,
+            # and no further candidates like the bare stem).
+            pairs2_s, pairs2_has_s = grep_search_pairs(stem, standalone_only=True)
+            gal2_s, gal2_has_s = grep_search_gal(stem, standalone_only=True)
+            kk2_s, kk2_has_s = grep_search_kk(stem, standalone_only=True)
+            kajaia2_s = grep_search_kajaia(stem, standalone_only=True)
+
+            output2_s = pairs2_s + gal2_s + kk2_s + kajaia2_s
+            has_any_standalone2 = pairs2_has_s or gal2_has_s or kk2_has_s or bool(kajaia2_s)
+
+            if has_any_standalone2:
+                output += f"\n[Case-stripped fallback: {word} → {stem}]\n"
+                output += output2_s
+                case_fallback_applied = True
+                break
+
+            # Otherwise, fall back to the normal grep-style matching for this candidate.
+            pairs2, pairs2_has = grep_search_pairs(stem)
+            gal2, gal2_has = grep_search_gal(stem)
+            kk2, kk2_has = grep_search_kk(stem)
+
+            output2 = pairs2 + gal2 + kk2
+            has_any_standalone2 = pairs2_has or gal2_has or kk2_has
+            kajaia2 = "" if has_any_standalone2 else grep_search_kajaia(stem)
+            output2 += kajaia2
+
+            if output2:
+                output += f"\n[Case-stripped fallback: {word} → {stem}]\n"
+                output += output2
+                case_fallback_applied = True
+                break
+
+    # If we STILL have no hits, assume this might be a verb with a preverb attached
+    # and try stripping a simple preverb.
+    if not (pairs_result or gal_result or kk_result or kajaia_result or case_fallback_applied):
+        for stem in _preverb_strip_candidates_mkhedruli(word):
+            # Prefer standalone-only results for the stripped stem.
+            pairs2_s, pairs2_has_s = grep_search_pairs(stem, standalone_only=True)
+            gal2_s, gal2_has_s = grep_search_gal(stem, standalone_only=True)
+            kk2_s, kk2_has_s = grep_search_kk(stem, standalone_only=True)
+            kajaia2_s = grep_search_kajaia(stem, standalone_only=True)
+
+            output2_s = pairs2_s + gal2_s + kk2_s + kajaia2_s
+            has_any_standalone2 = pairs2_has_s or gal2_has_s or kk2_has_s or bool(kajaia2_s)
+
+            if has_any_standalone2:
+                output += f"\n[Preverb-stripped fallback: {word} → {stem}]\n"
+                output += output2_s
+                break
+
+            # Otherwise allow normal grep-style matches.
+            pairs2, pairs2_has = grep_search_pairs(stem)
+            gal2, gal2_has = grep_search_gal(stem)
+            kk2, kk2_has = grep_search_kk(stem)
+
+            output2 = pairs2 + gal2 + kk2
+            has_any_standalone2 = pairs2_has or gal2_has or kk2_has
+            kajaia2 = "" if has_any_standalone2 else grep_search_kajaia(stem)
+            output2 += kajaia2
+
+            if output2:
+                output += f"\n[Preverb-stripped fallback: {word} → {stem}]\n"
+                output += output2
+                break
 
     if len(output) > 10000:
         return output[:10000]
