@@ -23,10 +23,15 @@ from src.logger import (
 )
 import re
 
+SERVER_KEY_MODELS = {
+    "openai": {"gpt-5.4-nano"},
+    "gemini": {"gemini-3.1-flash-lite-preview"},
+}
+
 # Request model
 class PromptIn(BaseModel):
     prompt: str
-    api_key: str = None  # Optional: if None, server will use default Gemini key
+    api_key: str = None  # Optional: if None, server will use the configured key for the selected provider
     source_language: str = "mingrelian"  # Source language: "mingrelian", "georgian", or "english"
     target_language: str = "english"  # Target language: "mingrelian", "georgian", or "english"
     provider: str = None  # "openai", "anthropic", or "gemini" (if None, reads from env)
@@ -66,6 +71,33 @@ app.add_middleware(
 def is_mkhedruli(text):
     """Check if text contains Georgian Mkhedruli script characters."""
     return bool(re.search('[\u10D0-\u10FF]', text))
+
+
+def get_server_api_key(provider: str):
+    """Resolve the configured server-side API key for the requested provider."""
+    env_var_by_provider = {
+        "openai": "OPENAI_API_KEY",
+        "anthropic": "ANTHROPIC_API_KEY",
+        "gemini": "GEMINI_API_KEY",
+    }
+    env_var = env_var_by_provider.get(provider)
+    return os.getenv(env_var) if env_var else None
+
+
+def get_default_model_for_provider(provider: str):
+    """Resolve the provider's runtime default model."""
+    if provider == "openai":
+        return "gpt-5.4-nano"
+    if provider == "anthropic":
+        return "claude-sonnet-4-5-20250929"
+    if provider == "gemini":
+        return "gemini-3.1-flash-lite-preview"
+    return None
+
+
+def is_server_key_model_allowed(provider: str, model: str) -> bool:
+    """Check whether this provider/model pair may use the server-side key."""
+    return model in SERVER_KEY_MODELS.get(provider, set())
 
 
 def format_output_for_legacy(result, source_lang, target_lang, source_text):
@@ -141,7 +173,7 @@ async def stream_translation(prompt_text, api_key, source_language="mingrelian",
     
     Args:
         prompt_text: Text to translate
-        api_key: API key for the LLM provider
+        api_key: API key for the LLM provider (optional if the server has a provider key configured)
         source_language: Source language ("mingrelian", "georgian", or "english")
         target_language: Target language ("mingrelian", "georgian", or "english")
         provider: "openai" or "anthropic" (if None, reads from LLM_PROVIDER env var, defaults to "openai")
@@ -229,7 +261,7 @@ async def chat(data: PromptIn):
     
     Parameters:
     - prompt: Text to translate
-    - api_key: API key for the LLM provider
+    - api_key: API key for the LLM provider (optional if the server has a provider key configured)
     - source_language: Source language ("mingrelian", "georgian", or "english")
     - target_language: Target language ("mingrelian", "georgian", or "english")
     - provider: LLM provider to use ("openai", "anthropic", or "gemini")
@@ -238,21 +270,27 @@ async def chat(data: PromptIn):
     if not data.prompt:
         raise HTTPException(status_code=400, detail="Prompt text is required")
     
-    # Default to Gemini if no API key provided (free tier)
     api_key = data.api_key
-    provider = data.provider
-    model = data.model
-    
-    if not api_key:
-        # Use server-side Gemini key for free public access
-        provider = "gemini"
-        model = model or "gemini-3.1-flash-lite-preview"
-        api_key = os.getenv("GEMINI_API_KEY")  # Server-side key
-        if not api_key:
-            raise HTTPException(status_code=500, detail="Server API key not configured")
-    
+    provider = data.provider or os.getenv("LLM_PROVIDER", "openai")
+    env_provider = os.getenv("LLM_PROVIDER", "openai")
+    env_model = os.getenv("LLM_MODEL") if provider == env_provider else None
+    model = data.model or env_model or get_default_model_for_provider(provider)
+
     if provider is not None and provider not in ["openai", "anthropic", "gemini"]:
         raise HTTPException(status_code=400, detail="Provider must be 'openai', 'anthropic', or 'gemini'")
+
+    if not api_key:
+        if not is_server_key_model_allowed(provider, model):
+            raise HTTPException(
+                status_code=400,
+                detail=f"Model '{model}' requires a user-provided API key"
+            )
+        api_key = get_server_api_key(provider)
+        if not api_key:
+            raise HTTPException(
+                status_code=500,
+                detail=f"Server-side API key not configured for provider '{provider}'"
+            )
     
     # Validate language parameters
     valid_languages = ["mingrelian", "georgian", "english"]

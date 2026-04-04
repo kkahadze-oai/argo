@@ -46,7 +46,7 @@ class LLMClient:
             self.client_lib = openai
             self.api_key = api_key or os.getenv("OPENAI_API_KEY")
             # Use model from parameter, then env var LLM_MODEL, then default
-            self.model = model or os.getenv("LLM_MODEL") or "gpt-4o"
+            self.model = model or os.getenv("LLM_MODEL") or "gpt-5.4-nano"
             
             if not self.api_key:
                 raise ValueError("OpenAI API key not found. Set OPENAI_API_KEY in .env or pass api_key parameter.")
@@ -115,11 +115,11 @@ class LLMClient:
         import openai
         client = openai.OpenAI(api_key=self.api_key)
         
-        # GPT-5 Pro models use the new v1/responses endpoint
-        is_gpt5_pro = "gpt-5-pro" in self.model.lower()
-        
-        if is_gpt5_pro:
-            # Use the v1/responses endpoint for GPT-5 Pro
+        # GPT-5 family models use the v1/responses endpoint.
+        is_gpt5_family = self.model.lower().startswith("gpt-5")
+
+        if is_gpt5_family:
+            # Use the v1/responses endpoint for GPT-5 family models
             # GPT-5 Pro uses 'input' parameter (not 'prompt')
             # Input can be either a string or a messages array
             if system_prompt:
@@ -239,7 +239,7 @@ def get_default_llm_client(
 
 
 # Convenience functions for backward compatibility
-def complete_with_openai(prompt: str, model: str = "gpt-4o", api_key: Optional[str] = None) -> str:
+def complete_with_openai(prompt: str, model: str = "gpt-5.4-nano", api_key: Optional[str] = None) -> str:
     """
     Quick function to complete a prompt with OpenAI.
     
@@ -285,4 +285,3 @@ def complete_with_gemini(prompt: str, model: str = "gemini-3-flash-preview", api
     """
     client = LLMClient(provider="gemini", model=model, api_key=api_key)
     return client.complete(prompt)
-

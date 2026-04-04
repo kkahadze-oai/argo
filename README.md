@@ -5,7 +5,7 @@ FastAPI backend for the Mingrelian translation application. Provides translation
 ## Features
 
 - **Multi-directional Translation**: Translate between any pair of Mingrelian, Georgian, and English
-- **Multiple LLM Providers**: Support for OpenAI (GPT-4o, GPT-5.2), Anthropic (Claude), and Google (Gemini)
+- **Multiple LLM Providers**: Support for OpenAI (GPT-5.4 family, GPT-5.2), Anthropic (Claude), and Google (Gemini)
 - **Smart Dictionary Lookups**: Standalone word matching with short-circuit optimization
 - **Google Translate Bridge**: Instant translations via high-resource language bridging
 - **Comprehensive Logging**: Structured logging for debugging prompts, responses, and errors
@@ -32,7 +32,7 @@ pip install -r fastapi_app/requirements.txt
 Create a `.env` file in the argo root directory:
 
 ```bash
-# OpenAI (optional)
+# OpenAI (optional, also used for server-side fallback if the client omits api_key)
 OPENAI_API_KEY=your_openai_key_here
 
 # Anthropic (optional)
@@ -45,7 +45,7 @@ GEMINI_API_KEY=your_gemini_key_here
 LLM_PROVIDER=openai  # or "anthropic" or "gemini"
 
 # Default model (optional)
-LLM_MODEL=gpt-4o  # or claude-sonnet-4-5-20250929, gemini-3-flash-preview, etc.
+LLM_MODEL=gpt-5.4-nano  # or gpt-5.4-mini, gpt-5.4, claude-sonnet-4-5-20250929, gemini-3-flash-preview, etc.
 
 # Logging level (optional, defaults to INFO)
 LOG_LEVEL=INFO  # or DEBUG for more verbose logs
@@ -76,14 +76,14 @@ The API will be available at `http://localhost:8000`
   "api_key": "your_api_key",
   "source_language": "mingrelian",
   "target_language": "english",
-    "provider": "openai",
-    "model": "gpt-4o"
+  "provider": "openai",
+  "model": "gpt-5.4-nano"
 }
 ```
 
 **Parameters:**
 - `prompt` (string, required): Text to translate
-- `api_key` (string, required): API key for the LLM provider
+- `api_key` (string, optional): API key for the LLM provider (if omitted, the backend uses the configured server-side key for the selected provider)
 - `source_language` (string, optional): Source language - "mingrelian", "georgian", or "english" (default: "mingrelian")
 - `target_language` (string, optional): Target language - "mingrelian", "georgian", or "english" (default: "english")
 - `provider` (string, optional): LLM provider - "openai", "anthropic", or "gemini" (reads from env if not specified)
@@ -100,7 +100,10 @@ The endpoint streams JSON events with translation progress:
 ## Supported Models
 
 ### OpenAI
-- `gpt-4o` (default)
+- `gpt-5.4-nano` (default)
+- `gpt-5.4-mini`
+- `gpt-5.4`
+- `gpt-4o`
 - `gpt-4o-mini`
 - `gpt-5.2`
 
