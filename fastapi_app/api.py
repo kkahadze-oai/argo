@@ -310,3 +310,16 @@ async def chat(data: PromptIn):
             "Connection": "keep-alive",
         }
     ) 
+
+
+@app.get("/debug/config")
+async def debug_config():
+    """Temporary safe config check endpoint for deployment debugging."""
+    provider = os.getenv("LLM_PROVIDER", "openai")
+    return {
+        "has_openai_key": bool(os.getenv("OPENAI_API_KEY")),
+        "has_anthropic_key": bool(os.getenv("ANTHROPIC_API_KEY")),
+        "has_gemini_key": bool(os.getenv("GEMINI_API_KEY")),
+        "llm_provider": provider,
+        "llm_model": os.getenv("LLM_MODEL") or get_default_model_for_provider(provider),
+    }
