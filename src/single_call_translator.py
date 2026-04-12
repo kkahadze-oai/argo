@@ -33,6 +33,86 @@ LANG_LABEL = {
     "georgian": "Georgian",
 }
 
+FIGURATIVE_MARKERS = {
+    "ru": ("переносное значение", "перен."),
+    "ka": ("გადატანილი მნიშვნელობით", "გადატ."),
+}
+
+
+def _normalize_gloss_segment(text: str) -> str:
+    """Strip numbering and separators that are not meaningful translation content."""
+    normalized = re.sub(r"\s+", " ", text).strip(" ;,\n\t")
+    normalized = re.sub(r"^\d+\.\s*", "", normalized)
+    normalized = re.sub(r"\s+\d+\.$", "", normalized)
+    return normalized.strip(" ;,\n\t")
+
+
+def _split_figurative_gloss(gloss: str, lang_code: str) -> tuple[str, Optional[str]]:
+    """Split a dictionary gloss into primary and figurative senses."""
+    markers = FIGURATIVE_MARKERS.get(lang_code, ())
+    if not gloss or not markers:
+        normalized = _normalize_gloss_segment(gloss)
+        return normalized, None
+
+    lowered = gloss.lower()
+    marker_position = min(
+        (idx for marker in markers if (idx := lowered.find(marker)) != -1),
+        default=-1,
+    )
+    if marker_position == -1:
+        normalized = _normalize_gloss_segment(gloss)
+        return normalized, None
+
+    matched_marker = next(marker for marker in markers if lowered.find(marker) == marker_position)
+    primary = _normalize_gloss_segment(gloss[:marker_position])
+    secondary = _normalize_gloss_segment(gloss[marker_position + len(matched_marker):])
+    return primary, secondary or None
+
+
+def _format_kk_entry(mingrelian: str, russian: str, georgian: str) -> str:
+    """Format a kk.tsv entry with figurative senses clearly marked as secondary."""
+    ru_primary, ru_figurative = _split_figurative_gloss(russian, "ru")
+    ka_primary, ka_figurative = _split_figurative_gloss(georgian, "ka")
+
+    lines = [f"Mingrelian: {mingrelian}"]
+    if ru_primary:
+        lines.append(f"Russian primary meaning: {ru_primary}")
+    if ru_figurative:
+        lines.append(f"Russian secondary figurative meaning: {ru_figurative}")
+    if ka_primary:
+        lines.append(f"Georgian primary meaning: {ka_primary}")
+    if ka_figurative:
+        lines.append(f"Georgian secondary figurative meaning: {ka_figurative}")
+    return "\n".join(lines)
+
+
+def _choose_kk_bridge_gloss(russian: str, georgian: str, target_lang: Optional[str]) -> tuple[str, str]:
+    """
+    Pick the safest gloss for direct bridging from kk.tsv.
+
+    Russian glosses bridge to English more reliably than Georgian glosses in the
+    current pipeline, so prefer Russian when producing English.
+    """
+    russian_primary, _ = _split_figurative_gloss(russian, "ru")
+    georgian_primary, _ = _split_figurative_gloss(georgian, "ka")
+
+    if target_lang == "english":
+        if russian_primary:
+            return russian_primary, "ru"
+        if georgian_primary:
+            return georgian_primary, "ka"
+    elif target_lang == "georgian":
+        if georgian_primary:
+            return georgian_primary, "ka"
+        if russian_primary:
+            return russian_primary, "ru"
+
+    if georgian_primary:
+        return georgian_primary, "ka"
+    if russian_primary:
+        return russian_primary, "ru"
+    return "", ""
+
 
 def _get_data_path(filename: str) -> str:
     """Get the path to a data file, checking multiple possible locations."""
@@ -231,19 +311,20 @@ def grep_search_kk(word: str, *, standalone_only: bool = False) -> tuple[str, bo
         if len(parts) >= 4:
             mingrelian, ipa, russian, georgian = parts[0], parts[1], parts[2], parts[3]
             if mingrelian and russian and georgian:
+                formatted_entry = _format_kk_entry(
+                    mingrelian.strip(),
+                    russian.strip(),
+                    georgian.strip(),
+                )
                 # Check if word appears as standalone
                 if (_is_standalone_match(mingrelian, word) or 
                     _is_standalone_match(russian, word) or 
                     _is_standalone_match(georgian, word)):
-                    standalone_output += "Mingrelian: " + mingrelian + "\n"
-                    standalone_output += "Russian: " + russian + "\n"
-                    standalone_output += "Georgian: " + georgian
+                    standalone_output += formatted_entry + "\n"
                     standalone_output += "========\n"
                 elif _is_substring_match(line, word) or _is_substring_match(line, word.lower()):
                     # Word appears as substring
-                    substring_output += "Mingrelian: " + mingrelian + "\n"
-                    substring_output += "Russian: " + russian + "\n"
-                    substring_output += "Georgian: " + georgian
+                    substring_output += formatted_entry + "\n"
                     substring_output += "========\n"
     
     # Return standalone matches if found, otherwise substring matches (unless standalone_only)
@@ -802,7 +883,8 @@ def check_exact_match_simple(input_text: str, source_lang: str, target_lang: str
                     # Mingrelian → Georgian
                     if source_lang == "mingrelian" and target_lang == "georgian":
                         if mingrelian.lower() == input_lower:
-                            return georgian
+                            georgian_primary, _ = _split_figurative_gloss(georgian, "ka")
+                            return georgian_primary or georgian
                     
                     # Georgian → Mingrelian
                     elif source_lang == "georgian" and target_lang == "mingrelian":
@@ -841,7 +923,7 @@ def check_exact_match_simple(input_text: str, source_lang: str, target_lang: str
     return None
 
 
-def find_mingrelian_in_dicts(text: str) -> Optional[tuple[str, str]]:
+def find_mingrelian_in_dicts(text: str, target_lang: Optional[str] = None) -> Optional[tuple[str, str, str]]:
     """
     Find ANY translation for a text in dictionaries, searching across all columns.
     Returns (mingrelian, other_language_text, other_language_code) if found.
@@ -895,12 +977,16 @@ def find_mingrelian_in_dicts(text: str) -> Optional[tuple[str, str]]:
                 if len(parts) >= 4:
                     mingrelian, ipa, russian, georgian = parts[0].strip(), parts[1].strip(), parts[2].strip(), parts[3].strip()
                     if mingrelian.lower() == text_lower:
-                        # Found mingrelian, prefer Georgian
+                        bridge_text, lang_code = _choose_kk_bridge_gloss(russian, georgian, target_lang)
+                        if bridge_text and lang_code:
+                            return (mingrelian, bridge_text, lang_code)
                         return (mingrelian, georgian, "ka")
                     elif georgian.lower() == text_lower:
-                        return (mingrelian, georgian, "ka")
+                        georgian_primary, _ = _split_figurative_gloss(georgian, "ka")
+                        return (mingrelian, georgian_primary or georgian, "ka")
                     elif russian.lower() == text_lower:
-                        return (mingrelian, russian, "ru")
+                        russian_primary, _ = _split_figurative_gloss(russian, "ru")
+                        return (mingrelian, russian_primary or russian, "ru")
     except FileNotFoundError:
         pass
     
@@ -927,8 +1013,6 @@ def check_exact_match_with_google_translate(input_text: str, source_lang: str, t
     
     # SCENARIO 1: Translating TO Mingrelian from high-resource language
     if target_lang == "mingrelian" and source_lang in ["english", "georgian"]:
-        input_lower = input_text.lower().strip()
-        
         # Try direct lookup first
         direct_match = check_exact_match_simple(input_text, source_lang, target_lang)
         if direct_match:
@@ -969,7 +1053,7 @@ def check_exact_match_with_google_translate(input_text: str, source_lang: str, t
             return direct_match
         
         # Search for Mingrelian in ANY dictionary with ANY language pair
-        result = find_mingrelian_in_dicts(input_text)
+        result = find_mingrelian_in_dicts(input_text, target_lang=target_lang)
         if result:
             mingrelian_text, other_lang_text, lang_code = result
             
