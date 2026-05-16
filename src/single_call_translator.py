@@ -8,6 +8,7 @@ translate`` working for the API, eval scripts, and external callers.
 
 from src.translator import lookup as _lookup
 from src.translator import pipeline as _pipeline
+from src.translator import prompts as _prompts
 from src.translator.data import (
     _data_file_cache_key,
     _get_data_path,
@@ -40,15 +41,7 @@ from src.translator.lookup import (
     grep_search_pairs,
 )
 from src.translator.prompts import (
-    PROMPT_BUILDERS,
-    _build_dict_entries,
-    _construct_prompt,
-    _construct_translation_prompt,
     _format_exact_candidate_block,
-    construct_prompt_from_english_to_mingrelian,
-    construct_prompt_from_georgian_to_mingrelian,
-    construct_prompt_from_mingrelian_to_english,
-    construct_prompt_from_mingrelian_to_georgian,
 )
 from src.translator.text_utils import (
     FIGURATIVE_MARKERS,
@@ -103,6 +96,48 @@ def grep_search_from_mingrelian(*args, **kwargs):
 def check_exact_match_with_google_translate(*args, **kwargs):
     _sync_compat_state()
     return _lookup.check_exact_match_with_google_translate(*args, **kwargs)
+
+
+def _build_dict_entries(*args, **kwargs):
+    _sync_compat_state()
+    return _prompts._build_dict_entries(*args, **kwargs)
+
+
+def _construct_prompt(*args, **kwargs):
+    _sync_compat_state()
+    return _prompts._construct_prompt(*args, **kwargs)
+
+
+def _construct_translation_prompt(*args, **kwargs):
+    return _prompts._construct_translation_prompt(*args, **kwargs)
+
+
+def construct_prompt_from_mingrelian_to_english(*args, **kwargs):
+    _sync_compat_state()
+    return _prompts.construct_prompt_from_mingrelian_to_english(*args, **kwargs)
+
+
+def construct_prompt_from_english_to_mingrelian(*args, **kwargs):
+    _sync_compat_state()
+    return _prompts.construct_prompt_from_english_to_mingrelian(*args, **kwargs)
+
+
+def construct_prompt_from_georgian_to_mingrelian(*args, **kwargs):
+    _sync_compat_state()
+    return _prompts.construct_prompt_from_georgian_to_mingrelian(*args, **kwargs)
+
+
+def construct_prompt_from_mingrelian_to_georgian(*args, **kwargs):
+    _sync_compat_state()
+    return _prompts.construct_prompt_from_mingrelian_to_georgian(*args, **kwargs)
+
+
+PROMPT_BUILDERS = {
+    ("mingrelian", "english"): construct_prompt_from_mingrelian_to_english,
+    ("english", "mingrelian"): construct_prompt_from_english_to_mingrelian,
+    ("mingrelian", "georgian"): construct_prompt_from_mingrelian_to_georgian,
+    ("georgian", "mingrelian"): construct_prompt_from_georgian_to_mingrelian,
+}
 
 
 def translate(*args, **kwargs):
