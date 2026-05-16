@@ -8,7 +8,7 @@ FastAPI backend for the Mingrelian translation application. Provides translation
 - **Multiple LLM Providers**: Support for OpenAI (GPT-5.4 family, GPT-5.2), Anthropic (Claude), and Google (Gemini)
 - **Smart Dictionary Lookups**: Standalone word matching with short-circuit optimization
 - **Google Translate Bridge**: Instant translations via high-resource language bridging
-- **Configurable Logging**: Console logging by default, with opt-in file logs for debugging prompts, responses, and errors
+- **Configurable Logging**: Console logging by default, with opt-in file logs; full prompt/response traces require DEBUG file logging
 - **Single API Call**: Optimized to use only one LLM call per translation
 
 ## Quick Start
@@ -206,13 +206,14 @@ Set `LOG_TO_FILE=true` to save logs to the `logs/` directory:
 - `translator_YYYYMMDD.log` - Logs at the configured `LOG_LEVEL` and above
 - `errors_YYYYMMDD.log` - Error logs only
 
-**Log files include:**
+**At `LOG_LEVEL=INFO`, log files include:**
 - Translation requests with language pairs
-- Full prompts sent to LLMs
-- Full LLM responses
+- Truncated prompt/response previews
 - Extracted translations
 - Instant lookup results
 - Error details with context
+
+Full prompts sent to LLMs and full LLM responses are DEBUG entries. To write them to `translator_YYYYMMDD.log`, set both `LOG_TO_FILE=true` and `LOG_LEVEL=DEBUG`.
 
 **Environment variable:**
 ```bash
@@ -301,7 +302,7 @@ python3 -m py_compile fastapi_app/api.py src/*.py eval/provider.py
 ### Debugging
 
 - Set `LOG_LEVEL=DEBUG` and `LOG_TO_FILE=true` in `.env` to write full prompt/response logs
-- Check `logs/translator_YYYYMMDD.log` for full request/response traces
+- Check `logs/translator_YYYYMMDD.log` for full request/response traces when `LOG_TO_FILE=true` and `LOG_LEVEL=DEBUG`
 - Check `logs/errors_YYYYMMDD.log` for error details
 
 ## Deployment

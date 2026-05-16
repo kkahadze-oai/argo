@@ -17,6 +17,8 @@ class LoggerSetupTests(unittest.TestCase):
     def setUp(self):
         self.logger_module = importlib.import_module('src.logger')
         self.original_log_to_file = os.environ.pop('LOG_TO_FILE', None)
+        self.original_log_level = os.environ.get('LOG_LEVEL')
+        os.environ['LOG_LEVEL'] = 'INFO'
         self.original_logs_dir = self.logger_module.LOGS_DIR
         self.loggers_to_cleanup = []
 
@@ -25,6 +27,11 @@ class LoggerSetupTests(unittest.TestCase):
             os.environ.pop('LOG_TO_FILE', None)
         else:
             os.environ['LOG_TO_FILE'] = self.original_log_to_file
+
+        if self.original_log_level is None:
+            os.environ.pop('LOG_LEVEL', None)
+        else:
+            os.environ['LOG_LEVEL'] = self.original_log_level
 
         self.logger_module.LOGS_DIR = self.original_logs_dir
         for logger_name in self.loggers_to_cleanup:
@@ -121,6 +128,34 @@ class LoggerSetupTests(unittest.TestCase):
             self.assertTrue(any(handler.name == 'margo_console' for handler in logger.handlers))
             self.assertFalse(any(isinstance(handler, logging.FileHandler) for handler in logger.handlers))
             self.assertTrue(all(handler.stream is None for handler in file_handlers))
+
+    def test_truncated_suffix_requires_debug_capable_file_logging(self):
+        with tempfile.TemporaryDirectory() as tmpdir:
+            logs_dir = Path(tmpdir) / 'logs'
+            self.logger_module.LOGS_DIR = logs_dir
+            os.environ['LOG_TO_FILE'] = 'true'
+            os.environ['LOG_LEVEL'] = 'INFO'
+
+            logger = self.setup_test_logger('test_info_file_suffix')
+
+            self.assertEqual(
+                '[truncated, set LOG_LEVEL=DEBUG for full prompt file logs]',
+                self.logger_module._truncated_suffix('prompt', logger),
+            )
+
+    def test_truncated_suffix_points_to_log_file_when_debug_reaches_file(self):
+        with tempfile.TemporaryDirectory() as tmpdir:
+            logs_dir = Path(tmpdir) / 'logs'
+            self.logger_module.LOGS_DIR = logs_dir
+            os.environ['LOG_TO_FILE'] = 'true'
+            os.environ['LOG_LEVEL'] = 'DEBUG'
+
+            logger = self.setup_test_logger('test_debug_file_suffix')
+
+            self.assertEqual(
+                '[truncated, see log file for full response]',
+                self.logger_module._truncated_suffix('response', logger),
+            )
 
 
 if __name__ == '__main__':

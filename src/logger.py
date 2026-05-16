@@ -61,10 +61,25 @@ def _has_file_logging(logger: logging.Logger) -> bool:
     )
 
 
+def _has_debug_file_logging(logger: logging.Logger) -> bool:
+    """Return whether full DEBUG logs can be written to a file."""
+    if not logger.isEnabledFor(logging.DEBUG):
+        return False
+
+    return any(
+        isinstance(handler, logging.FileHandler)
+        and getattr(handler, 'name', None) in FILE_HANDLER_NAMES
+        and handler.level <= logging.DEBUG
+        for handler in logger.handlers
+    )
+
+
 def _truncated_suffix(kind: str, logger: logging.Logger) -> str:
-    if _has_file_logging(logger):
+    if _has_debug_file_logging(logger):
         return f"[truncated, see log file for full {kind}]"
-    return f"[truncated, enable {LOG_TO_FILE_ENV}=true for full {kind} logs]"
+    if _has_file_logging(logger):
+        return f"[truncated, set LOG_LEVEL=DEBUG for full {kind} file logs]"
+    return f"[truncated, set {LOG_TO_FILE_ENV}=true and LOG_LEVEL=DEBUG for full {kind} file logs]"
 
 
 def setup_logger(name: str = 'mingrelian_translator') -> logging.Logger:
