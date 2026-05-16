@@ -268,6 +268,7 @@ argo/
 ├── venv/                   # Virtual environment (gitignored)
 ├── .env                    # Environment variables (gitignored)
 ├── env.example             # Example environment file
+├── render.yaml             # Render Blueprint deployment config
 ├── run_local.sh            # Local development script
 └── README.md               # This file
 ```
@@ -298,16 +299,32 @@ python3 -m py_compile fastapi_app/api.py src/*.py eval/provider.py
 
 ## Deployment
 
-This backend is designed to be deployed on platforms like Render, Heroku, or Railway.
+Render is the documented deployment path for this backend. The repository includes
+`render.yaml` so the service can be created or synced from a Render Blueprint.
 
-**Key files for deployment:**
-- `fastapi_app/requirements.txt` - Dependencies
-- `fastapi_app/api.py` - Entry point
-- Environment variables must be set in the platform's dashboard
+**Render configuration:**
+- Runtime: Python
+- Build command: `pip install -r fastapi_app/requirements.txt`
+- Start command: `uvicorn fastapi_app.api:app --host 0.0.0.0 --port $PORT`
+- Service name: `argo-translator`
 
-**Render example:**
-- Build Command: `pip install -r fastapi_app/requirements.txt`
-- Start Command: `uvicorn fastapi_app.api:app --host 0.0.0.0 --port $PORT`
+### Deploying on Render
+
+1. In Render, create a Blueprint or Web Service from this repository.
+2. Let Render read `render.yaml`, or manually use the build and start commands above.
+3. Set secrets in the Render dashboard. Do not commit secrets to the repository.
+
+The default Render config uses `LLM_PROVIDER=openai`, `LLM_MODEL=gpt-5.4-nano`,
+and prompts for `OPENAI_API_KEY` as a secret value. If you switch providers,
+set the matching provider and model variables plus the matching secret key
+(`ANTHROPIC_API_KEY` or `GEMINI_API_KEY`) in Render.
+
+Optional Supabase analytics remain disabled by default. To enable them, set
+`SUPABASE_LOGGING_ENABLED=true` and provide `SUPABASE_URL` plus a Supabase API
+key in Render.
+
+Azure GitHub Actions deployment has been removed. Render should build and deploy
+from the linked repository or Blueprint.
 
 ## Contributing
 
