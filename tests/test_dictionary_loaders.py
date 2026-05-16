@@ -34,8 +34,9 @@ class DictionaryLoaderHeaderTests(unittest.TestCase):
             side_effect=lambda filename: str(self.data_dir / filename),
         )
         self.path_patch.start()
-        self.addCleanup(self.path_patch.stop)
         self.addCleanup(self.temp_dir.cleanup)
+        self.addCleanup(translator._sync_compat_state)
+        self.addCleanup(self.path_patch.stop)
 
         self._clear_loader_caches()
         self.addCleanup(self._clear_loader_caches)
