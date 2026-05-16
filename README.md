@@ -323,8 +323,7 @@ Optional Supabase analytics remain disabled by default. To enable them, set
 `SUPABASE_LOGGING_ENABLED=true` and provide `SUPABASE_URL` plus a Supabase API
 key in Render.
 
-Azure GitHub Actions deployment has been removed. Render should build and deploy
-from the linked repository or Blueprint.
+Render builds and deploys from the linked repository or Blueprint.
 
 ## Contributing
 
