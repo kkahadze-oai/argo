@@ -6,6 +6,7 @@ module keeps legacy imports such as ``from src.single_call_translator import
 translate`` working for the API, eval scripts, and external callers.
 """
 
+from src import dictionary_store as _dictionary_store
 from src.translator import data as _data
 from src.translator import extraction as _extraction
 from src.translator import lookup as _lookup
@@ -94,6 +95,15 @@ def _sync_compat_state() -> None:
     _text_utils.LOOKUP_SEPARATOR = LOOKUP_SEPARATOR
     _text_utils.LOW_VALUE_LOOKUP_TERMS = LOW_VALUE_LOOKUP_TERMS
     _text_utils.MAX_LOOKUP_OUTPUT_CHARS = MAX_LOOKUP_OUTPUT_CHARS
+
+    _dictionary_store.FIGURATIVE_MARKERS = FIGURATIVE_MARKERS
+    _dictionary_store.LOOKUP_SEPARATOR = LOOKUP_SEPARATOR
+    _dictionary_store.MAX_LOOKUP_OUTPUT_CHARS = MAX_LOOKUP_OUTPUT_CHARS
+    _dictionary_store.choose_kk_bridge_gloss = _choose_kk_bridge_gloss
+    _dictionary_store.get_data_path = _get_data_path
+    _dictionary_store.normalize_lookup_value = _normalize_lookup_value
+    _dictionary_store.split_figurative_gloss = _split_figurative_gloss
+    _dictionary_store.truncate_lookup_output = _truncate_lookup_output
 
     _data._data_file_cache_key = _data_file_cache_key
     _data._get_data_path = _get_data_path

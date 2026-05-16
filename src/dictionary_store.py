@@ -52,21 +52,10 @@ class SearchResult:
 
 
 def get_data_path(filename: str) -> str:
-    """Get the path to a data file, checking multiple possible locations."""
-    project_root = Path(__file__).parent.parent
+    """Get a data path through the canonical translator data resolver."""
+    from src.translator import data as translator_data
 
-    candidates = [
-        project_root / "fastapi_app" / "data" / filename,
-        project_root / "data" / filename,
-        project_root / "notebooks" / filename,
-        project_root / "notebooks" / "dicts" / filename,
-    ]
-
-    for candidate in candidates:
-        if candidate.exists():
-            return str(candidate)
-
-    return str(candidates[0])
+    return translator_data._get_data_path(filename)
 
 
 def normalize_lookup_value(text: str) -> str:
@@ -231,6 +220,11 @@ def _load_sentence_pairs(file_path: str, mtime_ns: Optional[int]) -> tuple[Sente
     rows = []
     for parts in _read_tsv_rows(file_path, 2):
         mingrelian, english = parts[0], parts[1]
+        if (
+            normalize_lookup_value(mingrelian).lstrip("\ufeff") == "mingrelian"
+            and normalize_lookup_value(english) == "english"
+        ):
+            continue
         if mingrelian and english:
             rows.append(SentencePair(mingrelian=mingrelian, english=english))
     return tuple(rows)

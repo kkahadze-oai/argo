@@ -10,11 +10,9 @@ except ImportError:
     GoogleTranslator = None
 
 from src.logger import setup_logger
+from src.dictionary_store import get_dictionary_store
 
 from src.translator.data import (
-    _load_gal_rows,
-    _load_kk_rows,
-    _load_sentence_pairs_rows,
     _load_context_source_entries,
     _load_master_lexicon_rows,
 )
@@ -23,7 +21,6 @@ from src.translator.text_utils import (
     LOW_VALUE_LOOKUP_TERMS,
     LOOKUP_SEPARATOR,
     _choose_kk_bridge_gloss,
-    _format_kk_entry,
     _format_token_candidate_block,
     _is_low_value_lookup_term,
     _is_standalone_match,
@@ -92,58 +89,58 @@ def _collect_simple_exact_match_candidates(
     target_lang: str,
 ) -> list[dict[str, str]]:
     """Collect exact-match candidates from the existing extractive dictionaries."""
-    input_normalized = _normalize_lookup_value(input_text)
     candidates: list[dict[str, str]] = []
+    store = get_dictionary_store()
 
     # sentence_pairs.tsv (Mingrelian ↔ English)
     if (source_lang, target_lang) in [("mingrelian", "english"), ("english", "mingrelian")]:
-        for mingrelian, english in _load_sentence_pairs_rows():
-            if source_lang == "mingrelian" and _normalize_lookup_value(mingrelian) == input_normalized:
+        if source_lang == "mingrelian":
+            for row in store.exact_sentence_mingrelian(input_text):
                 candidates.append(
                     {
                         "source_name": "sentence_pairs",
-                        "target_text": english,
-                        "headword": mingrelian,
-                        "translation": english,
+                        "target_text": row.english,
+                        "headword": row.mingrelian,
+                        "translation": row.english,
                         "matched_on": "mingrelian",
                     }
                 )
-            elif source_lang == "english" and _normalize_lookup_value(english) == input_normalized:
+        else:
+            for row in store.exact_sentence_english(input_text):
                 candidates.append(
                     {
                         "source_name": "sentence_pairs",
-                        "target_text": mingrelian,
-                        "headword": mingrelian,
-                        "translation": english,
+                        "target_text": row.mingrelian,
+                        "headword": row.mingrelian,
+                        "translation": row.english,
                         "matched_on": "english",
                     }
                 )
 
     # kk.tsv (Mingrelian ↔ Georgian)
-    for mingrelian, _, russian, georgian in _load_kk_rows():
-        if source_lang == "mingrelian" and target_lang == "georgian":
-            if _normalize_lookup_value(mingrelian) == input_normalized:
-                georgian_primary, _ = _split_figurative_gloss(georgian, "ka")
-                candidates.append(
-                    {
-                        "source_name": "kk.tsv",
-                        "target_text": georgian_primary or georgian,
-                        "headword": mingrelian,
-                        "translation": georgian_primary or georgian,
-                        "matched_on": "mingrelian",
-                    }
-                )
-        elif source_lang == "georgian" and target_lang == "mingrelian":
-            if _normalize_lookup_value(georgian) == input_normalized:
-                candidates.append(
-                    {
-                        "source_name": "kk.tsv",
-                        "target_text": mingrelian,
-                        "headword": mingrelian,
-                        "translation": georgian,
-                        "matched_on": "georgian",
-                    }
-                )
+    if source_lang == "mingrelian" and target_lang == "georgian":
+        for row in store.exact_kk_mingrelian(input_text):
+            georgian_primary, _ = _split_figurative_gloss(row.georgian, "ka")
+            candidates.append(
+                {
+                    "source_name": "kk.tsv",
+                    "target_text": georgian_primary or row.georgian,
+                    "headword": row.mingrelian,
+                    "translation": georgian_primary or row.georgian,
+                    "matched_on": "mingrelian",
+                }
+            )
+    elif source_lang == "georgian" and target_lang == "mingrelian":
+        for row in store.exact_kk_georgian(input_text):
+            candidates.append(
+                {
+                    "source_name": "kk.tsv",
+                    "target_text": row.mingrelian,
+                    "headword": row.mingrelian,
+                    "translation": row.georgian,
+                    "matched_on": "georgian",
+                }
+            )
 
     return candidates
 
@@ -278,27 +275,8 @@ def grep_search_pairs(word: str, *, standalone_only: bool = False) -> tuple[str,
     Search sentence_pairs.tsv for English translations, prioritizing standalone word matches.
     Returns: (result_string, has_standalone_matches)
     """
-    rows = _load_sentence_pairs_rows()
-    if not rows:
-        return "", False
-
-    # First pass: look for standalone word matches
-    standalone_output = LOOKUP_SEPARATOR
-    substring_output = LOOKUP_SEPARATOR
-
-    for mingrelian, english in rows:
-        entry = f"Mingrelian: {mingrelian}\nEnglish: {english}\n{LOOKUP_SEPARATOR}"
-        if _is_standalone_match(mingrelian, word) or _is_standalone_match(english, word):
-            standalone_output += entry
-        elif _is_substring_match(f"{mingrelian}\t{english}", word):
-            substring_output += entry
-
-    # Return standalone matches if found, otherwise substring matches (unless standalone_only)
-    if standalone_output != LOOKUP_SEPARATOR:
-        return _truncate_lookup_output(standalone_output), True
-    elif (not standalone_only) and substring_output != LOOKUP_SEPARATOR:
-        return _truncate_lookup_output(substring_output), False
-    return "", False
+    result = get_dictionary_store().search_sentence_pairs(word, standalone_only=standalone_only)
+    return _truncate_lookup_output(result.output), result.has_standalone_matches
 
 
 def grep_search_gal(word: str, *, standalone_only: bool = False) -> tuple[str, bool]:
@@ -306,29 +284,8 @@ def grep_search_gal(word: str, *, standalone_only: bool = False) -> tuple[str, b
     Search gal.tsv for Russian translations, prioritizing standalone word matches.
     Returns: (result_string, has_standalone_matches)
     """
-    rows = _load_gal_rows()
-    if not rows:
-        return "", False
-
-    # First pass: look for standalone word matches
-    standalone_output = LOOKUP_SEPARATOR
-    substring_output = LOOKUP_SEPARATOR
-
-    lowered_word = word.lower()
-    for russian, mingrelian in rows:
-        entry = f"Mingrelian: {mingrelian}\nRussian: {russian}\n{LOOKUP_SEPARATOR}"
-        haystack = f"{russian}\t{mingrelian}"
-        if _is_standalone_match(mingrelian, word) or _is_standalone_match(russian, word):
-            standalone_output += entry
-        elif _is_substring_match(haystack, word) or _is_substring_match(haystack, lowered_word):
-            substring_output += entry
-
-    # Return standalone matches if found, otherwise substring matches (unless standalone_only)
-    if standalone_output != LOOKUP_SEPARATOR:
-        return _truncate_lookup_output(standalone_output), True
-    elif (not standalone_only) and substring_output != LOOKUP_SEPARATOR:
-        return _truncate_lookup_output(substring_output), False
-    return "", False
+    result = get_dictionary_store().search_gal(word, standalone_only=standalone_only)
+    return _truncate_lookup_output(result.output), result.has_standalone_matches
 
 
 def grep_search_kk(word: str, *, standalone_only: bool = False) -> tuple[str, bool]:
@@ -336,33 +293,8 @@ def grep_search_kk(word: str, *, standalone_only: bool = False) -> tuple[str, bo
     Search kk.tsv for Russian and Georgian translations, prioritizing standalone word matches.
     Returns: (result_string, has_standalone_matches)
     """
-    rows = _load_kk_rows()
-    if not rows:
-        return "", False
-
-    # First pass: look for standalone word matches
-    standalone_output = LOOKUP_SEPARATOR
-    substring_output = LOOKUP_SEPARATOR
-    lowered_word = word.lower()
-
-    for mingrelian, ipa, russian, georgian in rows:
-        formatted_entry = _format_kk_entry(mingrelian, russian, georgian)
-        haystack = "\t".join((mingrelian, ipa, russian, georgian))
-        if (
-            _is_standalone_match(mingrelian, word)
-            or _is_standalone_match(russian, word)
-            or _is_standalone_match(georgian, word)
-        ):
-            standalone_output += formatted_entry + "\n" + LOOKUP_SEPARATOR
-        elif _is_substring_match(haystack, word) or _is_substring_match(haystack, lowered_word):
-            substring_output += formatted_entry + "\n" + LOOKUP_SEPARATOR
-
-    # Return standalone matches if found, otherwise substring matches (unless standalone_only)
-    if standalone_output != LOOKUP_SEPARATOR:
-        return _truncate_lookup_output(standalone_output), True
-    elif (not standalone_only) and substring_output != LOOKUP_SEPARATOR:
-        return _truncate_lookup_output(substring_output), False
-    return "", False
+    result = get_dictionary_store().search_kk(word, standalone_only=standalone_only)
+    return _truncate_lookup_output(result.output), result.has_standalone_matches
 
 
 def grep_search_context_source(word: str, *, standalone_only: bool = False) -> str:
@@ -713,46 +645,41 @@ def check_exact_match_simple(input_text: str, source_lang: str, target_lang: str
 
     This is the simple direct lookup without Google Translate augmentation.
     """
-    input_normalized = _normalize_lookup_value(input_text)
+    store = get_dictionary_store()
 
     # Check sentence_pairs.tsv (Mingrelian ↔ English)
     if (source_lang, target_lang) in [("mingrelian", "english"), ("english", "mingrelian")]:
-        for mingrelian, english in _load_sentence_pairs_rows():
-            if source_lang == "mingrelian" and _normalize_lookup_value(mingrelian) == input_normalized:
-                return english
-            elif source_lang == "english" and _normalize_lookup_value(english) == input_normalized:
-                return mingrelian
+        if source_lang == "mingrelian":
+            matches = store.exact_sentence_mingrelian(input_text)
+            if matches:
+                return matches[0].english
+        else:
+            matches = store.exact_sentence_english(input_text)
+            if matches:
+                return matches[0].mingrelian
 
     # Check kk.tsv (Mingrelian ↔ Russian ↔ Georgian)
-    for mingrelian, ipa, russian, georgian in _load_kk_rows():
-        # Mingrelian → Georgian
-        if source_lang == "mingrelian" and target_lang == "georgian":
-            if _normalize_lookup_value(mingrelian) == input_normalized:
-                georgian_primary, _ = _split_figurative_gloss(georgian, "ka")
-                return georgian_primary or georgian
+    if source_lang == "mingrelian" and target_lang == "georgian":
+        matches = store.exact_kk_mingrelian(input_text)
+        if matches:
+            georgian_primary, _ = _split_figurative_gloss(matches[0].georgian, "ka")
+            return georgian_primary or matches[0].georgian
 
-        # Georgian → Mingrelian
-        elif source_lang == "georgian" and target_lang == "mingrelian":
-            if _normalize_lookup_value(georgian) == input_normalized:
-                return mingrelian
-
-        # Mingrelian → English
-        elif source_lang == "mingrelian" and target_lang == "english":
-            if _normalize_lookup_value(mingrelian) == input_normalized:
-                # We don't have English in kk, skip
-                pass
+    elif source_lang == "georgian" and target_lang == "mingrelian":
+        matches = store.exact_kk_georgian(input_text)
+        if matches:
+            return matches[0].mingrelian
 
     # Check gal.tsv (Russian ↔ Mingrelian)
-    for russian, mingrelian in _load_gal_rows():
-        # Russian → Mingrelian
-        if source_lang == "russian" and target_lang == "mingrelian":
-            if _normalize_lookup_value(russian) == input_normalized:
-                return mingrelian
+    if source_lang == "russian" and target_lang == "mingrelian":
+        matches = store.exact_gal_russian(input_text)
+        if matches:
+            return matches[0].mingrelian
 
-        # Mingrelian → Russian
-        elif source_lang == "mingrelian" and target_lang == "russian":
-            if _normalize_lookup_value(mingrelian) == input_normalized:
-                return russian
+    elif source_lang == "mingrelian" and target_lang == "russian":
+        matches = store.exact_gal_mingrelian(input_text)
+        if matches:
+            return matches[0].russian
 
     return None
 
@@ -770,35 +697,32 @@ def find_mingrelian_in_dicts(text: str, target_lang: Optional[str] = None) -> Op
     Returns:
         tuple or None: (mingrelian_text, other_lang_text, lang_code) if found
     """
-    text_normalized = _normalize_lookup_value(text)
+    store = get_dictionary_store()
 
     # Priority 1: Search sentence_pairs.tsv (English ↔ Mingrelian, cleanest)
-    for mingrelian, english in _load_sentence_pairs_rows():
-        if _normalize_lookup_value(mingrelian) == text_normalized:
-            return (mingrelian, english, "en")
-        elif _normalize_lookup_value(english) == text_normalized:
-            return (mingrelian, english, "en")
+    for row in store.exact_sentence_mingrelian(text):
+        return (row.mingrelian, row.english, "en")
+    for row in store.exact_sentence_english(text):
+        return (row.mingrelian, row.english, "en")
 
     # Priority 2: Search gal.tsv (Russian ↔ Mingrelian, reliable)
-    for russian, mingrelian in _load_gal_rows():
-        if _normalize_lookup_value(mingrelian) == text_normalized:
-            return (mingrelian, russian, "ru")
-        elif _normalize_lookup_value(russian) == text_normalized:
-            return (mingrelian, russian, "ru")
+    for row in store.exact_gal_mingrelian(text):
+        return (row.mingrelian, row.russian, "ru")
+    for row in store.exact_gal_russian(text):
+        return (row.mingrelian, row.russian, "ru")
 
     # Priority 3: Search kk.tsv (may have data quality issues, use as fallback)
-    for mingrelian, ipa, russian, georgian in _load_kk_rows():
-        if _normalize_lookup_value(mingrelian) == text_normalized:
-            bridge_text, lang_code = _choose_kk_bridge_gloss(russian, georgian, target_lang)
-            if bridge_text and lang_code:
-                return (mingrelian, bridge_text, lang_code)
-            return (mingrelian, georgian, "ka")
-        elif _normalize_lookup_value(georgian) == text_normalized:
-            georgian_primary, _ = _split_figurative_gloss(georgian, "ka")
-            return (mingrelian, georgian_primary or georgian, "ka")
-        elif _normalize_lookup_value(russian) == text_normalized:
-            russian_primary, _ = _split_figurative_gloss(russian, "ru")
-            return (mingrelian, russian_primary or russian, "ru")
+    for row in store.exact_kk_mingrelian(text):
+        bridge_text, lang_code = _choose_kk_bridge_gloss(row.russian, row.georgian, target_lang)
+        if bridge_text and lang_code:
+            return (row.mingrelian, bridge_text, lang_code)
+        return (row.mingrelian, row.georgian, "ka")
+    for row in store.exact_kk_georgian(text):
+        georgian_primary, _ = _split_figurative_gloss(row.georgian, "ka")
+        return (row.mingrelian, georgian_primary or row.georgian, "ka")
+    for row in store.exact_kk_russian(text):
+        russian_primary, _ = _split_figurative_gloss(row.russian, "ru")
+        return (row.mingrelian, russian_primary or row.russian, "ru")
 
     return None
 
