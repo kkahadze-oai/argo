@@ -113,6 +113,8 @@ The endpoint streams server-sent events. The final event payload looks like:
 
 ## Supported Models
 
+Provider names, language names, provider defaults, and the server-side-key model allowlist are defined in `src/provider_config.py`. User-provided API keys may still request other provider-supported model names.
+
 ### OpenAI
 - `gpt-5.4-nano` (default)
 - `gpt-5.4-mini`
@@ -259,6 +261,7 @@ argo/
 │       └── harris.txt
 ├── src/
 │   ├── single_call_translator.py  # Core translation logic
+│   ├── provider_config.py         # Provider, model, language defaults and allowlists
 │   ├── llm_client.py              # LLM provider abstraction
 │   └── logger.py                  # Logging configuration
 ├── eval/                   # Promptfoo configs and evaluation helpers
@@ -276,12 +279,11 @@ argo/
 
 ### Running Tests
 
-There is no automated unit test suite checked into this repo yet.
-
 For a quick verification pass:
 
 ```bash
-python3 -m py_compile fastapi_app/api.py src/*.py eval/provider.py
+python3 -m py_compile fastapi_app/api.py src/*.py eval/*.py tests/*.py
+python3 -m unittest tests.test_provider_config
 ```
 
 ### Adding New Dictionary Data
@@ -314,10 +316,11 @@ This backend is designed to be deployed on platforms like Render, Heroku, or Rai
 When contributing:
 
 1. Keep all LLM calls centralized in `src/llm_client.py`
-2. Add comprehensive logging for debugging
-3. Update dictionary data in `fastapi_app/data/` as needed
-4. Test with multiple LLM providers
-5. Update this README with any architectural changes
+2. Keep provider, model, language defaults, and server-key allowlists centralized in `src/provider_config.py`
+3. Add comprehensive logging for debugging
+4. Update dictionary data in `fastapi_app/data/` as needed
+5. Test with multiple LLM providers
+6. Update this README with any architectural changes
 
 ## License
 

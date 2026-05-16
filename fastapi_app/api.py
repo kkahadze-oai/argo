@@ -16,6 +16,15 @@ load_dotenv()
 # Add the src directory to the path so we can import modules from it
 sys.path.append(str(Path(__file__).parent.parent))
 from src.llm_client import LLMClient
+from src.provider_config import (
+    DEFAULT_PROVIDER,
+    SERVER_KEY_MODELS,
+    SUPPORTED_PROVIDERS,
+    VALID_LANGUAGES,
+    get_api_key_env_var,
+    get_default_model_for_provider,
+    is_server_key_model_allowed,
+)
 from src.single_call_translator import translate as single_call_translate
 from src.logger import (
     setup_logger,
@@ -28,13 +37,6 @@ from src.translation_analytics import (
     schedule_translation_event,
 )
 import re
-
-SERVER_KEY_MODELS = {
-    "openai": {"gpt-5.4-nano"},
-    "gemini": {"gemini-3.1-flash-lite-preview"},
-}
-SUPPORTED_PROVIDERS = ("openai", "anthropic", "gemini")
-VALID_LANGUAGES = ("mingrelian", "georgian", "english")
 
 # Request model
 class PromptIn(BaseModel):
@@ -73,29 +75,8 @@ def is_mkhedruli(text: str) -> bool:
 
 def get_server_api_key(provider: str) -> Optional[str]:
     """Resolve the configured server-side API key for the requested provider."""
-    env_var_by_provider = {
-        "openai": "OPENAI_API_KEY",
-        "anthropic": "ANTHROPIC_API_KEY",
-        "gemini": "GEMINI_API_KEY",
-    }
-    env_var = env_var_by_provider.get(provider)
+    env_var = get_api_key_env_var(provider)
     return os.getenv(env_var) if env_var else None
-
-
-def get_default_model_for_provider(provider: str) -> Optional[str]:
-    """Resolve the provider's runtime default model."""
-    if provider == "openai":
-        return "gpt-5.4-nano"
-    if provider == "anthropic":
-        return "claude-sonnet-4-5-20250929"
-    if provider == "gemini":
-        return "gemini-3.1-flash-lite-preview"
-    return None
-
-
-def is_server_key_model_allowed(provider: str, model: str) -> bool:
-    """Check whether this provider/model pair may use the server-side key."""
-    return model in SERVER_KEY_MODELS.get(provider, set())
 
 
 def format_output_for_legacy(result, source_lang, target_lang, source_text):
@@ -192,7 +173,7 @@ async def stream_translation(
 
     # Use environment variables if provider/model not specified
     if provider is None:
-        provider = os.getenv("LLM_PROVIDER", "openai")
+        provider = os.getenv("LLM_PROVIDER", DEFAULT_PROVIDER)
     if model is None:
         model = os.getenv("LLM_MODEL")
     
@@ -318,14 +299,14 @@ async def chat(data: PromptIn, request: Request):
         raise HTTPException(status_code=400, detail="Prompt text is required")
     
     api_key = data.api_key
-    provider = data.provider or os.getenv("LLM_PROVIDER", "openai")
+    provider = data.provider or os.getenv("LLM_PROVIDER", DEFAULT_PROVIDER)
     if provider not in SUPPORTED_PROVIDERS:
         raise HTTPException(
             status_code=400,
             detail=f"Provider must be one of: {', '.join(SUPPORTED_PROVIDERS)}",
         )
 
-    env_provider = os.getenv("LLM_PROVIDER", "openai")
+    env_provider = os.getenv("LLM_PROVIDER", DEFAULT_PROVIDER)
     env_model = os.getenv("LLM_MODEL") if provider == env_provider else None
     model = data.model or env_model or get_default_model_for_provider(provider)
 

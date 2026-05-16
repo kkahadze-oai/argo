@@ -17,6 +17,10 @@ load_dotenv(os.path.join(parent_dir, '.env'))
 
 from src.single_call_translator import translate
 from src.llm_client import LLMClient
+from src.provider_config import DEFAULT_MODEL_BY_PROVIDER
+
+
+EVAL_DEFAULT_PROVIDER = 'gemini'
 
 
 def call_api(prompt, options, context):
@@ -49,8 +53,8 @@ def call_api(prompt, options, context):
         runtime_options = options.get('config', options)
 
         # Extract configuration
-        provider = runtime_options.get('provider', 'gemini')
-        model = runtime_options.get('model', 'gemini-3.1-flash-lite-preview')
+        provider = runtime_options.get('provider', EVAL_DEFAULT_PROVIDER)
+        model = runtime_options.get('model', DEFAULT_MODEL_BY_PROVIDER.get(provider))
         api_key = runtime_options.get('api_key') or os.getenv(f'{provider.upper()}_API_KEY')
         source_language = runtime_options.get('source_language', 'mingrelian')
         target_language = runtime_options.get('target_language', 'english')
@@ -103,8 +107,8 @@ if __name__ == '__main__':
     # Test configuration
     test_prompt = "მა"
     test_options = {
-        'provider': 'gemini',
-        'model': 'gemini-3.1-flash-lite-preview',
+        'provider': EVAL_DEFAULT_PROVIDER,
+        'model': DEFAULT_MODEL_BY_PROVIDER[EVAL_DEFAULT_PROVIDER],
         'source_language': 'mingrelian',
         'target_language': 'english',
         'temperature': 0.7
