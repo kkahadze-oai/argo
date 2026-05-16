@@ -12,14 +12,14 @@ runtime_files=(
   "sentence_pairs.tsv"
   "gal.tsv"
   "kk.tsv"
-  "kajaia_cleaned.txt"
+  "context_source.txt"
   "harris.txt"
 )
 
 optional_runtime_files=(
-  "master-lexicon-mkhedruli.csv"
-  "context_source.txt"
   "harris_compact.txt"
+  "master-lexicon-mkhedruli.csv"
+  "translation_overrides.tsv"
 )
 
 choose_private_data_source() {

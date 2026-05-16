@@ -8,11 +8,16 @@ from unittest.mock import patch
 from fastapi.testclient import TestClient
 
 import fastapi_app.api as api
+from src import dictionary_store
 import src.single_call_translator as translator
 
 
 class LazyCredentialTests(unittest.TestCase):
     def setUp(self):
+        self.temp_dir = tempfile.TemporaryDirectory()
+        self.data_dir = Path(self.temp_dir.name)
+        self._write_test_data()
+        self.addCleanup(self.temp_dir.cleanup)
         self.client = TestClient(api.app)
         self.temp_dir = tempfile.TemporaryDirectory()
         self.data_dir = Path(self.temp_dir.name)
@@ -48,7 +53,42 @@ class LazyCredentialTests(unittest.TestCase):
         translator._load_grammar_cached.cache_clear()
         translator._compiled_word_pattern.cache_clear()
 
+    def _write_test_data(self):
+        (self.data_dir / "sentence_pairs.tsv").write_text(
+            "Mingrelian\tEnglish\n"
+            "ჭიფანა კაკალეფ უღუუ.\tIt has smaller grapes.\n",
+            encoding="utf-8",
+        )
+        (self.data_dir / "gal.tsv").write_text("Russian\tMingrelian\n", encoding="utf-8")
+        (self.data_dir / "kk.tsv").write_text(
+            "word\tipa\trussian_def\tgeorgian_def\n"
+            "აბანა\tabana\tбаня\tაბანო 2. სამკურნალო წყლები\n",
+            encoding="utf-8",
+        )
+        (self.data_dir / "translation_overrides.tsv").write_text(
+            "source_language\ttarget_language\tsource_text\ttarget_text\n",
+            encoding="utf-8",
+        )
+        (self.data_dir / "context_source.txt").write_text("", encoding="utf-8")
+        (self.data_dir / "harris.txt").write_text("", encoding="utf-8")
+        (self.data_dir / "harris_compact.txt").write_text("", encoding="utf-8")
+        (self.data_dir / "master-lexicon-mkhedruli.csv").write_text(
+            "headword,headword_raw,translation\n",
+            encoding="utf-8",
+        )
+
+    def _clear_caches(self):
+        dictionary_store._get_dictionary_store_cached.cache_clear()
+        translator._load_master_lexicon_rows_cached.cache_clear()
+        translator._load_sentence_pairs_rows_cached.cache_clear()
+        translator._load_gal_rows_cached.cache_clear()
+        translator._load_kk_rows_cached.cache_clear()
+        translator._load_context_source_entries_cached.cache_clear()
+        translator._load_grammar_cached.cache_clear()
+        translator._compiled_word_pattern.cache_clear()
+
     def _post_events(self, payload):
+        self._clear_caches()
         with patch.dict(
             os.environ,
             {

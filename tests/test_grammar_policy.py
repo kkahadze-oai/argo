@@ -4,6 +4,7 @@ import unittest
 from pathlib import Path
 from unittest import mock
 
+from src import dictionary_store
 from src import single_call_translator as translator
 
 
@@ -52,6 +53,7 @@ class GrammarPolicyTests(unittest.TestCase):
         translator._load_kk_rows_cached.cache_clear()
         translator._load_context_source_entries_cached.cache_clear()
         translator._load_grammar_cached.cache_clear()
+        dictionary_store._get_dictionary_store_cached.cache_clear()
         translator._compiled_word_pattern.cache_clear()
 
     def test_compact_policy_uses_compact_grammar(self) -> None:

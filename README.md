@@ -41,9 +41,12 @@ private_data/
 ├── sentence_pairs.tsv
 ├── gal.tsv
 ├── kk.tsv
-├── kajaia_cleaned.txt
+├── context_source.txt
 └── harris.txt
 ```
+
+Optional private files include `harris_compact.txt`,
+`master-lexicon-mkhedruli.csv`, and local `translation_overrides.tsv`.
 
 `private_data/` is ignored by git, so the code can be public while the corpora
 stay local/private.
@@ -234,6 +237,8 @@ Private runtime corpora are loaded from `ARGO_DATA_DIR` when set, then
 4. **context_source.txt** - Large fallback reference used for LLM context, not extractive lookups
 5. **harris.txt** - Full grammar reference
 6. **harris_compact.txt** - Compact grammar reference for prompt-size experiments
+7. **master-lexicon-mkhedruli.csv** - Optional master lexicon for exact Mingrelian-English candidates
+8. **translation_overrides.tsv** - Small pair-specific exact overrides; public sample overrides may live in `fastapi_app/data/`
 
 ### Optimization Strategies
 
@@ -310,18 +315,18 @@ argo/
 ├── src/
 │   ├── single_call_translator.py  # Backward-compatible translator facade
 │   ├── translator/                # Translation data, lookup, prompts, extraction, pipeline
-│   ├── provider_config.py         # Provider, model, language defaults and allowlists
 │   ├── dictionary_store.py        # Dictionary loading and lookup indexes
+│   ├── provider_config.py         # Provider, model, language defaults and allowlists
 │   ├── llm_client.py              # LLM provider abstraction
 │   └── logger.py                  # Logging configuration
+├── eval/                   # Promptfoo configs and evaluation helpers
 ├── private_data/           # Ignored private corpora for local/full-quality runs
 ├── scripts/
 │   └── build_share_bundle.sh # Build code+private-data zip for sharing
-├── eval/                   # Promptfoo configs and evaluation helpers
 ├── supabase/
 │   └── translation_events.sql
-├── tests/                  # Unit tests with synthetic fixtures
 ├── logs/                   # Optional log files when LOG_TO_FILE=true (gitignored)
+├── tests/                  # Unit tests with synthetic fixtures
 ├── venv/                   # Virtual environment (gitignored)
 ├── .env                    # Environment variables (gitignored)
 ├── env.example             # Example environment file
@@ -364,7 +369,7 @@ python3 -m unittest tests.test_provider_config
 ### Adding New Dictionary Data
 
 1. Add private TSV/TXT/CSV files to `private_data/` or an `ARGO_DATA_DIR` folder
-2. Update loaders/search functions in `src/translator/data.py` and `src/translator/lookup.py`
+2. Update loaders/search functions in `src/translator/data.py`, `src/translator/lookup.py`, and `src/dictionary_store.py`
 3. Add to prompt construction as needed
 4. Commit only docs, code, and small public sample fixtures unless the data has clear redistribution rights
 

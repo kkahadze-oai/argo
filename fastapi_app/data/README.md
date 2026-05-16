@@ -9,8 +9,15 @@ Expected runtime filenames for this branch:
 - `sentence_pairs.tsv`
 - `gal.tsv`
 - `kk.tsv`
-- `kajaia_cleaned.txt`
+- `context_source.txt`
 - `harris.txt`
 
-This directory can hold small public sample fixtures later, but do not commit
-research-derived or otherwise non-redistributable corpora here.
+Optional runtime filenames:
+
+- `harris_compact.txt`
+- `master-lexicon-mkhedruli.csv`
+- `translation_overrides.tsv`
+
+This directory can hold small public sample fixtures such as
+`translation_overrides.tsv`, but do not commit research-derived or otherwise
+non-redistributable corpora here.

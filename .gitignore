@@ -58,6 +58,7 @@ fastapi_app/data/*.csv
 fastapi_app/data/*.tsv
 fastapi_app/data/*.txt
 !fastapi_app/data/README.md
+!fastapi_app/data/translation_overrides.tsv
 eval/datasets/*.csv
 !eval/datasets/README.md
 
@@ -97,6 +98,5 @@ Thumbs.db
 .ipynb_checkpoints
 */.ipynb_checkpoints/* 
 
-# texts
 bats/
 eval/redteam/redteam.yaml

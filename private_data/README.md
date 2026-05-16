@@ -9,14 +9,14 @@ Expected runtime filenames for the current backend:
 - `sentence_pairs.tsv`
 - `gal.tsv`
 - `kk.tsv`
-- `kajaia_cleaned.txt`
+- `context_source.txt`
 - `harris.txt`
 
 Optional files used by newer/experimental branches:
 
-- `master-lexicon-mkhedruli.csv`
-- `context_source.txt`
 - `harris_compact.txt`
+- `master-lexicon-mkhedruli.csv`
+- `translation_overrides.tsv`
 - `eval-datasets/notion-mingrelian-lesson-notes-triples.csv`
 
 The backend checks `ARGO_DATA_DIR` first, then this folder, then
