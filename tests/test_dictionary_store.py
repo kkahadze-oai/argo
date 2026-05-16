@@ -49,6 +49,8 @@ class DictionaryStoreTests(unittest.TestCase):
             "georgian\tmingrelian\tეკლესია\tოხვამე\n"
             "georgian\tmingrelian\tკვერცხი\tკვერცხი\n"
             "english\tmingrelian\thello\tგომორძგუა\n"
+            "english\tmingrelian\twhat is your name?\tსი მუ რჯოხო?\n"
+            "english\tmingrelian\twhat is your name\tსი მუ რჯოხო?\n"
             "english\tgeorgian\twhat language is this\tრა ენაა ეს\n",
             encoding="utf-8",
         )
@@ -87,6 +89,14 @@ class DictionaryStoreTests(unittest.TestCase):
         self.assertEqual(
             check_exact_match_simple("what language is this", "english", "georgian"),
             "რა ენაა ეს",
+        )
+        self.assertEqual(
+            check_exact_match_simple("What is your name?", "english", "mingrelian"),
+            "სი მუ რჯოხო?",
+        )
+        self.assertEqual(
+            check_exact_match_simple("what is your name", "english", "mingrelian"),
+            "სი მუ რჯოხო?",
         )
         self.assertIsNone(
             check_exact_match_simple("what language is this", "english", "mingrelian")
